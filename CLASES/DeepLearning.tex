@@ -1,0 +1,88 @@
+%###########################PRESENTACION##########################################
+%Modo presentación
+\documentclass[12pt]{beamer}
+
+%Modo handout
+%\documentclass[handout,compress]{beamer}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{4 on 1}[border shrink=1mm]
+
+\usepackage{graphicx}
+\usepackage{beamerthemeCambridgeUS}
+\usepackage{subfig}
+\usepackage{tikz}
+\usepackage{amsmath}
+\setbeamercovered{transparent}
+
+\title[Deep Learning]{\emph{MACHINE LEARNING}}
+\author[Edier Aristizábal]{Edier V. Aristizábal G.}
+\institute{\emph{evaristizabalg@unal.edu.co}}
+\date{(Versión:\today)}
+\usepackage{textpos} 
+
+\addtobeamertemplate{headline}{}{%
+	\begin{textblock*}{2mm}(.9\textwidth,0cm)
+	\hfill\includegraphics[height=1cm]{G:/Mi Unidad/ADMINISTRATIVA/logos/logo3.png}  
+	\end{textblock*}
+			}
+%############################INICIO#############################################
+\begin{document}
+%###########################SLIDE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\titlepage
+\centering
+	\includegraphics[width=5cm]{G:/Mi Unidad/ADMINISTRATIVA/logos/unal.png}\hspace*{4.75cm}~%
+   	\includegraphics[width=2cm]{G:/Mi Unidad/INVESTIGACION/GRUPOS DE INVESTIGACION/GEOHAZARDS/logo2} 
+\end{frame}
+%#############################SLIDE
+\begin{frame}
+\begin{figure}
+\centering
+	\includegraphics[width=12cm]{G:/Mi unidad/CATEDRA/MACHINE LEARNING/fig/sgd}
+\end{figure}\vfill
+\tiny{Source: \url{www.towardsdatascience.com} (Raimi Karim)}
+\end{frame}
+%#############################SLIDE
+\begin{frame}
+\begin{figure}
+\centering
+	\includegraphics[width=12cm]{G:/Mi unidad/CATEDRA/MACHINE LEARNING/fig/sgd1}
+\end{figure}\vfill
+\tiny{Source: \url{www.towardsdatascience.com} (Raimi Karim)}
+\end{frame}
+ %#############################SLIDE
+\begin{frame}
+\frametitle{LSTM network architectures}
+\begin{figure}
+\centering
+	\includegraphics[width=12cm]{G:/Mi unidad/CATEDRA/MACHINE LEARNING/fig/lstm}
+\end{figure}\vfill
+\tiny{Source: \url{http://karpathy.github.io/2015/05/21/rnn-effectiveness/}}
+\end{frame}
+ %#############################SLIDE
+\begin{frame}
+\frametitle{LSTM network architectures}
+\framesubtitle{Many-to-one architecture}
+\begin{figure}
+\centering
+	\includegraphics[width=8.5cm]{G:/Mi unidad/CATEDRA/MACHINE LEARNING/fig/lstm1}
+\end{figure}\vfill
+\tiny{Source: \url{https://towardsdatascience.com/}(Timur Bikmukhametov)}
+\end{frame}
+ %#############################SLIDE
+\begin{frame}
+\frametitle{LSTM network architectures}
+\framesubtitle{Many-to-many architecture}
+\begin{figure}
+\centering
+	\includegraphics[width=12cm]{G:/Mi unidad/CATEDRA/MACHINE LEARNING/fig/lstm2}
+\end{figure}\vfill
+\tiny{Source: \url{https://towardsdatascience.com/}(Timur Bikmukhametov)}
+\end{frame}
+%#############################SLIDE
+\begin{frame}
+\frametitle{Mas información...}
+\url{http://www.deeplearningbook.org/}
+\end{frame}
+%#############################SLIDE
+\end{document}
