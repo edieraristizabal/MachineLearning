@@ -1,0 +1,4734 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Machine Learning</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/serif.css" id="theme">
+	<link rel="stylesheet" href="dist/style.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+
+
+	<style>
+		.axis {
+			font: 10px sans-serif;
+		}
+
+		path {
+			stroke: steelblue;
+			stroke-width: 2;
+			fill: none;
+		}
+
+		.errors {
+			fill: red;
+			fill-opacity: 0.4;
+		}
+
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+	</style>
+</head>
+
+<body>
+
+	<script>
+		setInterval(showTime, 1000);
+		function showTime() {
+			let time = new Date();
+			let hour = time.getHours();
+			let min = time.getMinutes();
+			let sec = time.getSeconds();
+			am_pm = "am";
+
+			if (hour > 12) {
+				hour -= 12;
+				am_pm = "pm";
+			}
+			if (hour == 0) {
+				hr = 12;
+				am_pm = "am";
+			}
+
+			hour = hour < 10 ? "0" + hour : hour;
+			min = min < 10 ? "0" + min : min;
+			sec = sec < 10 ? "0" + sec : sec;
+
+			let currentTime = hour + ":"
+				+ min + ":" + sec + am_pm;
+
+			document.getElementById("clock")
+				.innerHTML = currentTime;
+		}
+
+		showTime();
+	</script>
+
+	<div class="reveal">
+		<div class="slides">
+
+			<div id="marca-agua"><img style="border:none;box-shadow:none;width:80px;position:absolute;top:0%;right:0%;"
+					src="https://investigacion.unal.edu.co/fileadmin/recursos/focos/meritocracia/unnamed.jpg" />
+			</div>
+			<div id="lecture"
+				style="font-style: italic;color:rgb(118, 35, 47) ;font-size:14px;position:relative;top:98%; text-align: center;">
+				Curso: Machine Learning - Prof. Edier Aristizábal - Universidad Nacional de Colombia, sede Medellín
+			</div>
+			<div id="clock" style="font-size:20px;position:absolute;top:98%;right:98%;">0:00:00</div>
+
+			<section data-background-color="#ffffff" ; data-state="primera">
+				<h1 style="font-size:60px">MACHINE LEARNING</h1>
+				<p>
+				<h4><a href="https://edieraristizabal.github.io/">Prof. Edier Aristizábal</a></h4>
+				</p>
+				<img src="https://i.pinimg.com/564x/f8/5b/28/f85b28f72a65d9c64d8c5e4a7bac57aa.jpg" alt="unal.jpg"
+					width="500" />
+				<p id="demo" style="position:absolute;top:100%;right:42%;color: gray;font-size: 24px;"></p>
+				<script>
+					var d = new Date();
+					var months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+					document.getElementById("demo").innerHTML = months[d.getMonth()] + " " + d.getDate() + " / " + d.getFullYear();
+				</script>
+			</section>
+<!--Curso-->
+			<section>
+				<section>
+					<h1>Curso</h1>
+				</section>
+
+				<section>
+					<h2>Classroom</h2>
+					<img src="https://i.pinimg.com/564x/e7/30/de/e730de4e9492104d1004cd128e495eff.jpg" alt="Classroom"
+						width="1000" />
+					<figcaption><a href="https://classroom.google.com/u/0/c/NjMyNTE0OTgwOTBa">Class code wv4cglx</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Página web</h2>
+					<a href="https://edieraristizabal.github.io/MachineLearning/">https://edieraristizabal.github.io/MachineLearning/</a>
+				</section>
+
+				<section>
+					<h2>Curso Machine Learning</h2>
+					<p>El curso de <strong>Machine Learning</strong> está orientado para estudiantes de ingeniería que
+						deseen adquirir conocimientos
+						sobre modelos multivariados para establecer patrones espaciales y análisis de inferencia
+						estadística y predicción
+						de una variable dependiente a partir de variables independentes o predictoras.</p>
+					<p>Para dichos análisis se utilizarán técnicas de aprendizaje automático como:</p>
+					<ul>
+						<li>Machine Learning</li>
+						<li>Data Mining</li>
+						<li>Big Data</li>
+					</ul>
+					<p>Las herramientas de procesamiento serán:</p>
+					<ul>
+						<li>Lenguaje de programación Python</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Curso Machine Learning</h2>
+					<p>El curso de <strong>Machine Learning</strong> está enfocado en la construcción de modelos basados
+						en datos espaciales,
+						que ayuden a entender la distribución y comportamientos de procesos físicos en ciencias de la
+						tierra.</p>
+					<p>No es un curso avanzado de Python o SIG, por lo tanto no requiere conocimientos profundos en
+						dichas herramientas.
+						El curso, sin entrar en detalle en los aspectos básicos de estas herramientas, parte que el
+						estudiante conoce
+						dichas herramientas, sin necesidad de ser un experto. Sin embargo las personas con conocimientos
+						profundos
+						en cualquiera de estas herramientas son bienvenidas a aportar desde su conocimiento y en el
+						marco del contenido
+						del curso. El curso es una construcción conjunta de conocimiento por parte tanto de los
+						estudiantes como del
+						profesor.</p>
+					<p>Aunque la mayoría de las técnicas a utilizar se encuentran en el campo de machine learning, data
+						mining, y big data,
+						no corresponde a un curso avanzado en estas herramientas ni tampoco de Deep Learning. El enfoque
+						es el uso de dichas
+						herramientas para solucionar problemas en el campo de las geociencias.</p>
+				</section>
+
+				<section>
+					<h2>Cronograma y contenido del curso</h2>
+					<img src="https://i.pinimg.com/564x/4c/fb/a1/4cfba1b4f852711aa0d7d7d659dc6242.jpg" alt="cronograma"
+						width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Cronograma y contenido del curso</h2>
+					<img src="https://i.pinimg.com/564x/58/ab/31/58ab3125abd56f3f3cce1fdd70b95003.jpg" alt="cronograma"
+						width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Evaluación del curso</h2>
+					<img src="https://i.pinimg.com/originals/4d/81/f4/4d81f4013811f8b27bfda7e90a287c51.png"
+						alt="evaluación" width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+			</section>
+
+			<section>
+				<p style="text-align: center; font-size: 40px;">“In God we trust. All others must bring data"</p>
+				<p style="text-align: right;"><small>W. Edwards Deming (1900–1993)</small></p>
+			</section>
+<!--Intro-->
+			<section>
+				<section>
+					<h1>Intro</h1>
+				</section>
+
+				<section>
+					<h2>La era de los datos</h2>
+					<img src="https://i.pinimg.com/564x/ad/a1/41/ada141ba910a8e6bc8f5641b390504df.jpg" alt="datos"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>La era de los datos</h2>
+					<img src="https://miro.medium.com/max/1086/1*_sIf35S9d9qkLuh62phOHw.jpeg" alt="datos1"
+						width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data store</h2>
+					<img src="https://i.pinimg.com/564x/f1/a2/61/f1a261cf9e9a6d7ee854b364534c563c.jpg" alt="store"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data store</h2>
+					<p>Los kilobytes eran almacenados en discos, megabytes fueron almacenados en discos duros, terabytes
+						fueron
+						almacenados en arreglos de discos, y petabytes son almacenados en la nube <small>(Anderson,
+							2008)</small>.</p>
+					<img src="https://i.pinimg.com/originals/2d/e2/56/2de2560df25599ebe14b117ce53b1755.png" alt="store1"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data science job</h2>
+					<img src="https://i.pinimg.com/564x/df/7d/fe/df7dfeaa2800c12885b93ed3167780e0.jpg" alt="datos3"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data science job</h2>
+					<img src="https://i.pinimg.com/564x/8c/ec/f1/8cecf15ddfa12d9d2c6d2388fb541e92.jpg" alt="people"
+						width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<img src="https://miro.medium.com/max/4360/1*PzzcJA-cwXQ8hwlpM4DwbA@2x.jpeg" alt="datos3"
+						width="650" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data science</h2>
+					<p>Metodología y técnica para extraer información de datos en un dominio del conocimiento.</p>
+					<img src="https://i.pinimg.com/564x/85/89/0b/85890bf516dce297b32c80f30e17e215.jpg" alt="datascience"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<img src="https://miro.medium.com/max/700/1*o7DTEHgBknK2iBE9c-2Ing.jpeg" alt="datascience"
+						width="490" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data science</h2>
+					<img src="https://i.pinimg.com/564x/f5/be/2c/f5be2c272f3693442e8e4bdcf1bf838b.jpg"
+						alt="venn diagram" width="600" />
+					<figcaption><small>Data Science Venn Diagram</small></figcaption>
+				</section>
+
+				<section>
+					<h3>Data mining</h3>
+					<p>The field of data mining involves processes, methodologies, tools and techniques to discover and
+						extract patterns,
+						knowledge, insights and valuable information from non-trivial datasets.</p>
+					<img src="https://www.masterdatascienceucm.com/wp-content/uploads/2020/08/proceso-mineria-de-datos.png"
+						alt="data mining" width="750" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<img class="r-stretch"
+						src="http://www.aiiottalk.com/wp-content/uploads/2019/08/What-is-Artificial-Itelligence.jpg"
+						width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Inteligencia Artificial</h2>
+					<img class="r-stretch"
+						src="https://d1jnx9ba8s6j9r.cloudfront.net/blog/wp-content/uploads/2018/03/AI-vs-ML-vs-Deep-Learning.png"
+						alt="inteligencia artificial" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Inteligencia Artificial</h2>
+					<img src="https://i.pinimg.com/564x/9b/c1/b4/9bc1b46e2a3d1cb6c2b8cd623845ba92.jpg"
+						alt="inteligencia artificial" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data Science Lifecycle</h2>
+					<img src="https://i.pinimg.com/564x/5b/e6/0d/5be60d8af13684feab9afd8d53f4b715.jpg" alt="ciclo"
+						width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data Science Lifecycle</h2>
+					<img src="https://i.pinimg.com/564x/fa/4e/c8/fa4ec8490643d5f93840af820c70e691.jpg" alt="ciclo"
+						width="950" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data Science Lifecycle</h2>
+					<img src="https://i.pinimg.com/564x/bf/3b/19/bf3b19d5d3b4fe92b4da33ebdeda7c22.jpg" alt="metodo"
+						width="750" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data Science Lifecycle</h2>
+					<img src="https://i.pinimg.com/564x/61/4b/75/614b75ebe787a557ded6c7a9919c37b4.jpg" alt="cartoon"
+						width="430" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+			</section>
+<!--Ambiente de trabjo-->
+			<section>
+				<section>
+					<h1>Ambiente de trabajo</h1>
+				</section>
+
+				<section>
+					<h2>Python</h2>
+					<img src="https://miro.medium.com/max/2760/0*GV5Xm8Ve-tb_qAAs" alt="Python" width="1000" />
+				</section>
+
+				<section>
+					<h2>Python</h2>
+					<p><span style="color:red;">Python code is fast to develop</span>: As the code is not required to be
+						compiled and built, Python code
+						can be much readily changed and executed. This makes for a fast development cycle.</p>
+					<p><span style="color: red" ;>Python code is not as fast in execution</span>: Since the code is not
+						directly compiled and executed
+						and an additional layer of the Python virtual machine is responsible for execution, Python code
+						runs a little slow as
+						compared to conventional languages like C, C++, etc.</p>
+					<p><span style="color: red" ;>It is interpreted</span>: Python is an interpreted language, which
+						means it does not need compilation to binary code before
+						it can be run. You simply run the program directly from the source code.</p>
+					<p><span style="color: red" ;>It is object oriented</span>: Python is an object-oriented programming
+						language. An object--oriented
+						program involves a collection of interacting objects, as opposed to the conventional list of
+						tasks. Many modern programming
+						languages support object-oriented programming. ArcGIS and QGIS is designed to work with
+						object-oriented languages, and
+						Python qualifies in this respect.</span>
+				</section>
+
+				<section>
+					<h2>Python</h2>
+					<img src="https://techyeverything.com/wp-content/uploads/2020/11/main-10.jpg" alt="Paquetes"
+						width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Anaconda</h2>
+					<img src="https://electronicssoftware.net/wp-content/uploads/2-3-1024x768.png" alt="anaconda"
+						width="720" />
+					<figcaption><a href="https://www.anaconda.com/download/">https://www.anaconda.com/download/</a>
+					</figcaption>
+				</section>
+
+				<section>
+					<h2>Anaconda</h2>
+					<img src="https://miro.medium.com/max/3624/1*O5Jgl-KFuvUyujAZhXHYlQ.png" alt="anaconda"
+						width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Anaconda</h2>
+					<img src="https://docs.anaconda.com/_images/nav-defaults.png" alt="anaconda" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<img src="https://ijstokes-public.s3.amazonaws.com/dspyr/img/screenshot_navigator_install.png"
+						alt="anaconda" width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Anaconda</h2>
+					<img src="https://cluebots.com/storage/wink/images/dNKgplYxdJ7wGIaieaNwTmsiQtZEQjGiKKoY6HyO.png"
+						alt="cmd" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Python Packaging Index</h2>
+					<img src="https://cdn.activestate.com/wp-content/uploads/2019/12/how-to-install-pip-on-windows.png"
+						alt="pip" width="1000" />
+					<figcaption><a href="https://pypi.org/project/pip/">https://pypi.org/project/pip/</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Python Packaging Index</h2>
+					<img src="https://i.pinimg.com/564x/e3/71/71/e37171b593223001f3430b00a8cb738b.jpg" alt="pip"
+						width="750" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Spyder</h2>
+					<img src="https://docs.spyder-ide.org/current/_images/mainwindow_default_1610.png" alt="spyder"
+						width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Jupyter Lab</h2>
+					<img src="https://www.tutorialspoint.com/jupyter/images/start_python_notebook.jpg" alt="Jupyter Lab"
+						width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h1>Docker</h1>
+					<img src="https://miro.medium.com/max/672/1*glD7bNJG3SlO0_xNmSGPcQ.png" width="600">
+					<figcaption><a href="https://www.docker.com/">https://www.docker.com/</a></figcaption>
+				</section>
+
+				<section>
+					<img src="https://geekflare.com/wp-content/uploads/2019/07/dockerfile.png" width="1000">
+					<figcaption><a href="https://hub.docker.com/">https://hub.docker.com/</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Scikit learn</h2>
+					<img src="https://miro.medium.com/max/629/1*_HoMKjrWahRiI-JmwYW6zg.png" alt="scikit" width="1000" />
+				</section>
+
+				<section>
+					<h2>Scikit learn</h2>
+					<img src="https://miro.medium.com/max/923/1*nRmF_XhObEdI8zTB2wGgQw.png" alt="scikit" width="400" />
+					<p>Scikit-learn es la librería más usada de Machine Learning tradicional</p>
+					<p>La librería incluye funcionalidades de:</p>
+					<ul>
+						<li>Preprocesamiento de datos en sklearn.preprocessing.</li>
+						<li>Algoritmos de Machine Learning en sklearn.linear_model, sklearn.svm, sklearn.ensemble, y
+							muchos más.</li>
+						<li>Evaluación de modelos en sklearn.model_selection y sklearn.metrics.</li>
+					</ul>
+					<figcaption><a href="https://scikit-learn.org/stable/">https://scikit-learn.org/stable/</a>
+					</figcaption>
+				</section>
+			</section>
+<!--Modelos basados en datos-->
+			<section>
+				<section>
+					<h1>Modelos basados en datos</h1>
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<p>“A computer program is said to learn from experience E with respect to some class of tasks T and
+						performance measure P,
+						if its performance at tasks in T, as measured by P, improves with experience E.”</p>
+					<img src="https://i.pinimg.com/564x/d0/82/00/d08200d88ea32fd977695b2eb045574a.jpg"
+						alt="machine learning" width="580" />
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<img src="https://i.pinimg.com/564x/26/af/e6/26afe6085643d8b536785a0e7b15f548.jpg"
+						alt="machine learning" width="900" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<img src="https://i.pinimg.com/564x/d5/16/5e/d5165e55671e7fad74ccb9ec4abef972.jpg"
+						alt="machine learning" width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<img src="https://i.pinimg.com/564x/fc/9b/c4/fc9bc49a5a28453001566ec4f7b95e18.jpg"
+						alt="machine learning" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<img src="https://i.pinimg.com/564x/9f/7e/ac/9f7eac6c821e8169513fc4f7762633f2.jpg"
+						alt="machine learning" width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Machine learning</h2>
+					<img src="https://i.pinimg.com/564x/33/f4/79/33f479465d1561fef47ac2fe9cc08c33.jpg"
+						alt="machine learning" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2><i>Clustering</i></h2>
+					<img src="https://i.pinimg.com/564x/14/c1/3f/14c13f17609b9d6a12ce4e6899c612f6.jpg"
+						alt="machine learning" width="500" />
+				</section>
+
+				<section>
+					<h2>Reducción de dimensiones</h2>
+					<img src="https://i.pinimg.com/564x/3c/af/a0/3cafa081b560bc74154b2e3c251a0cd0.jpg"
+						alt="machine learning" width="1000" />
+				</section>
+
+				<section>
+					<h2>Clasificación</h2>
+					<img src="https://i.pinimg.com/564x/8d/8f/af/8d8faf059d0db036dbe180294ee7a3b1.jpg"
+						alt="machine learning" width="500" />
+				</section>
+
+				<section>
+					<h2>Regresión</h2>
+					<img src="https://i.pinimg.com/564x/e3/1f/e4/e31fe45d3748712e2cd04953bd9f73dd.jpg"
+						alt="machine learning" width="500" />
+				</section>
+
+				<section>
+					<h2>Regresión</h2>
+					<img src="https://i.pinimg.com/564x/c0/22/21/c02221fb0105f0d031cf2d18818fadaa.jpg"
+						alt="machine learning" width="1000" />
+				</section>
+
+				<section>
+					<h2>Términos básicos</h2>
+					<img src="https://i.pinimg.com/564x/0d/84/2f/0d842f5faedf8fa4ea60606576638638.jpg" alt="table"
+						width="780" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Términos básicos</h2>
+					<img src="https://i.pinimg.com/564x/80/a3/ec/80a3ec9bcfd83e0fe08209c633a3bd7c.jpg" alt="table"
+						width="450" />
+					<img src="https://i.pinimg.com/564x/f4/5c/f0/f45cf0708777feb7dfa819acb209b7e7.jpg" alt="table"
+						width="250" />
+					<img src="https://i.pinimg.com/564x/03/5f/00/035f00989b9a145a7777350fff5456b5.jpg" alt="table"
+						width="700" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Entrenamiento</h2>
+					<img src="https://i.pinimg.com/564x/ac/7a/35/ac7a35c3567d393fc663e5de941716d0.jpg"
+						alt="modelo supervisado" width="1000" />
+				</section>
+
+				<section>
+					<h2>Entrenamiento</h2>
+					<img src="https://i.pinimg.com/564x/61/21/73/612173ed5bb6e63848d5a9a798d2c9e8.jpg"
+						alt="modelo supervisado" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Entrenamiento</h2>
+					<img src="https://i.pinimg.com/564x/da/47/b3/da47b31855f6efd94a6bf8e3aeba5558.jpg"
+						alt="modelo supervisado" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Entrenamiento</h2>
+					<img src="https://i.pinimg.com/564x/00/60/33/006033046f0904ac7ae5326ff0044822.jpg"
+						alt="modelo supervisado" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Procesamiento general</h2>
+					<img src="https://i.pinimg.com/564x/8e/c1/ed/8ec1ed2bae72ec02e21a04c846611ac1.jpg"
+						alt="procesamiento" width="700" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Procesamiento general</h2>
+					<img src="https://i.pinimg.com/564x/ea/23/a9/ea23a9d9e67f1e85918fc2dd2540c87e.jpg"
+						alt="procesamiento" width="700" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Procesamiento general</h2>
+					<img src="https://i.pinimg.com/564x/2f/84/31/2f8431cd19fd678862832318fc1314a7.jpg"
+						alt="procesamiento" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Procesamiento general</h2>
+					<img src="https://i.pinimg.com/564x/49/be/2c/49be2cf0fc4b0219fd36a4783397e0ad.jpg"
+						alt="procesamiento" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h1>Paso a paso...</h1>
+					<p><span style="color:red;">Step 1:</span> Modelo conceptual. </p>
+					<p><span style="color:red" ;>Step 2:</span> Toma y procesamiento de datos. </p>
+					<p><span style="color:red" ;>Step 3:</span> Análisis exploratorio de datos. </p>
+					<p><span style="color:red" ;>Step 4:</span> Selección de variables (<i>Feature engineering</i>).
+					</p>
+					<p><span style="color:red" ;>Step 5:</span> Selección del algoritmo (<i>Training & Evaluation</i>).
+					</p>
+					<p><span style="color:red" ;>Step 6:</span> Optimización del modelo (<i>Hyperparameters
+							selection</i>). </p>
+					<p><span style="color:red" ;>Step 7:</span> Predecir </p>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/45/3a/22/453a227d341ca77352963fbbfef751ab.jpg" alt="George Box"
+						width="850" />
+				</section>
+
+				<section>
+					<h2>Qué es un modelo?</h2>
+					<p>A model is an an idealized representation of a system</p>
+					<img src="https://i.pinimg.com/564x/6b/55/1a/6b551a9aa9894a651c7f710e0ee80191.jpg" alt="modelo"
+						width="950" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Qué es un modelo?</h2>
+					<h3>Why do we build models?</h3>
+					<ul>
+						<li>Models enable us to make accurate predictions</li>
+						<img src="https://i.pinimg.com/564x/5c/54/df/5c54df6513ba7f300171e54649897ca0.jpg" alt="modelo"
+							width="800" />
+						<li>Provide insight into complex phenomena</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Qué es un modelo?</h2>
+					<img src="https://i.pinimg.com/564x/92/f8/ab/92f8ab191eb40d6ea31c88ef40ca6b00.jpg" alt="modelo"
+						width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Qué es un modelo?</h2>
+					<img src="https://i.pinimg.com/564x/0d/36/52/0d3652615b0747e9a9dd05771b81af3c.jpg" alt="modelo"
+						width="850" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Modelos Explicativos vs Predictivos</h2>
+					<h3>Modelos predictivos</h3>
+					<p>In many situations, a set of inputs <strong>X</strong> are readily available, but the output
+						<strong>Y</strong> cannot be
+						easily obtained. In this setting, since the error term averages to zero, we can predict
+						<strong>Y</strong> using
+					</p>
+					<p style="text-align:center;">$\widehat{Y} = \widehat{f}(X) $</p>
+					<p>where $\widehat{f}$ represents our estimate for $f$ real, and $\widehat{Y}$ represents the
+						resulting prediction for $Y$ real.</p>
+					<p>In this setting, $\widehat{f}$ is often treated as a <i>black box</i>, in the sense that one is
+						not typically concerned
+						with the exact form of $f$, provided that it yields accurate predictions for $Y$.</p>
+				</section>
+
+				<section>
+					<h2>Modelos Explicativos vs Predictivos</h2>
+					<h3>Modelos explicativos</h3>
+					<p>In this situation we wish to estimate $f$, but our goal is not necessarily to make predictions
+						for $Y$. We instead want
+						to understand the relationship between $X$ and $Y$ , or more specifically, to understand how $Y$
+						changes as a function
+						of $X1, . . .,Xp.$</p>
+					<p>$\widehat{f}$ cannot be treated as a <i>black box</i>, because we need to know its exact form. In
+						this setting, one may be interested
+						in answering the following questions:</p>
+					<ul>
+						<li><span style="color: red" ;>Which predictors are associated with the response?</span> It is
+							often the case that only a small fraction of the available
+							predictors are substantially associated with $Y$.</li>
+						<li><span style="color: red" ;>What is the relationship between the response and each
+								predictor?</span> Some predictors may have a positive relationship
+							with $Y$, in the sense that increasing the predictor is associated with increasing values of
+							$Y$ . Other predictors
+							may have the opposite relationship.</li>
+						<li>Can the relationship between $Y$ and each predictor be adequately summarized using a linear
+							equation, or is the
+							relationship more complicated?</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Modelos Explicativos vs Predictivos</h2>
+					<p>Los <strong>modelos explicativos</strong> se refieren a la aplicación a datos de modelos
+						estadísticos para verificar hipótesis causales sobre
+						construcciones teóricas. En la práctica los modelos estadísticos basados en asociación aplicados
+						a datos observacionales
+						son comúnmente utilizados para ese propósito.</p>
+					<p>Los científicos están entrenados para reconocer que correlación es no causalidad, no es
+						recomendable sacar conclusiones
+						solo basado en la correlación entre $X$ y $Y$ (es posible que solo sea una coincidencia). Por lo
+						tanto, <strong>se debe entender el
+							mecanismo que subyace y que conecta $X$ y $Y$</strong>. Cuando se tiene un modelo, se puede
+						concretar los datos con confidencia.</p>
+				</section>
+
+				<section>
+					<h2>Modelos Explicativos vs Predictivos</h2>
+					<p>En <strong>modelos explicativos</strong>, la función $\widehat{f}$ es cuidadosamente construida
+						basada en $f$, en una forma que soporte interpretando
+						la relación estimada entre $X$ y $Y$, y testeando la hipótesis causal.</p>
+					<ul>
+						<li>En modelos explicativos mira hacia atrás, por lo que la función $\widehat{f}$ es utilizada
+							para testear las hipótesis planteadas.</li>
+					</ul>
+					<p>En <strong>modelos predictivos</strong>, la función $\widehat{f}$ es generalmente construida a
+						partir de los datos. La interpretación directa en términos
+						de la relación entre $X$ y $Y$ no es requerida, aunque en algunos casos <strong>la transparencia
+							de la función f es deseada</strong>.</p>
+					<ul>
+						<li>En los modelos predictivos miran hacia adelante, por lo que la función $\widehat{f}$ es
+							construida para predecir nuevas observaciones.</li>
+
+					</ul>
+				</section>
+
+				<section>
+					<h2>Modelos & Datos</h2>
+					<p>En <strong>modelos explicativos</strong>, la función $\widehat{f}$ es cuidadosamente construida
+						basada en $f$, en una forma que soporte interpretando
+						la relación estimada entre $X$ y $Y$, y testeando la hipótesis causal.</p>
+					<ul>
+						<li><span style="color: red" ;>Datos reducidos</span>: En los modelos basados en una cantidad de
+							datos finitos, <strong>sí existe una diferencia significativa</strong> entre modelos
+							explicativos y modelos predictivos, ya que un modelo optimo para propósitos de predicción
+							puede ser muy diferente a un modelo</li>
+						<li><span style="color: red" ;>Big data</span>: <strong>Puede no existir una diferencia
+								significativa</strong> entre modelos explicativos y predictivos para inferir la
+							verdadera
+							estructura de la función $\widehat{f}$ o hacer predicciones cuando se cuenta con datos
+							infinitos o si no existe ruido en los datos.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Modelos & Datos</h2>
+					<p>De acuerdo con Simon (2001) distingue entre ciencia básica y ciencia aplicada de forma similar a
+						modelos explicativos y modelos
+						predictivos.</p>
+					<ul>
+						<li>La <strong>ciencia básica</strong> busca conocer (describir el mundo) y entenderlo (proveer
+							explicaciones de este fenómeno).</li>
+						<li>Las <strong>ciencias aplicadas</strong> por el contrario buscan leyes que conecten un
+							conjunto de variables que permita obtener inferencias
+							o predicciones a partir de valores conocidos de algunas de las variables a valores
+							desconocidos de otras variables.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Asociación vs Correlación vs Causalidad</h2>
+					<p><strong>Association (dependence): </strong>indicates a general relationship between two variables,
+						where one of them provides some information
+						about another.</p>
+					<p><strong>Correlation: </strong>refers to a specific kind of association and captures information
+						about the increasing or decreasing trends (whether linear or non-linear)
+						of associated variables.</p>
+					<p><strong>Causation: </strong>refers to a stronger relationship between two associated variables, where the cause variable 
+						“is partly responsible for the effect, and the effect is partly dependent on the cause”.</p>
+					<ul>
+						<li>Statistical dependency does not imply causality</li>
+						<li>Sometimes the existence of statistical dependencies between system inputs and outputs is
+							(erroneously) used to demonstrate
+							cause-and-effect relationship between variables of interest.</li>
+						<li>Causality cannot be inferred from data analysis alone; instead, it must be assumed or
+							demonstrated by an argument outside
+							the statistical analysis.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Correlación vs Causalidad</h2>
+					<img src="https://pbs.twimg.com/media/BlI2WbvCQAA38vu.jpg" alt="cartoon2" width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Data leakage</h2>
+					<h3>Datos de entrenamiento</h3>
+					<img src="https://i.pinimg.com/564x/3c/2d/55/3c2d55ebaabe493b1a2bc1d09964feaa.jpg" alt="leon"
+						width="850" />
+					<figcaption>(Vincenzo Lavorini, 2019) www.towardsdatascience.com</figcaption>
+				</section>
+
+				<section>
+					<h2>Data leakage</h2>
+					<h3>Datos de producción</h3>
+					<img src="https://i.pinimg.com/564x/77/9f/f9/779ff9b942942d0063cd2a535be9326e.jpg" alt="leon1"
+						width="700" />
+					<figcaption>(Vincenzo Lavorini, 2019) www.towardsdatascience.com</figcaption>
+				</section>
+
+				<section>
+					<h3>Data leakage</h3>
+					<img src="https://i.pinimg.com/564x/f9/dc/53/f9dc530efac56dc4689b184bdfa45c1e.jpg" alt="correlacion"
+						width="600" />
+					<figcaption>(Vincenzo Lavorini, 2019) www.towardsdatascience.com</figcaption>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/75/e0/2f/75e02ff09ae9a3887cc08e0f3e6233dd.jpg" alt="modelo full"
+						width="650" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>No-Free-Lunch <div style="font-size:16px">(D. Wolpert & W. Macready (1997)</div>
+					</h2>
+					<img src="https://i.pinimg.com/564x/74/9c/cf/749ccf8eedd6d69b7e2f3c436c65a79b.jpg" alt="maslow"
+						width="900" />
+					<figcaption>Piramide de Maslow para Machine Learning</figcaption>
+				</section>
+
+				<section>
+					<h2><i>No-Free-Lunch</i></h2>
+					<img src="https://i.pinimg.com/564x/c0/22/88/c02288f5e7fc44a2e3f891cd15959f32.jpg" alt="free luch"
+						width="700" />
+					<figcaption>Fuente: Curso Sebastian Raschka (2019)</figcaption>
+				</section>
+
+				<section>
+					<h2><i>No-Free-Lunch</i></h2>
+					<quote><small>I suppose it is tempting, if the only tool you have is a hammer, to
+							treat everything as if it were a nail. </small> </quote>
+					<p>For example, each
+						classification algorithm has its inherent biases, and no single classification model
+						enjoys superiority if we don't make any assumptions about the task. In practice, it is
+						therefore essential to compare at least a handful of different algorithms in order to
+						train and select the best performing model.</p>
+					<figcaption>Fuente: Curso Sebastian Raschka (2019)</figcaption>
+				</section>
+
+				<section>
+					<h2 style="font-size:150%;height:50px;color:rgb(22, 39, 136)" :><i>Data is useful to illuminate the
+							path, but keep following the path
+							to find the full story...</i></h2>
+				</section>
+
+				<section>
+					<h2>Data</h2>
+					<h3>Variables</h3>
+					<p>Propiedad, atributo, característica, aspecto o dimensión de un objeto, hecho o fenómeno que puede
+						variar
+						y cuya variación es medible.</p>
+					<p><strong>Variables categóricas</strong>: Expresan una cualidad, característica o atributo que solo
+						se pueden clasificar
+						o categorizar mediante el conteo. Se establecen en rango o categorías y sólo pueden tomar los
+						valores que únicamente
+						pertenecen al conjunto.</p>
+					<p><strong>Variables continuas</strong> variables numéricas que no pueden ser contadas y tienen un
+						número infinito de
+						valores entre un intervalo determinado. Nunca puede ser medido con exactitud y depende de la
+						precisión de los equipos
+						de medida..</p>
+				</section>
+
+				<section>
+					<h2>Data</h2>
+					<img src="https://i.pinimg.com/originals/c3/4a/c5/c34ac50238798ac35bcaf933e4dc525d.jpg" alt="table"
+						width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h3>Tidy data</h3>
+					<img src="https://www.ksk-anl.com/wp-content/uploads/2018/04/messy-tidy-ex.png" width="800">
+				</section>
+
+				<section>
+					<h2>Data</h2>
+					<img src="https://www.openscapes.org/img/blog/tidydata/tidydata_1.jpg" alt="table" width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+			</section>
+<!--Data processing-->
+			<section>
+				<section>
+					<h1>Data processing</h1>
+				</section>
+
+				<section>
+					<img src="https://miro.medium.com/max/1400/1*c9mmBc2UJ-aQRGANRP0bJg.png" width="1000">
+				</section>
+
+				<section>
+					<h3>Exploratory Data Analysis (EDA)</h3>
+					<p>Exploratory Data Analysis (EDA) is the very first step before you can perform any changes to the dataset or develop a statistical model to answer 
+						business problems. In other words, the process of EDA contains summarizing, visualizing and getting deeply acquainted with the important traits
+						of a data set. </p>
+						<ul>
+							<li>What kind of data is this?</li>
+							<li>How complex is this data?</li>
+							<li>Is this data sufficient for meeting our ultimate goal</li>
+							<li>Is there any missing data? </li>
+							<li>Are there any missing values?</li>
+							<li>Is there any relationship between different independent variables of the dataset? If yes then how strong is that relationship?</li>
+							<li>Are observations independent or tightly coupled?</li>
+						</ul>
+						<figcaption>Source = Leah Nguyen (2021)</figcaption>
+				</section>
+
+				<section>
+					<h3>Data Preprocessing</h3>
+					<p>Data Preprocessing is usually about data engineers getting large volumes of data from the sources — databases, object stores, data lakes, etc — and 
+						performing basic data cleaning and data wrangling preparing them for the later part, which is essentially important before modelling — feature 
+						engineering!</p>
+						<ul>
+							<li>If the data has html tags then remove it.</li>
+							<li>If data contains Null values then impute it.</li>
+							<li>If the data has some irrelevant features then drop it</li>
+							<li>If the data has some abbreviation then replace it.</li>
+							<li>If the data has stop words then remove it.</li>
+						</ul>
+						<figcaption>Source = Leah Nguyen (2021)</figcaption>
+				</section>
+
+				<section>
+					<h3>Feature Engineering</h3>
+					<p>Feature Engineering is known as the process of transforming raw data into features that better 
+						represent the underlying problem to predictive models, resulting in improved model accuracy on unseen data.</p>
+
+						<img src="https://miro.medium.com/max/1400/1*ftXnRQIsut53O4634oRVxQ.png" width="400">
+					
+					<p>Specifically, the data scientist will begin building the models and testing to see if the features achieve the desired results. This is a repetitive 
+						process that includes running experiments with various features, as well as adding, removing, and changing features multiple times!!!</p>
+						<figcaption>Source = Leah Nguyen (2021)</figcaption>
+
+				</section>
+
+				<section>
+					<h3>Web scraping</h3>
+					<p>Web Scraping refers to the process of extracting data from a website or specific webpage.
+						Once web scrapers extract the user’s desired data, they often also restructure the data 
+						into a more convenient format such as an csv.</p>
+					<img src="https://www.xenonfactory.es/wp-content/uploads/2020/09/Scraping-tecnica-de-raspado-web.png" width="600"/>
+				</section>
+
+				<section>
+					<h3>API</h3>
+					<p>An API (Application Programming Interface) is a set of procedures and communication protocols 
+						that provide access to the data of an application, operating system or other services.
+						Generally, this is done to allow the development of other applications that use the same data.</p>
+					<img src="https://miro.medium.com/max/1400/1*2ButIBBk8OBypIt8eLyyvw.png" width="800"/>
+				</section>
+
+				<section>
+					<h2><i>Data preprocessing</i></h2>
+					<img src="https://i.pinimg.com/564x/70/62/73/706273edac5c5872bef61b8ca700e6d5.jpg" width="600" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2><i>Data preprocessing</i></h2>
+					<img src="https://i.pinimg.com/564x/45/d0/5f/45d05f94bee8bb8f55586a5027b81cfa.jpg" width="650" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h3>Data cleaning...<em>The world is imperfect, so is data</em></h3>
+					<ul>
+						<li>Drop multiple columns</li>
+						<li>Change dtypes</li>
+						<li>Encoding</li>
+						<li>Missing data</li>
+						<li>Remove strings in columns</li>
+						<li>Remove white space in columns</li>
+						<li>Concatenate two columns with strings (with condition)</li>
+						<li>Convert timestamp(from string to datetime format)</li>
+					</ul>
+					</br>
+					<figcaption><a href="https://towardsdatascience.com/the-simple-yet-practical-data-cleaning-codes-ad27c4ce0a38">Source: Admond Lee</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Datos faltantes</h2>
+					<img src="https://i.pinimg.com/564x/11/72/1a/11721aa64ffab82e0ba6725432f864f1.jpg" alt="bansky"
+						width="950" />
+					<figcaption>The Missing Piece by Banksy in Vancouver</figcaption>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/92/78/f7/9278f70046472482bc59b6385ad7595c.jpg" alt="bansky"
+						width="850" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/0f/1d/ed/0f1dede12577ca0d2ea8b8257f9ac7ea.jpg" alt="bansky"
+						width="950" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/99/9c/43/999c435d540d175b75c178e91101791c.jpg" alt="bansky"
+						width="950" />
+				</section>
+				<section>
+					<h2><i>Outliers</i></h2>
+					<img src="https://i.pinimg.com/564x/f1/c8/f6/f1c8f61e63a1dd78590b93d647ee522c.jpg" width="950" />
+				</section>
+
+				<section>
+					<h2><i>Outliers</i></h2>
+					<img src="https://i.pinimg.com/564x/a6/23/5e/a6235e3a7183290541485120ae97e81c.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2><i>Outliers</i></h2>
+					<img src="https://i.pinimg.com/564x/8a/9e/81/8a9e813c7d60c07e474c78429eb479be.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2><i>Outliers</i></h2>
+					<img src="https://i.pinimg.com/564x/f7/da/04/f7da04756659b3329129a91ae212ece7.jpg" width="600" />
+				</section>
+
+				<section>
+					<h2><i>Outliers</i></h2>
+					<img src="https://i.pinimg.com/564x/5e/62/1d/5e621dbb651137d0159c7aa8ab32d127.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2><i>Binning</i></h2>
+					<img src="https://i.pinimg.com/564x/07/58/3d/07583d2b0b97cdb330509734ea071105.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<p>Los modelos lineales o regresión logística son especialmente sensibles a este problema.
+						Los modelos basados en arboles de decisión pueden funcionar adecuadamente sin escalar las variables.</p>
+					<img src="https://miro.medium.com/max/832/1*vEqbUwYneOkRQXCdPU0n9g.png" width="450">
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<img src="https://i.pinimg.com/564x/28/df/12/28df127074b36d9517b359fb2026b86a.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<img src="https://i.pinimg.com/564x/6b/40/cc/6b40cc6cccf3a28ed857df178069e94b.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<img src="https://i.pinimg.com/564x/be/87/eb/be87eb70dc261fd42ed043805e7f759a.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<img src="https://i.pinimg.com/564x/dd/89/f3/dd89f3a4ce98036e87df557c26ef4d0a.jpg" width="440" />
+				</section>
+
+				<section>
+					<h2>Escalar</h2>
+					<img src="https://i.pinimg.com/564x/b3/a2/b0/b3a2b07c023f45cef860010defe7deed.jpg" width="800" />
+				</section>
+
+				<section>
+					<h2><i>Label encoding</i></h2>
+					<img src="https://i.pinimg.com/564x/bc/d5/56/bcd5567a761f8a6265b257d3ed77155c.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2><i>Label encoding</i></h2>
+					<img src="https://i.pinimg.com/564x/4a/37/b4/4a37b4be71227a31ee5c34e7778d71bd.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<img src="http://www.svds.com/wp-content/uploads/2016/08/messy.png" width="800" />
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<ul>
+						<li><strong>Ajuste de Parámetros del modelo: </strong>Consiste en ajustar parametros ó metricas
+							del propio algoritmo para
+							intentar equilibrar a la clase minoritaria penalizando a la clase mayoritaria durante el
+							entrenamiento. Ejemplos como el
+							parámetro class_weight = «balanced». No todos los algoritmos tienen estas posibilidades.
+						</li>
+						<li><strong>Modificar el Dataset: </strong>podemos eliminar o agregar muestras de la clase
+							mayoritaria o minoritaria para
+							reducirlo o aumentarlo e intentar equilibrar la situación. Tiene como «peligroso» que
+							podemos prescindir de muestras
+							importantes, que brindan información y por lo tanto empeorar el modelo.</li>
+						<li><strong>Muestras artificiales: </strong>podemos intentar crear muestras sintéticas (no
+							idénticas) utilizando diversos
+							algoritmos que intentan seguir la tendencia del grupo minoritario. Según el método, podemos
+							mejorar los resultados.
+							Lo peligroso de crear muestras sintéticas es que podemos alterar la distribución «natural»
+							de esa clase y confundir
+							al modelo en su clasificación.</li>
+						<li><strong>Balanced Ensemble Methods: </strong>Utiliza las ventajas de hacer ensamble de
+							métodos, es decir, entrenar
+							diversos modelos y entre todos obtener el resultado final (por ejemplo «votando») pero se
+							asegura de tomar muestras
+							de entrenamiento equilibradas.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<img src="http://www.svds.com/wp-content/uploads/2016/08/ImbalancedClasses_fig9.png" width="1000" />
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<img src="https://i.pinimg.com/564x/36/9e/97/369e972fd3b2da2b93bfce72c4765e3b.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<img src="https://i.pinimg.com/564x/0b/26/c1/0b26c1cd5d6dd49abb1ebc43790bcd97.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Clases desbalanceadas</h2>
+					<img src="https://i.pinimg.com/564x/ac/e4/18/ace418892048804b0553276064a8730b.jpg" width="850" />
+				</section>
+
+			</section>
+<!--Seleccion de variables-->
+			<section>
+				<section>
+					<h1>Selección de variables</h1>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/c1/97/27/c19727b83517bdcdd916cb28f466a5fa.jpg" width="800" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Selección de variables</h2>
+					<p>Often, in a high dimensional dataset, there remain some entirely irrelevant, insignificant and
+						unimportant features.
+						It has been seen that the contribution of these types of features is often less towards
+						predictive modeling as compared
+						to the critical features. They may have zero contribution as well. These features cause a number
+						of problems which in
+						turn prevents the process of efficient predictive modeling.</p>
+					<ul>
+						<li>Unnecessary resource allocation for these features.</li>
+						<li>These features act as a noise for which the machine learning model can perform terribly
+							poorly.</li>
+						<li>The machine model takes more time to get trained.</li>
+						<li>It reduces the complexity of a model and makes it easier to interpret.</li>
+						<li>It improves the accuracy of a model if the right subset is chosen.</li>
+						<li>It reduces Overfitting.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Selección de variables</h2>
+					<img src="https://i.pinimg.com/564x/ec/10/85/ec1085046cd76245e6221ffa039da56c.jpg" alt="table"
+						width="1000" />
+					<figcaption><small></small></figcaption>
+				</section>
+
+				<section>
+					<h2>Selección de variables</h2>
+					<h3><i>Feature selection & Feature transformation</i></h3>
+					<p>Sometimes, feature selection is mistaken with dimensionality reduction. But they are different.
+						Feature selection is
+						different from dimensionality reduction. Both methods tend to reduce the number of attributes in
+						the dataset, but a
+						dimensionality reduction method does so by creating new combinations of attributes (sometimes
+						known as feature
+						transformation), whereas feature selection methods include and exclude attributes present in the
+						data without changing
+						them.</p>
+					<ul>
+						<li><strong>Features Independientes:</strong> Para no tener redudancias tus features deberían
+							ser lo más independientes
+							posible entre ellas.</li>
+						<li><strong>Cantidad de Features controlada: </strong>Nuestra intuición nos falla en dimensiones
+							superiores a 3. En la mayoría de los casos aumentar la cantidad de features
+							afecta negativamente la performance si no contamos con una gran cantidad de datos. Por
+							ultimo pocas features aseguran
+							una mejor interpretabilidad de los modelos</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2><i>Filter methods</i></h2>
+					<p>Filter method relies on the general uniqueness of the data to be evaluated and pick feature
+						subset, not including any mining
+						algorithm. Filter method uses the exact assessment criterion which includes distance,
+						information, dependency, and consistency.</p>
+					<img src="https://www.analyticsvidhya.com/wp-content/uploads/2016/11/Filter_1.png" width="1000">
+				</section>
+
+				<section>
+					<h2><i>Wrapper methods</i></h2>
+					<p> A wrapper method needs one machine learning algorithm and uses its performance as evaluation
+						criteria. This method searches for
+						a feature which is best-suited for the machine learning algorithm and aims to improve the mining
+						performance.</p>
+					<img src="https://www.analyticsvidhya.com/wp-content/uploads/2016/11/Wrapper_1.png" width="1000">
+				</section>
+
+				<section>
+					<h2><i>Embedded methods</i></h2>
+					<p> Embedded methods are iterative in a sense that takes care of each iteration of the model
+						training process and carefully extract
+						those features which contribute the most to the training for a particular iteration.</p>
+					<img src="https://www.analyticsvidhya.com/wp-content/uploads/2016/11/Embedded_1.png" width="1000">
+				</section>
+
+				<section>
+					<h2><i>Filter vs. wrapper methods</i></h2>
+					<ul>
+						<li>Filter methods do not incorporate a machine learning model in order to determine if a
+							feature is good or bad whereas
+							wrapper methods use a machine learning model and train it the feature to decide if it is
+							essential or not.</li>
+						<li>Filter methods are much faster compared to wrapper methods as they do not involve training
+							the models. On the other hand,
+							wrapper methods are computationally costly, and in the case of massive datasets, wrapper
+							methods are not the most effective
+							feature selection method to consider.</li>
+						<li>Filter methods may fail to find the best subset of features in situations when there is not
+							enough data to model the
+							statistical correlation of the features, but wrapper methods can always provide the best
+							subset of features because of their
+							exhaustive nature.</li>
+						<li>Using features from wrapper methods in your final machine learning model can lead to
+							overfitting as wrapper methods
+							already train machine learning models with the features and it affects the true power of
+							learning. But the features
+							from filter methods will not lead to overfitting in most of the cases</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Análisis de variables</h2>
+					<img src="https://miro.medium.com/max/631/1*nS6WoUIYrSfYbOO_s-38Bg.jpeg" width="700">
+				</section>
+
+				<section>
+					<h2>Análisis univariado</h2>
+					<img src="https://hockeygraphsdotcom.files.wordpress.com/2015/01/uni-cf2.png" width="900">
+				</section>
+
+				<section>
+					<h2>Análisis univariado</h2>
+					<img src="https://anomaly.io/wp-content/uploads/2015/12/multiplicative-model.png" width="1000">
+				</section>
+
+				<section>
+					<h2>Análisis bivariado</h2>
+					<img src="https://miro.medium.com/max/700/1*PtWT7cP6XfBxxWKZSGfkRQ.jpeg" width="750">
+				</section>
+
+				<section>
+					<h2>Análisis bivariado</h2>
+					<!-- Load d3.js -->
+					<script src="https://d3js.org/d3.v4.js"></script>
+
+					<!-- Create a div where the graph will take place -->
+					<div id="scatter"></div>
+
+					<script>
+
+						// Dimension of the whole chart. Only one size since it has to be square
+						var marginWhole = { top: 10, right: 10, bottom: 10, left: 10 },
+							sizeWhole = 620 - marginWhole.left - marginWhole.right
+
+						// Create the svg area
+						var svg = d3.select("#scatter")
+							.append("svg")
+							.attr("width", sizeWhole + marginWhole.left + marginWhole.right)
+							.attr("height", sizeWhole + marginWhole.top + marginWhole.bottom)
+							.append("g")
+							.attr("transform", "translate(" + marginWhole.left + "," + marginWhole.top + ")");
+
+
+						d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function (data1) {
+
+							// What are the numeric variables in this dataset? How many do I have
+							var allVar = ["Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width"]
+							var numVar = allVar.length
+
+							// Now I can compute the size of a single chart
+							mar = 20
+							size = sizeWhole / numVar
+
+
+							// ----------------- //
+							// Scales
+							// ----------------- //
+
+							// Create a scale: gives the position of each pair each variable
+							var position = d3.scalePoint()
+								.domain(allVar)
+								.range([0, sizeWhole - size])
+
+							// Color scale: give me a specie name, I return a color
+							var color = d3.scaleOrdinal()
+								.domain(["setosa", "versicolor", "virginica"])
+								.range(["#402D54", "#D18975", "#8FD175"])
+
+
+							// ------------------------------- //
+							// Add charts
+							// ------------------------------- //
+							for (i in allVar) {
+								for (j in allVar) {
+
+									// Get current variable name
+									var var1 = allVar[i]
+									var var2 = allVar[j]
+
+									// If var1 == var2 i'm on the diagonal, I skip that
+									if (var1 === var2) { continue; }
+
+									// Add X Scale of each graph
+									xextent = d3.extent(data1, function (d) { return +d[var1] })
+									var x = d3.scaleLinear()
+										.domain(xextent).nice()
+										.range([0, size - 2 * mar]);
+
+									// Add Y Scale of each graph
+									yextent = d3.extent(data1, function (d) { return +d[var2] })
+									var y = d3.scaleLinear()
+										.domain(yextent).nice()
+										.range([size - 2 * mar, 0]);
+
+									// Add a 'g' at the right position
+									var tmp = svg
+										.append('g')
+										.attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
+
+									// Add X and Y axis in tmp
+									tmp.append("g")
+										.attr("transform", "translate(" + 0 + "," + (size - mar * 2) + ")")
+										.call(d3.axisBottom(x).ticks(3));
+									tmp.append("g")
+										.call(d3.axisLeft(y).ticks(3));
+
+									// Add circle
+									tmp
+										.selectAll("myCircles")
+										.data(data1)
+										.enter()
+										.append("circle")
+										.attr("cx", function (d) { return x(+d[var1]) })
+										.attr("cy", function (d) { return y(+d[var2]) })
+										.attr("r", 3)
+										.attr("fill", function (d) { return color(d.Species) })
+								}
+							}
+
+
+							// ------------------------------- //
+							// Add histograms = diagonal
+							// ------------------------------- //
+							for (i in allVar) {
+								for (j in allVar) {
+
+									// variable names
+									var var1 = allVar[i]
+									var var2 = allVar[j]
+
+									// If var1 == var2 i'm on the diagonal, otherwisee I skip
+									if (i != j) { continue; }
+
+									// create X Scale
+									xextent = d3.extent(data1, function (d) { return +d[var1] })
+									var x = d3.scaleLinear()
+										.domain(xextent).nice()
+										.range([0, size - 2 * mar]);
+
+									// Add a 'g' at the right position
+									var tmp = svg
+										.append('g')
+										.attr("transform", "translate(" + (position(var1) + mar) + "," + (position(var2) + mar) + ")");
+
+									// Add x axis
+									tmp.append("g")
+										.attr("transform", "translate(" + 0 + "," + (size - mar * 2) + ")")
+										.call(d3.axisBottom(x).ticks(3));
+
+									// set the parameters for the histogram
+									var histogram = d3.histogram()
+										.value(function (d) { return +d[var1]; })   // I need to give the vector of value
+										.domain(x.domain())  // then the domain of the graphic
+										.thresholds(x.ticks(15)); // then the numbers of bins
+
+									// And apply this function to data to get the bins
+									var bins = histogram(data1);
+
+									// Y axis: scale and draw:
+									var y = d3.scaleLinear()
+										.range([size - 2 * mar, 0])
+										.domain([0, d3.max(bins, function (d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+
+									// append the bar rectangles to the svg element
+									tmp.append('g')
+										.selectAll("rect")
+										.data(bins)
+										.enter()
+										.append("rect")
+										.attr("x", 1)
+										.attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+										.attr("width", function (d) { return x(d.x1) - x(d.x0); })
+										.attr("height", function (d) { return (size - 2 * mar) - y(d.length); })
+										.style("fill", "#b8b8b8")
+										.attr("stroke", "white")
+								}
+							}
+
+
+						})
+
+					</script>
+				</section>
+
+				<section>
+					<h2>Relación con la variable dependiente</h2>
+					<img src="https://i.pinimg.com/564x/18/62/95/1862952a60eb58b14224c97f077c21b5.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Independencia de las variables</h2>
+					<img src="https://i.pinimg.com/564x/3c/76/f2/3c76f27267f00f353ced6c566e2e60af.jpg" width="1000">
+				</section>
+			</section>
+<!--Incertidumbre, desempeño & predicción-->
+			<section>
+				<section>
+					<h1>Incertidumbre, desempeño & predicción</h1>
+				</section>
+
+				<section>
+					<img src="https://cdn.quotes.pub/1920x1080/there-are-known-knowns-these-are-things-we-k-64285.jpg"
+						width="1000">
+				</section>
+
+				<section class="level2">
+					<p><strong>Incertidumbre (Uncertainty): </strong>grado con el cual las características actuales del
+						terreno
+						pueden ser presentadas espacialmente en un mapa.</p><br></br>
+					<ul>
+						<li><strong>Aleatoric Uncertainty: </strong>this is the uncertainty that is inherent in the
+							process we are trying
+							to explain. Uncertainty in this category tends to be irreducible in practice.</li><br></br>
+						<li><strong>Epistemic Uncertainty: </strong>tqhis is the uncertainty attributed to an inadequate
+							knowledge of the
+							model most suited to explain the data. This uncertainty is reducible given more knowledge
+							about the problem at hand.
+							e.g. reduce this uncertainty by adding more parameters to the model, gather more data etc.
+						</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<h2></h2>
+					<img src="https://i.pinimg.com/564x/f5/11/9a/f5119a5bb1867aa5733811231cad159c.jpg" width="680">
+				</section>
+
+				<section class="level2">
+					<h3>En teoría...</h3>
+					<img src="https://i.pinimg.com/564x/29/7a/fe/297afe0ac87de180c2fca5612ceba2c6.jpg" width="500">
+					<img src="https://i.pinimg.com/564x/63/1e/d5/631ed54783ca744605cb6a7fa1011edc.jpg" width="850">
+				</section>
+
+				<section class="level2">
+					<h3>En realidad...</h3>
+					<img src="https://i.pinimg.com/564x/f6/30/db/f630db0733a3f64883bf9e360971a5bb.jpg" width="450">
+					<img src="https://i.pinimg.com/564x/d4/38/d7/d438d7414ad6a6a2d2627d35968b4321.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/d3/21/df/d321df3f3abfbfdc400af1ec454f6e5f.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<p>$Y$ = $f(x)$ + <i>irreducible error</i> (<i>unknown unknowns</i>)</p></br>
+					<p>$f(x)$ = $\widehat{f}(x)$ + <i>reducible error</i> (<i>known knowns</i> + <i>known unknowns</i>)
+					</p></br>
+					<p>$Y$ = $\widehat{f}(x)$ + <i>reducible error</i> + <i>irreducible error</i></p></br>
+					<p>$Y$ = <i>known knowns</i> + <i>known unknowns</i> + <i>unknown unknowns</i></p>
+				</section>
+
+				<section class="level2">
+					<h3>Error (error):</h3>
+					<p>la diferencia entre el valor mapeado o la clase y el valor o clase verdadero</p>
+					<img src="https://i.pinimg.com/564x/24/65/b6/2465b65650ec39c3233e516d117089a2.jpg" width="600">
+					<ul>
+						<li><strong>Reducible error: </strong>$\widehat{f}$ will not be a perfect estimate for $f$ real,
+							and this inaccuracy will introduce
+							some error. This error is reducible because we can potentially improve the accuracy of
+							$\widehat{f}$ by using the most
+							appropriate statistical learning technique to estimate $f$.</li>
+						<li><strong>Irreducible error: </strong>Our prediction would still have some error in it. This
+							is because $\widehat{Y}$ is also a
+							function of $\widehat{x}$, which, by definition, cannot be predicted using $X$. The quantity
+							may contain unmeasured variables
+							that are useful in predicting $Y$ : since we don’t measure them, $\widehat{f}$ cannot use
+							them for its prediction. The quantity
+							may also contain unmeasurable variation.</li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/94/fe/94/94fe94e58b6eed7582179a0fca9ba159.jpg" width="800">
+				</section>
+
+				<section>
+					<img src="https://miro.medium.com/max/1262/0*Gea_2cLlP1TUPNoZ.png" width="700">
+					<figcaption>Source: <a href="https://towardsdatascience.com/causal-inference-with-linear-regression-endogeneity-9d9492663bac">Aaron Zhu (Towards Data Science, 2022)</a></figcaption>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/4e/61/a8/4e61a88bb2ccd1af7a97eb0f7b418ee5.jpg" width="700">
+				</section>
+
+				<section class="level2">
+					<h3>Bias - Variance trade-off</h3>
+					<p><strong><i>Bias</i></strong>: is the amount of error introduced by approximating real-world
+						phenomena with a simplified model.</p>
+					<ul>
+						<li><strong><i>Low Bias: </i></strong>Suggests less assumptions about the form of the target
+							function.
+							Ej. Decision Trees, k-NN and Support Vector Machines.</li>
+						<li><strong><i>High Bias: </i></strong>Suggests more assumptions about the form of the target
+							function.
+							Ej. Linear Regression, Linear Discriminant Analysis and Logistic Regression.</li>
+					</ul>
+					<p><strong><i>Variance</i></strong>: is how much your model's test error changes based on variation
+						in the training data.
+						It reflects the model's sensitivity to the idiosyncrasies of the data set it was trained on.</p>
+					<ul>
+						<li><strong><i>Low Variance: </i></strong>Suggests small changes to the estimate of the target
+							function with changes to the
+							training dataset. Ej. Linear Regression, Linear Discriminant Analysis and Logistic
+							Regression.</li>
+						<li><strong><i>High Variance: </i></strong>Suggests large changes to the estimate of the target
+							function with changes to the
+							training dataset. Ej. Decision Trees, k-Nearest Neighbors and Support Vector Machines.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/f6/30/db/f630db0733a3f64883bf9e360971a5bb.jpg" width="450">
+					<img src="https://i.pinimg.com/564x/d4/38/d7/d438d7414ad6a6a2d2627d35968b4321.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/50/e5/f8/50e5f82889da0049328c446c65a1a87a.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/73/c2/1e/73c21e7100769961ee46dd793792e072.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/5b/72/c6/5b72c631f692bc4fd78a37ba9cb439b9.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/5f/03/ad/5f03adbfb2b3c260d0151206e27294c2.jpg" width="800">
+				</section>
+
+				<section>
+					<form>
+						<label id="label" style="font-size: 20px;">0 Degree Polynomial</label>
+						<input type="range" id="points" min="0" max="20" value="0">
+						<div id="regression"></div>
+					</form>
+					<script src="./js/LinearRegression.js"></script>
+
+					<script>
+
+						var data = [];
+
+						for (var i = 0; i < 20; i++) {
+							var a = Math.round(600 * Math.random()) / 100;
+							data.push({ 'x': a, 'y': 0.9 * Math.sin(a) + (0.25 * Math.random()) - 0.125 });
+						}
+						var degree = document.getElementById("points").value;
+						var newdata = BasisExpand(data, degree);
+						var params = LinearRegression(newdata);
+						var smoothed = [];
+
+
+						for (var i = 1; i < 600; i++) {
+							var val = BasisExpand([{ 'x': i / 100, 'y': 0 }], degree);
+							var y = 0.0;
+							for (var j = 0; j < params.length; j++) {
+								y += params[j][0] * val[0].x[j];
+							}
+							smoothed.push({ 'x': i / 100, 'y': y });
+
+						}
+						var errors = Error(smoothed, data);
+
+
+						var margin1 = { top: 80, right: 180, bottom: 80, left: 180 },
+							width = 960 - margin1.left - margin1.right,
+							height = 500 - margin1.top - margin1.bottom;
+
+						var svg1 = d3.select("#regression").append("svg")
+							.attr("width", width + margin1.left + margin1.right)
+							.attr("height", height + margin1.top + margin1.bottom)
+							.append("g")
+							.attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+						var x = d3.scaleLinear()
+							.domain([0, 6])
+							.range([0, width]);
+
+
+						var y = d3.scaleLinear()
+							.domain([-1, 1])
+							.range([height, 0]);
+
+
+						var xAxis = d3.axisBottom()
+							.scale(x);
+
+						var yAxis = d3.axisLeft()
+							.scale(y);
+
+						var line = d3.line()
+							.x(function (d) { return x(d.x); })
+							.y(function (d) { return y(d.y); });
+
+						svg1.append("g")
+							.attr("class", "x axis")
+							.attr("transform", "translate(0," + height + ")")
+							.call(xAxis)
+
+						svg1.append("g")
+							.attr("class", "y axis")
+							.call(yAxis);
+
+						svg1.selectAll(".dot")
+							.data(data)
+							.enter().append("circle")
+							.attr("class", "dot")
+							.attr("r", 3.5)
+							.attr("cx", function (d) {
+								return x(d.x);
+							})
+							.attr("cy", function (d) {
+								return y(d.y)
+							})
+							.style("fill", "black");
+
+						svg1.append("path")
+							.datum(smoothed)
+							.attr("class", "line")
+							.attr("d", line);
+
+						svg1.selectAll("errors")
+							.data(errors)
+							.enter().append("rect")
+							.attr("class", "errors")
+							.attr("x", function (d) {
+								return x(d.x);
+							})
+							.attr("y", function (d) {
+								if (d.sy <= d.y) {
+									return y(d.y);
+								}
+								else {
+									return y(d.y) - Math.abs(y(d.y) - y(d.sy));
+								}
+							})
+							.attr("width", function (d) {
+								return Math.abs(x(d.y) - x(d.sy));
+							})
+							.attr("height", function (d) {
+								return Math.abs(y(d.y) - y(d.sy));
+							})
+							.style("fill", "red")
+							.style("fill-opacity", 0.5);
+
+						d3.select("#points")
+							.on("change", function (d) {
+								var degree = document.getElementById("points").value;
+								d3.select("label")
+									.text(degree + " Degree Polynomial");
+								var newdata = BasisExpand(data, degree);
+								var params = LinearRegression(newdata);
+								var smoothed = [];
+
+								for (var i = 1; i < 600; i++) {
+									var val = BasisExpand([{ 'x': i / 100, 'y': 0 }], degree);
+									var esty = 0.0;
+									for (var j = 0; j < params.length; j++) {
+										esty += params[j][0] * val[0].x[j];
+									}
+									smoothed.push({ 'x': i / 100, 'y': esty });
+
+								}
+								var errors = Error(smoothed, data);
+
+								svg1.selectAll(".line")
+									.datum(smoothed)
+									.transition()
+									.attr("class", "line")
+									.attr("d", line);
+
+								svg1.selectAll(".errors")
+									.data(errors)
+									.transition()
+									.attr("class", "errors")
+									.attr("x", function (d) {
+										return x(d.x);
+									})
+									.attr("y", function (d) {
+										if (d.sy <= d.y) {
+											return y(d.y);
+										}
+										else {
+											return y(d.y) - Math.abs(y(d.y) - y(d.sy));
+										}
+									})
+									.attr("width", function (d) {
+										return Math.abs(x(d.y) - x(d.sy));
+									})
+									.attr("height", function (d) {
+										return Math.abs(y(d.y) - y(d.sy));
+									})
+									.style("fill", "red")
+									.style("fill-opacity", 0.5);
+							});
+
+						function BasisExpand(data, degree) {
+							var BasisData = [];
+							for (var i = 0; i < data.length; i++) {
+								var expanded = { 'x': [], 'y': data[i].y };
+								for (var j = 0; j <= degree; j++) {
+									expanded['x'].push(Math.pow(data[i].x - 3, j));
+								}
+								BasisData.push(expanded);
+							}
+							return BasisData;
+						}
+
+						function Error(smoothed_data, data) {
+							var errors = [];
+							for (var i = 0; i < data.length; i++) {
+								j = Math.round(data[i].x * 100) - 1;
+								var smooth_y = smoothed_data[j].y;
+								errors.push({ 'x': data[i].x, 'y': data[i].y, 'sy': smooth_y });
+							}
+							return errors;
+						}
+					</script>
+
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/0f/26/9b/0f269b6f47c71b2bd895cfaab5e28fe5.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/24/59/74/245974d13ad72facfe1b197902c62c8f.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/41/88/b2/4188b2401e3cdd004770da5997ca4309.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/61/5c/c8/615cc849b5a91b7b923b6e782c653809.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/98/ec/2d/98ec2d8858e500edade476220bd43292.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/61/5c/c8/615cc849b5a91b7b923b6e782c653809.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/22/9f/7c/229f7c75c6d024ad26d894aa3a49b98a.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Features</h3>
+					<ul>
+						<li>Having too many features may introduce high variance and results in overfitting.</li>
+						<li>Although Regularization helps in reducing the importance of features, it is always a good
+							idea to review the
+							importance of features using Exploratory Data Analysis (EDA) or by using domain knowledge.
+						</li>
+						<li>If a feature is adding little value in predicting the dependent variable it makes sense not
+							to use that feature.</li>
+						<li>On the other hand, if the model is underfitting, it means that the model is not learning
+							enough to fit sufficient
+							number of points by finding the right hyperplane. In such a scenario, more features should
+							be added in the model.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/45/c0/b2/45c0b25bb04a6cd5430a6331c348d9ed.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Number of Training Records</h3>
+					<ul>
+						<li>Increasing the number of training records generally tends to help reduce Variance.</li>
+						<li>However, it also depends on the quality of data. For example, if the test data has some
+							particular type of data
+							which is not at all present in training data then overfitting is bound to happen because the
+							model has not learnt
+							a particular type of data in the training. In such a case, if we just add more data records
+							in training data but
+							do not add the type of data which was actually missing from the training dataset earlier,
+							then this would not help
+							in reducing variance.</li>
+						<li>If the model is having high bias, then adding data does not help beyond a certain point. The
+							training error remains
+							almost constant after certain point as we increase the number of training records.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<h3>Los datos para reducir el sobre-ajuste</h3>
+					<img src="https://i.pinimg.com/564x/8c/50/d2/8c50d2cca6845b7ac2561459cb6d29bc.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Early Stopping</h3>
+					<ul>
+						<li>Early stopping is used in Neural Network and Tree based algorithms.
+							As shown in the graph below, in Neural networks it may happen that the difference between
+							the training error and cross
+							validation error reduces as the number of epochs increases. It reaches its minimum value on
+							certain epoch and then
+							increases in subsequent epochs. In early stopping, we stop the algorithm on the epoch (or
+							the next epoch) showing
+							minimum difference between train and cross validation error.</li>
+						<li>In Decision trees, the variance increases as the depth of the tree increases. To make sure
+							we don’t overfit, the
+							growth of the decision tree is stopped at the optimum depth. This is typically achieved in
+							two ways. First is stopping
+							the tree growth if the number of data points at a node less than some specific threshold
+							value. In this case, having too few number of data points on a sample indicate that
+							the tree might be picking up some noisy points or outliers. The second way is to stop the
+							growth of the tree at length
+							which gives minimum cross validation error.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/2c/a6/60/2ca6604ed941e873bbd8fafc0f9e0664.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Choice of Machine Learning Algorithm: </h3>
+					<ul>
+						<li><strong>Bias -Variance trade-off</strong> can be controlled using regularization and other
+							means in all machine learning algorithms.
+							However, some ML algorithms such as Deep Neural networks, tend to overfit more. This is
+							because, Deep Neural networks
+							are typically used in applications having huge number of features (e.g. Computer Vision).
+						</li>
+						<li><strong>Bagging (Random Forest) and Boosting (Gradient Boosted Decision Trees)</strong> are
+							algorithms that inherently reduce
+							Variance and Bias respectively. In Random Forest, the base learners (Decision Trees) are of
+							higher depth which
+							make the base learners more prone to overfitting (i.e. high variance) but because of the
+							Randomization, the overall
+							variance on the aggregate level reduces significantly. On the other hand, Boosting
+							algorithms such as Gradient
+							Boosted Decision Trees (GBDT) use shallow base learners which are more prone to underfitting
+							(i.e. high bias)
+							but it reduces the bias on aggregate level by sequentially adding and training simple
+							(shallow decision trees
+							with less complexity) base learners.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<h3>Learning curve</h3>
+					<img src="https://i.pinimg.com/564x/ef/d1/14/efd114e51159421cdbe71847c475a4ec.jpg" width="750">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/a3/70/d2/a370d2d34f3540165e48585f6569655f.jpg" width="750">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/0c/11/89/0c11898107e3b2bd9eee2a0dd7b1c729.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/c4/77/e6/c477e6a7f3d782771bd1e7652b3f2b40.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/ba/77/15/ba7715625167027f2eaab90bec8fd593.jpg" width="1000">
+				</section>
+
+				<section>
+					<h1>Validación del modelo</h1>
+				</section>
+
+				<section class="level2">
+					<p>La evaluación de un modelo considera dos aspectos del desempeño de un modelo:</p><br></br>
+					<ul>
+						<li><strong>Poder explicativo: </strong>el cual consiste en la evaluación del poder de
+							explicación, el cual mide la fuerza de la relación indicada por la función $f$. </il><br></br>
+						<li><strong>poder predictivo: </strong>se refiere al desempeño de la función $f$ con nuevos
+							datos.</il>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<p>La validación en <strong>modelos explicativos</strong> consiste de dos partes:</p>
+					<ul>
+						<li>validar que la función $\hat{f}$ adecuadamente representa $f$, y </li><br></br>
+						<li>el ajuste del modelo que valida que la función f se ajuste a los datos (X,y).</li><br></br>
+					</ul>
+					<p>La validación en <strong>modelo predictivos</strong> se enfoca en la generalización, la cual
+						consiste en la habilidad de la
+						función $f$ en predecir con nuevos datos (X,y).</p>
+				</section>
+
+				<section class="level2">
+					<p>La aceptación de un modelos debe responder al menos tres criterios:</p>
+					<ul>
+						<li>Su adecuación (conceptual y matemáticamente) en describir el comportamiento del sistema</li>
+						<br></br>
+						<li>Su robustez a pequeños cambios de los parámetros de entrada (e.j. sensibilidad a los datos)
+						</li><br></br>
+						<li>Su exactitud en predecir los datos observados</li>
+					</ul>
+					<br></br>
+					<figcaption><small>Fuente: AGS (2007) Guidelines for landslide susceptibility, hazard and risk
+							assessment</small></figcaption>
+				</section>
+
+				<section class="level2">
+					<p>La evaluación debe ser chequeada:</p>
+					<ul>
+						<li>Contra la información usada para preparar el pronóstico (<i>Success rate</i>). Se refiere a
+							la “bondad del ajuste” del modelo. <strong>Qué tan bien el modelo se desempeña?</strong>
+						</li><br></br>
+						<li>Contra el futuro, cuando el evento finalmente ocurra (<i>Prediction rate</i>). Se refiere a
+							la habilidad del modelo para predecir adecuadamente los futuros deslizamientos. <strong>Qué
+								tan bien el modelo predice?</strong></li>
+					</ul><br></br>
+					<p>En general es mas fácil obtener niveles altos del ajuste del modelo que alcanzar niveles
+						similares para el desempeño
+						de la predicción. Y sin embargo el segundo es mas importante para efectos prácticos.</p>
+				</section>
+
+				<section class="level2">
+					<h3><i>Cross validation</i></h3>
+					<img src="https://i.pinimg.com/564x/b4/af/05/b4af05f2a7bd310946c410cd47e118a3.jpg" width="600">
+				</section>
+
+				<section class="level2">
+					<h3><i>train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/f6/0e/42/f60e429b79928a10d077f2d54156057a.jpg" width="600">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/19/62/fb/1962fbc64c0e81c2dc5c83f636191174.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/00/3d/86/003d8615b1ae8dbfac0c4346464d5b30.jpg" width="850">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/63/1a/dd/631add43502ca93771d3debc1b66a061.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/57/a1/4e/57a14ef3695dd52b41e2330110781364.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/46/85/59/468559e8026ba1f94724dc048abf8485.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3><i>Train-test-split</i></h3>
+					<img src="https://i.pinimg.com/564x/d7/85/33/d785338751dad348a60ba611504e06c6.jpg" width="600">
+				</section>
+
+				<section class="level2">
+					<h3><i>k-fold</i></h3>
+					<img src="https://i.pinimg.com/564x/c9/39/96/c93996d85fee594e4e8e8e8e1cb5c4d0.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/97/97/61/979761cf1e85d9dd7a088eb2a95564f9.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3><i>k-fold</i></h3>
+					<img src="https://i.pinimg.com/564x/63/a2/64/63a2648dbcdd3c080d0efa86d79d9666.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3><i>k-fold</i></h3>
+					<img src="https://i.pinimg.com/564x/9f/e4/c3/9fe4c3674499b05850413a54ef140ab6.jpg" width="950">
+				</section>
+
+				<section class="level2">
+					<h3><i>leave-one-out</i></h3>
+					<img src="https://i.pinimg.com/564x/b3/b1/f9/b3b1f9e79907eef93475eae35fb576b2.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3><i>leave-one-out</i></h3>
+					<img src="https://i.pinimg.com/236x/ce/90/25/ce9025b2f6e1dbfa2a5cc50df6877424.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<h3><i>Stratified kfold</i></h3>
+					<img src="https://i.pinimg.com/564x/bf/84/a2/bf84a2d38a61d873a628b38b50a5b4a9.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3><i>Stratified kfold</i></h3>
+					<img src="https://cambridgecoding.files.wordpress.com/2016/03/hyperparam_intro_rf_only2.png?w=610&h=312"
+						width="900">
+				</section>
+
+
+				<section>
+					<h1>Métrica para Regresión</h1>
+				</section>
+
+				<section class="level2">
+					<h3><i>Mean Absolute Error (MAE):</i></h3>
+					<div class="math">
+						\begin{equation}
+						MAE = \frac{1}n \sum_{j=1}^n |y_j - \widehat{y}_j|
+						\end{equation}
+					</div>
+					<p>If the absolute value is not taken (the signs of the errors are not removed), the average error
+						becomes the
+						Mean Bias Error (MBE) and is usually intended to measure average model bias. MBE can convey
+						useful information,
+						but should be interpreted cautiously because positive and negative errors will cancel out.</p>
+				</section>
+
+				<section class="level2">
+					<h3><i>Root Mean Squared Error (RMSE):</i></h3>
+					<div class="math">
+						\begin{equation}
+						RMSE = \sqrt{\frac{1}n \sum_{j=1}^n (y_j - \widehat{y}_j)^2}
+						\end{equation}
+					</div>
+					<br></br>
+					<ul>
+						<li>Both metrics can range from 0 to ∞ and are indifferent to the direction of errors.</li>
+						<br></br>
+						<li>They are negatively-oriented scores, which means lower values are better.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<h3><i>R-squared ($R^2$):</i></h3>
+					<img src="https://i.pinimg.com/564x/c0/5a/e9/c05ae9934cfddfba7604c824269f6278.jpg" width="700">
+					<p>R-squared ($R^2$) is a statistical measure that represents the proportion of the variance for a
+						dependent variable
+						that's explained by an independent variable or variables in a regression model.</p>
+				</section>
+
+				<section>
+					<img src="https://vitalflux.com/wp-content/uploads/2020/09/Regression-terminologies-Page-3.png"
+						width="800">
+				</section>
+
+
+				<section>
+					<h1>Métrica para Clasificación</h1>
+				</section>
+
+				<section class="level2">
+					<h3>Matriz de confusión</h3>
+					<img src="https://i.pinimg.com/564x/86/49/de/8649deda7c94fc73ddc9ed91cda9e476.jpg" width="700">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/d7/c2/ba/d7c2ba577f9ef7cbb9e3e389e16ce94a.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/99/20/70/992070d97537df5d22b513097a79b7be.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/59/8d/be/598dbe90e3a3d63bbe8448cd90581d6b.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/ce/e2/bc/cee2bcbc153af67cad30026662d3e2e0.jpg" width="650">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/29/00/55/290055f6009f1789997720e76997cb99.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/74/40/3f/74403ff783b3ff076355eebcf050358c.jpg" width="700">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/29/00/55/290055f6009f1789997720e76997cb99.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/9b/61/ba/9b61ba85af698dac8d28a785bfa0c335.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/f6/ad/68/f6ad68cc013f9ca28e801823399a2002.jpg" width="700">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/0b/82/e2/0b82e29fa53d0de12645b9dfabf2b100.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/cb/21/9b/cb219bd748195daacc6e23991febb01a.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Area bajo la curva (AUC)</h3>
+					<img src="https://i.pinimg.com/564x/21/23/91/212391f9b08a28471aca98f6e14c2987.jpg" width="550">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/24/46/ed/2446ed894d13b5f1dd31b9110a9c8dde.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/0d/4b/60/0d4b60a775acbfa8cd645df32ef3b9f7.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/ad/6a/5a/ad6a5a68d8dcb06b7a08b135150efc94.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/80/40/ee/8040ee1f9c25c45b3a5ae773a48e1660.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/c6/48/af/c648af60209d8a97bdbddd5dc8c99d60.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/bb/1f/16/bb1f16e7c5ee2e8821481d899c603524.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/b5/77/07/b577079c610c591984c442ae6dbe803a.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/6a/17/f5/6a17f5cabbf55a6c3e635597377534a9.jpg" width="1000">
+				</section>
+
+				<section>
+					<h1>Hypothesis evaluation</h1>
+				</section>
+
+				<section>
+					<h3>Statistical significance</h3>
+
+					<p>In statistics, when we wish to start asking questions about the data and interpret the results, we use statistical methods that provide 
+						a confidence or likelihood about the answers. In general, this class of methods is called statistical hypothesis testing, 
+						or significance tests.</p>
+					<p>There are various statistical test out there and one have to choose wisely which test to apply for particular problem. 
+						On a very broad level if we have prior knowledge about the under lying data distribution (mainly normal distribution) 
+						then <strong>parametric tests</strong> like T-Test, Z-Test, ANOVA test etc are used. And if we don’t have prior knowledge about the underlying 
+						data distribution then <strong>non-parametric tests</strong> like Mann-Whitney U Test is used.</p>						
+				</section>
+
+				<section>
+					<h3>Interpret the p-value</h3>
+					<p>We describe a finding as statistically significant by interpreting the p-value.</p>
+					<p>A statistical hypothesis test may return a value called p or the p-value. This is a quantity that we can use to interpret or quantify the result 
+						of the test and either reject or fail to reject the null hypothesis. This is done by comparing the p-value to a threshold value chosen 
+						beforehand called the significance level.</p>
+					<p>A common value used for alpha is 5% or 0.05. A smaller alpha value suggests a more robust interpretation of the null hypothesis, 
+							such as 1% or 0.1%.</p>
+							<ul>
+								<li><strong>If p-value > alpha</strong>: Fail to reject the null hypothesis (i.e. not significant result).</li>
+								<li><strong>If p-value <= alpha</strong>: Reject the null hypothesis (i.e. significant result).</li>
+							</ul>
+				</section>
+
+				<section>
+					<h3>T-Test</h3>
+					<p>It is used for hypothesis testing mainly when sample size is very less (less than 30) and sample standard deviation is not available. 
+						However under lying distribution is assumed to be normal.
+						A T-Test is of two types. <strong>One-Sample T-Test</strong>, which is used for comparing sample mean with that of a population mean.
+						<strong>Two-Sample T-Test</strong>, which is used for comparing means of two samples.
+						When observation across each sample are paired then it is called Pared T-Test.</p>
+						<img src="https://miro.medium.com/max/950/1*mq8hHjMQjUgD4DxTX1rJQw.png">
+						<img src="https://miro.medium.com/max/842/1*Cmd7Nfj12w_SUQpJ6wLpIw.png">
+						<figcaption>Source: <a href="https://machinelearningmastery.com/statistical-hypothesis-tests-in-python-cheat-sheet/">Machine Learning Mastery</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Z-Test</h3>
+					<p>It is used for hypothesis testing mainly when sample size is high (greater than 30) . And under lying distribution is assumed to be normal.
+						A Z-Test is of two types. <strong>One-Sample Z-Test</strong>, which is used for comparing sample mean with that of a population mean.
+						<strong>Two-Sample Z-Test</strong>, which is used for comparing means of two samples.</p>
+						<img src="https://miro.medium.com/max/946/1*6wrEvbMXL4FON6TDdScoDg.png">
+						<img src="https://miro.medium.com/max/834/1*gQJT9O-36OZ4C5PPbaWbBQ.png">
+						<figcaption>Source: <a href="https://machinelearningmastery.com/statistical-hypothesis-tests-in-python-cheat-sheet/">Machine Learning Mastery</a></figcaption>
+				</section>
+
+				<section>
+					<h3>ANOVA Test</h3>
+					<p>ANOVA Test stands for Analysis of Variance. It is a generalisation or extension for Z-Test. This test tells us whether two or more samples are significantly same or different.
+						Similar to Paired T-Test, there is also Repeated Measures ANOVA Test which tests whether the means of two or more paired samples are significantly different or not.</p>
+					<img src="https://miro.medium.com/max/778/1*6sARjZ5uxxDGYU5uF9UM9g.png">
+					<figcaption>Source: <a href="https://machinelearningmastery.com/statistical-hypothesis-tests-in-python-cheat-sheet/">Machine Learning Mastery</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Non-Parametric tests</h3>
+					<p>When we have prior knowledge of underlying data distribution (gaussian distribution), then parametric tests are carried out. Some of the non-parametric 
+						test are as follows</p>
+						<ul>
+							<li>Mann-Whitney U Test</li>
+							<li>Wilcoxon Signed-Rank Test</li>
+							<li>Kruskal-Wallis H Test</li>
+							<li>Friedman Test</li>
+						</ul>
+						<img src="https://miro.medium.com/max/822/1*cS6dhMv-cxt_0aloDyUGzQ.png" width="600">
+						<figcaption>Source: <a href="https://machinelearningmastery.com/statistical-hypothesis-tests-in-python-cheat-sheet/">Machine Learning Mastery</a></figcaption>
+				</section>
+
+
+			</section>
+<!--Hiperparametros & Optimizacion-->
+			<section>
+				<section>
+					<h1>Hiperparámetros & Optimización</h1>
+				</section>
+
+				<section>
+					<h2>Función de optimización</h2>
+					<p>Gradually, with the help of some optimization function, loss function learns to reduce the error
+						in prediction. An optimization algorithm is a procedure which is executed iteratively by comparing various
+						solutions until an optimum or a satisfactory solution is found. ... these algorithms minimize or maximize a Loss
+						function using its gradient values with respect to the parameters.</p>
+					<img src="https://i.pinimg.com/564x/2f/a9/2d/2fa92d2d8677302a246d955e4a1150ef.jpg" width="1000">
+				</section>
+
+				<section>
+					<h3>The case for lineal regression</h3>
+					$\hat{y}=\theta_0x_0+\theta_1x_1+\theta_2x_2+\theta_3x_3+\theta_nx_n$
+					$\hat{y}=h(\theta)=\theta^{T}x$
+					<h3>Loss function --» Cost function --» Optimizer</h3>
+					$MSE(\theta)=Cost(\theta)=J(\theta)--»min Cost(\theta)$
+					$J(\theta_0,\theta_1,\theta_2,...,\theta_m)=\frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}(x^{(i)})-y^{(i)})^2$
+					<p>$θ$ → The parameters that minimize the loss function</p>
+					<p>$x$ → The input feature values</p>
+					<p>$y$ → The vector of output values</p>
+					<p>$\hat{y}$ → The vector of estimated output values</p>
+					<p>$h(\theta)$ → the hypothesis function</p>
+				</section>
+
+				<section>
+					<h2>The Normal equation</h2>
+					<p>In a linear regression problem, optimizing a model can be done by using a mathematical formula called the Normal Equation. </p>
+					$\theta=(X^T X)^{-1} X^Ty$
+					<p>It is as a one-step algorithm used to analytically find the coefficients that minimize the loss function ($\theta$) without having to iterate</p>
+					<p>However, this method becomes an issue when you have a lot of data : either too much features (calculation time issue) or too much observations (memory issue).</p>
+				</section>
+
+				<section class="level2">
+					<h3>Gradiente descendente</h3>
+					<p>It is an optimization algorithm to find the minimum of a function. We start with a random point
+						on the function and move in the negative direction of the gradient of the function to reach the local/global minima.
+					</p>
+					<img src="https://miro.medium.com/max/1400/1*_4qYCex8Fr5o0K9rJAlVZA.png" width="800">
+					<figcaption>Source:<a href="https://medium.com/mlearning-ai/gradient-descent-the-most-used-algorithm-in-data-science-8c24f0ceafbf"> medium (Nicolas Pogeant) </a></figcaption>
+				</section>
+
+				<section>
+					<h3>Gradiente descendente</h3>
+					$\frac{\partial{}}{{\partial{\theta_j}}} cost(\theta)$
+					<img src="https://i.pinimg.com/564x/fc/b0/48/fcb048adcac26eaea04f923115a3d980.jpg" width="900">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/95/d1/f2/95d1f2cacf2d9667ca02c3a43f977fb5.jpg" width="1000">
+				</section>
+
+				<section>
+					<h3>Mínimo local</h3>
+					<img src="https://miro.medium.com/max/1400/1*HsIUQrky_BZj7FuqQzXAUg.png" width="900">
+					<figcaption>Source:<a href="https://medium.com/mlearning-ai/gradient-descent-the-most-used-algorithm-in-data-science-8c24f0ceafbf"> medium (Nicolas Pogeant) </a></figcaption>
+				</section>
+
+				<section class="level2">
+					<h3><i>Learning step</i></h3>
+					<p>Alpha (α) is called the learning rate and specify the magnitude of the steps. The higher α is, the bigger the steps are going to be and vice versa.</p>
+					$\theta^{(next_step)}=\theta - \alpha \nabla_\theta cost(\theta)$
+					<img src="https://miro.medium.com/max/1400/1*U9SYRjRti-nENKUa_ggutw.png" width="600">
+					<figcaption>Source:<a href="https://medium.com/mlearning-ai/gradient-descent-the-most-used-algorithm-in-data-science-8c24f0ceafbf"> medium (Nicolas Pogeant) </a></figcaption>
+				</section>
+
+				<section class="level2">
+					<h3><i>Learning step</i></h3>
+					<img src="https://miro.medium.com/max/1400/1*uFInkdtKJzaCOxwSWrJa2g.png" width="900">
+					<figcaption>Source:<a href="https://medium.com/mlearning-ai/gradient-descent-the-most-used-algorithm-in-data-science-8c24f0ceafbf"> medium (Nicolas Pogeant) </a></figcaption>
+				</section>
+
+				<section class="level2">
+					<h3>Procedimiento manual</h3>
+					<img src="https://i.pinimg.com/564x/ea/07/26/ea072617b5576dcddb6d161d27b94fc8.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/cd/49/8a/cd498aeba649d35a877405d95124d03f.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/67/da/82/67da82f2ba93e1e077bf3bbc58c7fc8b.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/d8/b5/d5/d8b5d539154028b22d01359041f92af3.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/7c/10/8b/7c108b4e24726fb7dc81b26a0d3abe9f.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<h3>Procedimiento interativo</h3>
+					<img src="https://i.pinimg.com/564x/0e/a2/3f/0ea23f16a67b8b2fdddcef68f6b04a9d.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/8c/1d/5e/8c1d5e1fddf0b28afb612dc06b75e216.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/c8/38/8d/c8388d302f2339ae4980cb375d19eba7.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/d7/fc/fa/d7fcfa95c002a61c64e9e540e9f8ac6e.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/72/a3/27/72a32712d98e14a0dbad6019202971d8.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/d1/b6/06/d1b606ce013ea17017f4998f67e1e199.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/74/c5/b8/74c5b8547cc96c2a8f97be8e46b12c0a.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/fa/f9/78/faf978ac964370c07116d46d303d2283.jpg" width="800">
+				</section>
+
+
+				<section class="level1">
+					<h1>Ejemplo</h1>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/aa/3b/0a/aa3b0a0a742bce67ea10812f3fa65e27.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<h1><i>Stochastic gradient descent</i></h1>
+					<img src="https://i.pinimg.com/564x/99/07/f6/9907f6b9b371f8248abc72880801da7e.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://i.pinimg.com/564x/36/b8/59/36b85971271ad214cc7ef2116d67980f.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://i.pinimg.com/564x/e6/b4/2f/e6b42f20411c8a29ed6aace7968af360.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://raw.githubusercontent.com/nslatysheva/data_science_blogging/master/expanding_ML_toolkit/expanding_toolkit.jpg"
+						width="600">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://cambridgecoding.files.wordpress.com/2016/03/gridsearch_cv.png?w=610&h=406"
+						width="900">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://www.oreilly.com/library/view/evaluating-machine-learning/9781492048756/assets/emlm_0401.png"
+						width="550">
+				</section>
+
+				<section class="level2">
+					<h3>Selección de hiperparámetros</h3>
+					<img src="https://raw.githubusercontent.com/nslatysheva/data_science_blogging/master/expanding_ML_toolkit/hyperparam_intro_logistic.png"
+						width="800">
+				</section>
+
+				<section>
+					<h2>L1 Loss function</h2>
+					<img src="https://i.pinimg.com/564x/5a/85/5a/5a855a00c5f4a3f09ec3b718e8de7a74.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>L2 Loss function</h2>
+					<img src="https://i.pinimg.com/564x/3f/83/36/3f833698bf8ad8e42d7c7d5fae3468e8.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Huber function</h2>
+					<img src="https://i.pinimg.com/564x/46/a7/c6/46a7c6c2ed272d074c75dacb3e7c8083.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Log loss</h2>
+					<img src="https://miro.medium.com/max/1192/1*wilGXrItaMAJmZNl6RJq9Q.png" width="1000">
+				</section>
+
+			</section>
+<!--Clustering-->
+			<section>
+				<section>
+					<h1>Clustering</h1>
+				</section>
+				<section>
+					<h3>Clustering</h3>
+					<!-- Load d3.js -->
+					<script src="https://d3js.org/d3.v4.js"></script>
+
+					<!-- Create a div where the graph will take place -->
+					<div id="my_dataviz"></div>
+
+					<script>
+
+						// set the dimensions and margins of the graph
+						var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+							width = 460 - margin.left - margin.right,
+							height = 400 - margin.top - margin.bottom;
+
+						// append the svg object to the body of the page
+						var svg2 = d3.select("#my_dataviz")
+							.append("svg")
+							.attr("width", width + margin.left + margin.right)
+							.attr("height", height + margin.top + margin.bottom)
+							.append("g")
+							.attr("transform",
+								"translate(" + margin.left + "," + margin.top + ")");
+
+						//Read the data
+						d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function (data) {
+
+							// Add X axis
+							var x = d3.scaleLinear()
+								.domain([4, 8])
+								.range([0, width]);
+							svg2.append("g")
+								.attr("transform", "translate(0," + height + ")")
+								.call(d3.axisBottom(x));
+
+							// Add Y axis
+							var y = d3.scaleLinear()
+								.domain([0, 9])
+								.range([height, 0]);
+							svg2.append("g")
+								.call(d3.axisLeft(y));
+
+							// Color scale: give me a specie name, I return a color
+							var color = d3.scaleOrdinal()
+								.domain(["setosa", "versicolor", "virginica"])
+								.range(["#440154ff", "#21908dff", "#fde725ff"])
+
+
+							// Highlight the specie that is hovered
+							var highlight = function (d) {
+
+								selected_specie = d.Species
+
+								d3.selectAll(".dot")
+									.transition()
+									.duration(200)
+									.style("fill", "lightgrey")
+									.attr("r", 3)
+
+								d3.selectAll("." + selected_specie)
+									.transition()
+									.duration(200)
+									.style("fill", color(selected_specie))
+									.attr("r", 7)
+							}
+
+							// Highlight the specie that is hovered
+							var doNotHighlight = function () {
+								d3.selectAll(".dot")
+									.transition()
+									.duration(200)
+									.style("fill", "lightgrey")
+									.attr("r", 5)
+							}
+
+							// Add dots
+							svg2.append('g')
+								.selectAll("dot")
+								.data(data)
+								.enter()
+								.append("circle")
+								.attr("class", function (d) { return "dot " + d.Species })
+								.attr("cx", function (d) { return x(d.Sepal_Length); })
+								.attr("cy", function (d) { return y(d.Petal_Length); })
+								.attr("r", 5)
+								.style("fill", function (d) { return color(d.Species) })
+								.on("mouseover", highlight)
+								.on("mouseleave", doNotHighlight)
+
+						})
+
+					</script>
+				</section>
+
+				<section class="level2">
+					<h3>Definición</h3>
+					<p>El objetivo es identificar subgrupos en los datos, de tal forma que los datos en cada subgrupo
+						(clusters) sean
+						muy similares, mientras que los datos en diferentes subgrupos sean muy diferentes.</p>
+					<img src="https://i.pinimg.com/564x/16/44/6f/16446f80a8faee3dbc2e930c8393657d.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/57/cf/e8/57cfe851e9007a27b3ca21728d97856b.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/43/6d/72/436d722853c64bb20ecf06ddb08c62a4.jpg" width="1000">
+				</section>
+
+				<section>
+					<h3>Distancias</h3>
+					<img src="https://i.pinimg.com/564x/18/30/ac/1830acc9666d0a75d384f165f3aa123b.jpg" width="850">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/236x/96/31/74/963174f44981900fdcb1dc5a4632f36e.jpg" width="450">
+					<figcaption>Shahid et al. (2009)</figcaption>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/4e/ab/0b/4eab0b57d177c10a35c51669b05f5eec.jpg" width="700">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/73/f9/96/73f9966ad8c39c2add50c7c49c0b9b53.jpgs" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/4b/2e/57/4b2e570ed4b1a808d45c5558ac73e907.jpg" width="1000">
+				</section>
+
+				<section>
+					<h3>Tipos de clustering</h3>
+					<ul>
+						<li style="color:rgb(15, 15, 15);"><strong>Hierarchical Clustering:</strong> descomposición
+							jerárquica utilizando algún criterio, pueden ser aglomerativos (bottom-up)
+							o de separación (top-down). No necesitan K al inicio.</li>
+						<li style="color:rgb(15, 15, 15);"><strong>Partitioning Methods (</strong> (k-means, PAM,
+							CLARA): se construye a partir de particiones, las cuales son evaluadas
+							por algún criterio. Necesitan K al inicio.</li>
+						<li style="color:rgb(150, 150, 150);">Density-Based Clustering: basados en funciones de
+							conectividad y funciones de densidad.</li>
+						<li style="color:rgb(150, 150, 150);">Model-based Clustering: se utiliza un modelo para agrupar
+							los modelos.</li>
+						<li style="color:rgb(150, 150, 150);">Fuzzy Clustering: A partir de lógica difusa se separan o
+							agrupan los clusters.</li>
+					</ul>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/93/2b/5d/932b5dc4b29faab5bc5fe8ec688767dd.jpg" width="1200">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/3a/4c/ca/3a4cca6d7b60d2b198578e4cafa63435.jpg" width="1200">
+				</section>
+
+				<section class="level2">
+					<h3>K-Means</h3>
+					<img src="https://i.pinimg.com/564x/f0/0d/50/f00d50d6b438178c91f0633e663fff1d.jpg" width="1200">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/originals/0f/7b/03/0f7b033f5116a110ffdc53c34d35ea5f.gif" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/7f/d8/03/7fd8038ad7b82396ec51b37f573ac02f.jpg" width="800">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/originals/37/1e/88/371e88c867d1015d65cbab831a7542c5.gif" width="600">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/07/d9/ca/07d9ca6c0dbab189b0f8437cabbec092.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h1>Jerarquical clustering</h1>
+					<img src="https://i.pinimg.com/564x/f3/5f/fc/f35ffc0bd23deceb2210d4f7d0005dd5.jpg" width="750">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/originals/11/3f/24/113f2409c3e9afcf77bcd645b3c8f8c6.gif"
+						width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/28/88/9e/28889e974bea367efaae6c3776d88c19.jpg" width="900">
+				</section>
+
+				<section class="level2">
+					<div>
+						<img src="" width="500">
+						<img src="https://i.pinimg.com/564x/a9/95/55/a9955553655ce4912fec48f95c4b6065.jpg" width="450">
+						<img src="https://i.pinimg.com/564x/55/86/61/558661c78fe7461fe8bccc4b3b87d91d.jpg" width="450">
+					</div>
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/1a/9e/0f/1a9e0f27f121f98a99934576a0b7c3f1.jpg" width="450">
+					<img src="https://i.pinimg.com/564x/23/8b/35/238b355dbe70b0b298427db4338afe16.jpg" width="450">
+				</section>
+
+				<section class="level2">
+					<h1>Métrica de evaluación</h1>
+					<img src="https://i.pinimg.com/564x/a0/ad/a2/a0ada20933a15457950644a424432589.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Método Elbow</h3>
+					<img src="https://i.pinimg.com/originals/77/fb/b8/77fbb8eeb78ff7fd5815b298d94ebc86.png" width="600">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/86/67/5e/86675e86bd071932fd41eb40034ec43f.jpg" width="1200">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/86/67/5e/86675e86bd071932fd41eb40034ec43f.jpg" width="1200">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/3e/2a/8c/3e2a8c14c66e80cfc7fbc151b2b55423.jpg" width="600">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/62/df/4c/62df4c59ad9708c0847529b443812817.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/83/90/6d/83906d13ea5f18fc4ddce51c6996c210.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/61/a6/9b/61a69bc3a272eb47364d1d32fd65c9a6.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Método Silhouette</h3>
+					<img src="https://i.pinimg.com/564x/04/88/0d/04880d5406d019df8e62cca3c4fbf2ff.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<h3>Consideraciones</h3>
+					<img src="https://i.pinimg.com/564x/b6/7b/ca/b67bca66369bae0f182d2e1ba190301c.jpg" width="700">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/33/17/88/331788d1927715a2d15e8d1d5b190cf0.jpg" width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/originals/25/71/92/257192e5bb866ad4ffc28d603a95ea91.gif"
+						width="1000">
+				</section>
+
+				<section class="level2">
+					<img src="https://i.pinimg.com/564x/ba/8b/4a/ba8b4a6641b511d88dcd0ba1feefc5d3.jpg" width="1000">
+				</section>
+
+			</section>
+<!--PCA-->
+			<section>
+				<section>
+					<h1>Reduccion de dimensiones</h1>
+				</section>
+
+				<section>
+					<h2>Dimensionalidad</h2>
+					<img src="https://i.pinimg.com/564x/da/00/3f/da003fb8088977715b747b5a76b91a18.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Dimensionalidad</h2>
+					<img src="https://i.pinimg.com/564x/a5/2e/c5/a52ec502efdace2f5ed444c240461f19.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Dimensionalidad</h2>
+					<img src="https://i.pinimg.com/564x/e5/6b/f4/e56bf424da187d7c0c1fe400a658fee9.jpg" width="800">
+				</section>
+
+				<section>
+					<h2><i>Hughes phenomenon</i></h2>
+					<img src="https://i.pinimg.com/564x/63/dd/04/63dd0455a75dbaedd9d3a7d4a488e988.jpg" width="700">
+					<p>As the dimensions increase the volume of
+						the space increases so fast that the available data becomes sparse</p>
+				</section>
+
+				<section>
+					<h2><i>Hughes phenomenon</i></h2>
+					<p>One more weird problem that arises with high dimensional data is that
+						distance-based algorithms tend to perform very poorly. This happens because
+						distances mean nothing in high dimensional space. As the dimensions increase,
+						all the points become equidistant from each other such that the difference
+						between the minimum and maximum distance between two points tends to zero.</p>
+					<img src="https://i.pinimg.com/564x/75/ea/b8/75eab89b427cd58ba649eb88e1b8382c.jpg" width="600">
+				</section>
+
+				<section>
+					<h2>Dimensionalidad</h2>
+					<img src="https://i.pinimg.com/564x/25/bd/d1/25bdd103d64c5e54c60f37058847b4f0.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Dimensionalidad</h2>
+					<img src="https://i.pinimg.com/originals/3d/56/ea/3d56ea7d7ccb3d956e6820f2a33af5e3.jpg" width="750">
+				</section>
+
+				<section class="level1">
+					<h1>Reducción de la dimensionalidad</h1>
+					<p>Dimensionality reduction techniques can be classified in two major approaches as follows.</p>
+					<ul>
+						<li><strong>Feature Selection methods:</strong> Specific features are selected for each data
+							sample from the original
+							list of features and other features are discarded. No new features are generated in this
+							process.</li>
+						<li><strong>Feature Extraction methods</strong>: We engineer or extract new features from the
+							original list of features
+							in the data. Thus the reduced subset of features will contain newly generated features that
+							were not part of the
+							original feature set. PCA falls under this category</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/15/2c/d5/152cd57687a92b80dca4598a15eb3508.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/28/c9/c6/28c9c6ce4fbd0e8763be0254fc86dbf3.jpg" width="600">
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/2a/09/0e/2a090e106044e0ebef460a677e865f73.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/82/2a/ec/822aec8bce5a98fe5b6585eb5ebe6590.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/4f/54/8b/4f548b091be5f582810cf2e2b513d21b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Componentes principales</h2>
+					<img src="https://i.pinimg.com/564x/83/7b/d1/837bd126151e07ecea98cd33d075f684.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/72/49/13/724913e803ef77d67670b35b78026d68.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/dd/53/16/dd531622725cc71107c96bd088a78859.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/e3/5f/c7/e35fc7cdbafcfe3e743e30f01ecf21ab.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/d5/00/bb/d500bb073b67c18de056d3bb445b0778.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/originals/98/8c/17/988c17c2fd1250bfc9d3b9447bcd6084.png"
+						width="1000">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/e9/c6/1d/e9c61d66a7b2c540f2b9fe25ceb42cf8.jpg" width="600">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/64/84/2e/64842e7c470cdeb14c3db7af337275a9.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/22/37/eb/2237eb28a45a600ba007b0725b163c26.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/d2/7a/21/d27a21eb9f2791786ef2c7d06ba4eba7.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/7e/d6/07/7ed607ad1c2c70bf9e22f9b48181853f.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/c7/ab/4d/c7ab4dc0ab8409e3ec0681b5125517b9.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Representación</h2>
+					<img src="https://i.pinimg.com/564x/75/12/a3/7512a35f72d95529ad251647ef8d9ad8.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2> Limitaciones</h2>
+					<img src="https://i.pinimg.com/564x/92/60/ff/9260ffb26d146db515f69b31f9105e76.jpg" width="800">
+				</section>
+
+				<section>
+					<h2> Limitaciones</h2>
+					<img src="https://i.pinimg.com/564x/67/b8/59/67b859e2a4e5a5d7f9101b8157d3888c.jpg" width="800">
+				</section>
+
+				<section>
+					<h2> Limitaciones</h2>
+					<img src="https://i.pinimg.com/564x/18/3d/7f/183d7f913fc67bf113cd5e8bcb6040c8.jpg" width="800">
+				</section>
+
+				<section>
+					<h2> Limitaciones</h2>
+					<img src="https://i.pinimg.com/564x/6d/5f/ed/6d5fed83f2e5b6d9754d6d9844183469.jpg" width="800">
+				</section>
+
+			</section>
+<!--LDA-->
+			<section>
+				<section>
+					<h1>Análisis Discriminante Lineal (LDA)</h1>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/13/ad/2f/13ad2f638ecb172312bb6497d0d0d5da.jpg" width="800">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/4a/30/97/4a3097b8fee8cd69627af9fb4ced36e6.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Análisis Discriminante Lineal (LDA)</h2>
+					<p>Método supervisado que trabaja con datos que ya han sido clasificados en grupos para encontrar
+						reglas que permitan
+						clasificar elementos individuales nuevos no clasificados. La técnica mas conocida y utilizada se
+						denomina <strong>Análisis
+							de la Función Linear Discriminante de Fisher</strong> (Fisher, 1936).</p>
+					<ul>
+						<li>Permite clasificar a los individuos o casos (en este caso celdas o unidades de análisis) en
+							alguno de los grupos
+							establecidos por la variable.</li>
+						<li>Variables canónicas o discriminantes : combinaciones lineales de las variables originales y
+							se expresan por una
+							Función discriminante.</li>
+						<li>Variable respuesta o variable grupo a partir de n variables explicativas o variables
+							clasificatorias.</li>
+						<li>No tiene hiperparámetros</li>
+						<li>Es muy similar al análisis de cluster, pero en este caso se cuenta con las clases a las
+							cuales pertenece (labels),
+							sin embargo utiliza el mismo algoritmo de PCA. Por lo que también se puede decir que es el
+							mismo PCA pero arroja
+							resultados similares en su forma a clúster (grupos homogéneos entre si pero heterogéneos
+							respecto a los demás grupos)
+							pro lo que tienen una finalidad también descriptiva (identificar la variable que mejor
+							discriminen y caracterizan a
+							los grupos). Sin embargo los resultados se parecen a la ecuación de regresión lineal.</li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/92/6c/15/926c1557fcd93f3c13ac036935e3ebb8.jpg" width="800">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/99/00/8d/99008df6fa7bc1ab2d2855e6f6f09c57.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<p>Se pretende encontrar relaciones lineales entre las variables continuas que mejor discriminen
+						entre grupos, para esto se
+						realiza:</p>
+					<lu>
+						<li>Selección de las variables (canónicas o discriminantes) que mas y mejor discriminen a los
+							grupos como combinaciones
+							lineales de las variables originales para formar la función discriminante.</li>
+						<li>Determinar la función discriminante si los datos ajustan al modelo, y con ella clasificar
+							los individuos.</li>
+					</lu>
+					<div class="fragment">
+						\[ \begin{aligned}
+						f = g(X1,X2, X3, ....Xn)
+						\end{aligned} \]
+					</div>
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/95/58/25/955825c25b2b0c53dd058002d07107be.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/fa/af/9e/faaf9e29cb267cc4a8c71510b8e6a9e3.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/0c/87/79/0c8779b7022eb339ea524f6b136c144d.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Procedimiento</h2>
+					<img src="https://i.pinimg.com/564x/7f/34/2a/7f342ab5bdef9ff45d379955a47bc799.jpg" width="900">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/02/71/39/027139dfd2f73bb7c34ffa8fd1f24846.jpg" width="800">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/2e/22/39/2e22390c5c70c2da1fcc6526021274e9.jpg" width="800">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/5c/cf/86/5ccf86b81a9c7bf6815bac35e362f80f.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/1d/f6/f7/1df6f7edad78007b6f02e30bd0f0603d.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/6a/94/b3/6a94b36fc819b2394339fe14d94c6aa8.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/10/da/33/10da336615d9e1cbeefb14609c25264b.jpg" width="900">
+				</section>
+
+			</section>
+<!--Regresion Lineal-->
+			<section>
+				<section>
+					<h1>Regresión lineal</h1>
+				</section>
+
+				<section>
+					<h2>Regresión lineal univariada</h2>
+					<img src="https://i.pinimg.com/564x/2a/25/80/2a25807a9a75974914378158aae5c34a.jpg">
+				</section>
+
+				<section>
+					<h2>Regresión lineal</h2>
+					<img src="https://sebastianraschka.com/images/faq/closed-form-vs-gd/simple_regression.png"
+						width="700">
+				</section>
+
+				<section>
+					<h3>Simple Linear Regression model</h3>
+					<div style="font-size: 20px;">$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i + \hat{\epsilon}_i$</div>
+					<img src="https://miro.medium.com/proxy/1*nrt8HIKU6CKto9F74ZjwwQ.png" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión lineal multivariada</h2>
+					<img src="https://i.pinimg.com/564x/3f/90/fe/3f90fe90982b19d5b2e8d032e8de0383.jpg">
+				</section>
+
+				<section>
+					<h3>Multivariate regression model </h3>
+					<div style="font-size: 20px;">$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i + \hat{\beta}_2 X_2 +
+						\hat{\beta}_n X_n +\hat{\epsilon}_i$</div>
+					<img src="https://miro.medium.com/proxy/1*ug_G5ZUYTzUj5qFxtbGPPw.png" width="900">
+				</section>
+
+				<section>
+					<h2>Modelos lineales</h2>
+					<p>El modelo lineal: </p>
+					<div>
+						\[\begin{aligned}
+						Y &amp; = a + \beta x \\
+						\end{aligned} \]
+					</div>
+					<p>Puede ser transformado a:</p>
+
+					<div>
+						\[\begin{aligned}
+						Y &amp; = a + \beta_1 x + \beta_2 x^2\\
+						\end{aligned} \]
+					</div>
+					<p >Este modelo sigue siendo lineal, ya que los coeficientes/pesos asociados con cada variable siguen
+						siendo lineales. Se puede decir que el modelo es no linear en término de las variables, pero lineal en término de
+						los coeficientes.</p>
+				</section>
+
+				<section>
+					<h2>Modelo lineal</h2>
+					<img src="https://i.pinimg.com/originals/c3/3e/66/c33e667fbc2b07c011bb8fa8966cc2ce.gif" width="800">
+				</section>
+
+				<section>
+					<h2>Modelo no lineal en término de las variables</h2>
+					<img src="https://i.pinimg.com/originals/06/e4/fe/06e4fe9a1a4d53472a5d2791851ff722.gif" width="800">
+				</section>
+
+				<section>
+					<h2>The assumptions</h2>
+					<img src="https://miro.medium.com/max/1400/1*82hCMk-jf8ZZuUifmw1GWw.png" width="850">
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<ul>
+						<li><strong>Linear relationship</strong> between the dependent and independent variables</li>
+						<li><strong>Multivariate normality</strong>: the residual of the linear model should be normally distributed</li>
+						<li><strong>No multicolinearity</strong> between independent variables, i.e. they should not correlate between each other</li>
+						<li><strong>Homoscedasticity</strong>: the errors/residuals should have constant variance (no trends)</li>
+						<li><strong>No autocorrelation</strong>: residuals (errors) in the model shoul not be correlqated in any way</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_e99c/lightboxImage.img.png/1548351203100.png" width="850">
+					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_a996/lightboxImage.img.gif/1548351202408.gif" width="850">
+					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_7320/lightboxImage.img.png/1548351202393.png" width="850">
+					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_dccd/lightboxImage.img.png/1548351201942.png" width="850">
+					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The assumptions</h3>
+					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_eb1f/lightboxImage.img.png/1548351202073.png" width="850">
+					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
+				</section>				
+
+				<section>
+					<h2>$R^2$</h2>
+					<img src="https://i.pinimg.com/564x/8a/77/a2/8a77a228608c54d2d87ba7612f33dd60.jpg" width="750">
+				</section>
+
+				<section>
+					<h2>Adjusted $R^2$</h2>
+					<img src="https://i.pinimg.com/564x/cb/3e/27/cb3e278d4299d12d832aaa4b6dc34d1d.jpg" width="850">
+				</section>
+
+				<section>
+					<h2>Resultados</h2>
+					<img src="https://i.pinimg.com/564x/8f/0d/94/8f0d94a435f024e3b8fd7ea06b3e27dc.jpg" width="850">
+					<figcaption><a href="https://medium.com/analytics-vidhya/how-to-interpret-result-from-linear-regression-3f7ae7679ef9#:~:text=Omnibus%2FProb%20%28Omnibus%29%20%E2%80%94%20Omnibus%20test%20is%20carried%20out,to%20zero%20is%20preferred%2C%20that%20would%20indicate%20normality.">Source: Medium (Stuti Singh, 2020)</a></figcaption>
+				</section>
+
+				<section>
+					<h2><i>Coef & t</i></h2>
+					<p>The importance of a feature in a linear regression model can be measured by the absolute value of
+						its t-statistic.
+						The t-statistic is the estimated weight scaled with its standard error.</p>
+
+					<p>Let us examine what this formula tells us: The importance of a feature increases with increasing
+						weight.
+						This makes sense. The more variance the estimated weight has (= the less certain we are about
+						the correct value),
+						the less important the feature is. This also makes sense.</p>
+				</section>
+
+				<section>
+					<h2>Cost function</h2>
+					<img src="https://i.pinimg.com/564x/43/a5/a8/43a5a84efb71d1618526ed72d7217bb8.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Regularización</h2>
+					<img src="https://i.pinimg.com/564x/a3/ab/2d/a3ab2dea301a9adcc701d07f89dc280a.jpg" width="850">
+				</section>
+
+				<section>
+					<h2>Regularización</h2>
+					<p>A standard least squares model tends to have some variance in it, i.e. this model won’t
+						generalize well for a data set
+						different than its training data. Regularization, significantly reduces the variance of the
+						model, without substantial
+						increase in its bias</p>
+					<p>So the tuning parameter λ, used in the regularization techniques controls the impact on bias and
+						variance. As the value
+						of λ rises, it reduces the value of coefficients and thus reducing the variance. Till a point,
+						this increase in λ
+						is beneficial as it is only reducing the variance (hence avoiding overfitting), without loosing
+						any important properties
+						in the data.</p>
+					<p>But after certain value, the model starts loosing important properties, giving rise to bias in
+						the model and thus
+						underfitting. Therefore, the value of λ should be carefully selected.</p>
+				</section>
+
+				<section>
+					<h2><i>Penalized linear regression</i></h2>
+					<p>Regularization will help select a midpoint between the first scenario of high bias and the later
+						scenario of high variance</p>
+					<img src="https://i.pinimg.com/564x/70/9e/c0/709ec0b1ee72c054d152c8d0483b6edd.jpg" width="850">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/90/ca/18/90ca18654e79368164a5610a125bd5db.jpg" width="850">
+				</section>
+
+				<section>
+					<h2>Ridge (L1)</h2>
+					<img src="https://i.pinimg.com/564x/4e/7c/e5/4e7ce5679690b09bcfb319409cf6c3a1.jpg" width="750">
+				</section>
+
+				<section>
+					<h2>Lasso (L2)</h2>
+					<img src="https://i.pinimg.com/564x/f2/81/9f/f2819f50de3dfbe25aaa3ccdb3d9b85f.jpg" width="750">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/3a/37/17/3a3717d8ff0199e52eba488533deae8d.jpg" width="850">
+				</section>
+
+
+				<section>
+					<img src="https://i.pinimg.com/564x/24/c4/e3/24c4e3ad39679496cdafb88c9d084328.jpg" width="850">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/be/7b/cb/be7bcbb92d59565bdcac801b740c72e0.jpg" width="850">
+				</section>
+
+			</section>
+<!--Regresion Logistica-->
+			<section>
+				<section>
+					<h1>Regresión logística</h1>
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://static.javatpoint.com/tutorial/machine-learning/images/linear-regression-vs-logistic-regression.png"
+						alt="RL" width="1000" />
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/82/a1/61/82a16191bde6ed1dcac88e1f75c6d5ee.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/be/33/38/be333848e2579f65e7f419a83571a1f4.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/88/1b/5a/881b5a06e1f8eed6261c21252ac1d3d7.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/b9/1a/a4/b91aa47ee4b1aad98aab59d6aa83084b.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/e9/2c/4e/e92c4e12d4002264b0a414518324e9ab.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Regresión logística</h2>
+					<img src="https://i.pinimg.com/564x/3c/5a/9e/3c5a9e34c64a3fbfb976c132b50031e4.jpg" width="800">
+				</section>
+
+
+				<section id="regresion" class="level2">
+					<h2>Regresión Logística</i></h2>
+					<p>La Regresión Logística es una combinación lineal de variables independientes (factores
+						explicativos) para explicar
+						la varianza en una variable dependiente (inventario de deslizamientos) tipo dummy [0 – 1].</p>
+					<h3>Ventajas</h3>
+					<ol>
+						<li>Las variables predictoras pueden ser continuas, discretas, dicótomas, o cualquier
+							combinación de ellas.</li>
+						<li>La variable dependiente es dicotoma (binaria)</li>
+						<li>A pesar de que el modelo transformado es lineal en las variables, las probabilidades no son
+							lineales</li>
+					</ol>
+					<h3>Desventajas</h3>
+					<ol>
+						<li>Los pesos de las variables terminan siendo un promedio para toda el área de estudio, los
+							cuales en realidad pueden diferir en diferentes partes del área de estudio.</li>
+						<li>La función objetivo es una combinacion lineal de las variables independientes</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Función <i>LOGIT</i></h2>
+					<img src="https://i.pinimg.com/564x/3d/61/22/3d6122d2586096e57c33ddce1497be8d.jpg" alt="RL"
+						width="1000" />
+				</section>
+
+				<section>
+					<h2>Función <i>LOGIT</i></h2>
+					<img src="https://i.pinimg.com/564x/c1/81/8d/c1818de769e0a8cbbc7af29cc1732948.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Función <i>LOGIT</i></h2>
+					<p>Sea p(x) la probabilidad de éxito cuando el valor de la variable predictora es x, entonces:</p>
+					$p(x) = \frac{e^{a+\sum bx}}{1+e^{a+\sum bx}} = \frac{1}{1+e^{-(a+\sum bx)}}$
+					<p></p>
+					$\frac{p(x)}{1-p(x)} = e^{a+\sum bx}$
+				</section>
+
+				<section>
+					<h2>Odds</i></h2>
+					<img src="https://i.pinimg.com/564x/71/62/82/716282a8a064055ebd69e01d530359da.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Limitaciones de los Odds</i></h2>
+					<img src="https://i.pinimg.com/564x/9c/55/30/9c5530ad771920fbd4690807ef1535b9.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Limitaciones de los Odds</i></h2>
+					<img src="https://i.pinimg.com/564x/b7/e0/72/b7e0721e704900e6cb444383dbd85a31.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Función <i>LOGIT</i></h2>
+					<p></p>
+					$Ln(\frac{p(x)}{1-p(x)}) = a+\sum bx$
+					<p>Donde $a$ es el intercepto del modelo, $b$ son los coeficientes del modelo de regresión
+						logística, y $x$
+						son las variables independientes (predictoras).</p>
+					$P(y=1) = \frac{1}{1+e^{-(a+\sum bx)}}$
+					<p>Donde, P es la probabilidad de Bernoulli que una unidad de terreno pertenece al grupo de no
+						deslizamientos
+						o al grupo de si deslizamiento. P varía de 0 a 1 en forma de curva “S” (logística).</p>
+				</section>
+
+				<section>
+					<h2>Odds</i></h2>
+					<img src="https://i.pinimg.com/564x/e8/89/df/e889dfae226ec31c53134bc8210b5c23.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Regresión Logística</i></h2>
+					<img src="https://i.pinimg.com/564x/03/27/44/0327447c19834e76372c930514406fac.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Función de costo</h2>
+					<p><img src="https://i.pinimg.com/564x/bf/d8/d1/bfd8d1e2d810d33759df71a86b892c2d.jpg" width="900" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Función de costo</h2>
+					<p><img src="https://i.pinimg.com/564x/04/bf/0e/04bf0e174ac65f0df26a38759c67a748.jpg" width="900" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Regresión Logística</i></h2>
+					<img src="https://i.pinimg.com/564x/59/ce/fe/59cefecb396127fa7252a395c30eb23f.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Regresión Logística</i></h2>
+					<img src="https://i.pinimg.com/564x/61/e3/8f/61e38fb081e8b0638a090514b2550f6b.jpg" alt="RL"
+						width="900" />
+				</section>
+
+				<section>
+					<h2>Regresión Logística</i></h2>
+					<img src="https://i.pinimg.com/564x/2e/79/b2/2e79b2dc2878c4b1ef05cb5d7c1a5b30.jpg" alt="RL"
+						width="900" />
+					<figcaption><small>Fuente: Chen et al (2016), río Yangtze (China)</small></figcaption>
+				</section>
+
+				<section>
+					<code>
+										LogisticRegression(X, y, 
+											pos_class=None, 
+											Cs=10, 
+											fit_intercept=True,
+											max_iter=100, 
+											tol=1e-4, 
+											verbose=0,
+											solver='lbfgs', 
+											coef=None,
+											class_weight=None, 
+											dual=False, penalty='l2',
+											intercept_scaling=1., 
+											multi_class='auto',
+											random_state=None, check_input=True,
+											max_squared_sum=None, 
+											sample_weight=None,
+											l1_ratio=None):
+									</code>
+				</section>
+
+				<section>
+					<h2>Hiperparámetro <i>C</i></h2>
+					<img src="https://i.pinimg.com/564x/3c/f8/d6/3cf8d63e8734ab293377683ef026a388.jpg" width="900" />
+				</section>
+
+			</section>
+<!--KNN-->
+			<section>
+				<section>
+					<h1>KNN</h1>
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<p>Utiliza todo el dataset para entrenar <strong>cada punto</strong> y por eso requiere de uso de
+						mucha memoria y recursos
+						de procesamiento (CPU). Por estas razones KNN tiende a funcionar mejor en datasets pequeños y
+						sin una
+						cantidad enorme de features (las columnas).</p>
+					<img src="https://i.pinimg.com/564x/5a/dc/d5/5adcd5d752715d47a448d859bb711f50.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<h3>Brute force search</h3>
+					<img src="https://i.pinimg.com/564x/57/68/b1/5768b12c93e360c60a7ed936c01809eb.jpg" width="600" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<p><strong>Lazy learning:</strong> KNN no genera un modelo
+						fruto del aprendizaje con datos de entrenamiento, sino que el aprendizaje sucede en el mismo
+						momento
+						en el que se prueban los datos de test.</p>
+					<p><strong>Basado en Instancia:</strong> Esto quiere decir que nuestro algoritmo no aprende
+						explícitamente un modelo
+						(como por ejemplo en Regresión Logística o árboles de decisión). En cambio memoriza las
+						instancias
+						de entrenamiento que son usadas como <strong>base de conocimiento</strong> para la fase de
+						predicción. </p>
+					<p><strong>Modelo supervisado:</strong> A diferencia de K-means, que es un algoritmo no
+						supervisado y donde la «K»
+						significa la cantidad de <strong>grupos</strong> (clusters) que deseamos clasificar, en
+						K-Nearest Neighbor la
+						«K» significa la cantidad de «puntos vecinos» que tenemos en cuenta en las cercanías para
+						clasificar los «n» grupos -que ya se conocen de antemano, pues es un algoritmo supervisado.</p>
+					<p><strong>Nonparametric: </strong>KNN makes no assumptions about the functional form of the problem
+						being solved. As such KNN is referred to as a nonparametric machine learning algorithm.</p>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/9d/93/06/9d930665516b67d91dd5471392cba12e.jpg" width="850" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<img src="https://i.pinimg.com/564x/1a/78/13/1a781304f155a67eb95755514c33e6d5.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<img src="https://i.pinimg.com/564x/63/14/52/6314525c2230326bece5075b1eeec469.jpg" width="700" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<img src="https://i.pinimg.com/564x/90/2a/9e/902a9eaef40d4397c60df905c2b33345.jpg" width="700" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<ul>
+						<li>λ = 1 is the Manhattan distance. Synonyms are L1-Norm, Taxicab or City-Block distance.
+							For two vectors of ranked ordinal variables, the Manhattan distance is sometimes called
+							Foot-ruler distance.</li>
+						<br>
+						<li>λ = 2 is the Euclidean distance. Synonyms are L2-Norm or Ruler distance. For two vectors
+							of ranked ordinal variables, the Euclidean distance is sometimes called Spearman distance.
+						</li>
+						<br>
+						<li>λ = ∞ is the Chebyshev distance. Synonyms are Lmax-Norm or Chessboard distance.reference.
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<img src="https://i.pinimg.com/564x/0d/01/cd/0d01cd2af567e90f4f10a5793e2d8b47.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>KNN</h2>
+					<img src="https://i.pinimg.com/564x/c2/6f/c3/c26fc374fd9e5581fd3b45c50cdb6cb9.jpg" width="800" />
+				</section>
+
+				<section>
+					<h2>1-NN (Voronoi Tessellation)</h2>
+					<img src="https://i.pinimg.com/564x/c1/a4/9c/c1a49c33f45060b054f6c906781c86e5.jpg" width="800" />
+				</section>
+
+				<section>
+					<h2>K-D Tree</h2>
+					<img src="https://i.pinimg.com/564x/e4/3e/98/e43e98cd12d2031911699933aacfc353.jpg" width="750" />
+				</section>
+
+				<section>
+					<h2>K-D Tree</h2>
+					<img src="https://i.pinimg.com/564x/d2/e5/c5/d2e5c5d46f6193783a0d93871b60e31a.jpg" width="800" />
+				</section>
+
+				<section>
+					<h2>Ball Tree</h2>
+					<img src="https://i.pinimg.com/564x/c3/1f/14/c31f142bb8ec720021dfa2aa01913dd2.jpg" width="800" />
+				</section>
+
+
+				<section>
+					<h2>Code</h2>
+					<code>
+									<strong>KNeighborsClassifier</strong>(n_neighbors=5, *, weights='uniform', algorithm='auto', leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=None, **kwargs)
+								</code>
+					<br></br>
+					<code>
+									<strong>KDTree</strong>(X, leaf_size=40, metric='minkowski', **kwargs)
+								</code>
+				</section>
+
+			</section>
+<!--SVM-->
+			<section>
+				<section>
+					<h1>Support Vector Machine</h1>
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<img src="https://i.pinimg.com/564x/62/13/20/6213209e88e86ebc0c0b3c1465bd9b85.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<img src="https://i.pinimg.com/564x/e7/2c/2d/e72c2d7f84db6809144cdec29950d2a4.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<img src="https://i.pinimg.com/564x/77/07/f8/7707f80e3a34010326e1d5ade8d02402.jpg" width="950" />
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<img src="https://i.pinimg.com/564x/b0/cd/e4/b0cde40b42c31c1ca8b265da2cab2581.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Margin</h2>
+					<p>A margin is a separation of line to the closest class points. A good margin is one where this
+						separation is larger for
+						both the classes. Images below gives to visual example of good and bad margin. A good margin
+						allows the points to be in
+						their respective classes without crossing to other class.</p>
+					<img src="https://i.pinimg.com/564x/69/88/f8/6988f880cde77258678a5da144d8d431.jpg" width="600" />
+				</section>
+
+				<section>
+					<h2>Margin</h2>
+					<img src="https://i.pinimg.com/564x/bf/85/cb/bf85cb4a2a162d390f2057a1908542a6.jpg" width="900" />
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<img src="https://i.pinimg.com/564x/b7/24/8d/b7248ddf544fe5cb7c8ea6089bb13bb9.jpg" width="900" />
+				</section>
+
+				<section>
+					<h2>Parámetro C</h2>
+					<p>El parametro C permite definir que tanto se desea penalizar los errores.</p>
+					<ul>
+						<li><strong>A very small value of C</strong> will cause the optimizer to look for a
+							larger-margin separating hyperplane, even if that hyperplane misclassifies more points.</li>
+						<br>
+						<li>The smaller the value of C, the less sensitive the algorithm is to the training data (lower
+							variance and lower bias).</li>
+						<br>
+						<li><strong>For large values of C</strong>, the optimization will choose a smaller-margin
+							hyperplane if that hyperplane does a better job of getting all the training points
+							classified correctly.</li>
+						<br>
+						<li>The larger the value of C, the more sensitive the algorithm is to the training data (higher
+							variance and higher bias).</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Parámetro C (regularización)</h2>
+					<img src="https://i.pinimg.com/564x/e0/f0/7f/e0f07f23f7f9b4a8ff1661b27143f614.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Parámetro C</h2>
+					<img src="https://i.pinimg.com/564x/27/8c/6d/278c6da7b9edf9f06e5423331778a09e.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Parámetro C</h2>
+					<img src="https://i.pinimg.com/564x/5c/c0/57/5cc057ad77846d34e408e3b98e77c41c.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Parámetro Gamma</h2>
+					<p>The gamma parameter defines how far the influence of a single training example reaches, with low
+						values meaning ‘far’
+						and high values meaning ‘close’. In other words, with low gamma, points far away from plausible
+						seperation line are
+						considered in calculation for the seperation line. Where as high gamma means the points close to
+						plausible line are
+						considered in calculation.</p>
+					<img src="https://i.pinimg.com/564x/7e/50/bd/7e50bdd85419ec306e493d391ce65bf2.jpg" width="500" />
+				</section>
+
+				<section>
+					<h2>Parámetro Gamma</h2>
+					<img src="https://i.pinimg.com/564x/9b/e3/70/9be37052fb2bb9587564dd13ca0a5cc7.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Kernel trick</h2>
+					<img src="https://i.pinimg.com/564x/b5/c9/84/b5c984a732ac59dd895c6c71ca83bccd.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Kernel trick</h2>
+					<img src="https://i.pinimg.com/564x/25/9f/5e/259f5efbbb5c2b2cfedebbb8f2220aa8.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>SVM</h2>
+					<h3>Pros</h3>
+					<ul>
+						<li>It works really well with clear margin of separation</li>
+						<li>It is effective in high dimensional spaces.</li>
+						<li>It is effective in cases where number of dimensions is greater than the number of samples.
+						</li>
+						<li>It uses a subset of training points in the decision function (called support vectors), so it
+							is also memory efficient.</li>
+					</ul>
+					<h3>cons</h3>
+					<ul>
+						<li>It doesn’t perform well, when we have large data set because the required training time is
+							higher</li>
+						<li>It also doesn’t perform very well, when the data set has more noise i.e. target classes are
+							overlapping</li>
+						<li>SVM doesn’t directly provide probability estimates, these are calculated using an expensive
+							five-fold cross-validation. It is related SVC method of Python scikit-learn library.
+						</li>
+					</ul>
+				</section>
+
+			</section>
+<!--Metodos ensamblados-->
+			<section>
+				<section>
+					<h1>Métodos ensamblados</h1>
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<img src="https://i.pinimg.com/564x/b4/ca/ee/b4caee7d75a824b06f22ef644c12ae38.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<p>A decision tree is a tree-like structure where internal nodes represent a test on an attribute,
+						each branch represents outcome
+						of a test, and each leaf node represents class label, and the decision is made after computing
+						all attributes. A path from
+						root to leaf represents classification rules. Thus, a decision tree consists of three types of
+						nodes.</p>
+					<img src="https://www.tutorialandexample.com/wp-content/uploads/2019/10/Decision-Trees-Root-Node.png"
+						width="600">
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<ul>
+						<li>They are relatively fast to construct and they produce interpretable models (if the trees
+							are small).</li>
+						<li>They naturally incorporate mixtures of numeric and categorical predictor variables and
+							missing values</li>
+						<li>They are invariant under (strictly monotone) transformations of the individual predictors.
+							As a result, scaling and/or more general transformations are not an issue, and they are
+							immune to the effects of predictor outliers</li>
+						<li>They perform internal feature selection as an integral part of the procedure</li>
+						<li>They are thereby resistant, if not completely immune, to the inclusion of many irrelevant
+							predictor variables</li>
+						<li>There is no need for the exclusive creation of dummy variables</li>
+						<li>Test attributes at each node are selected on the basis of a heuristic or statistical
+							impurity measure example, Gini, or Information Gain (Entropy). </li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Conditions for stopping partitioning</h2>
+					<ul>
+						<li>All samples for a given node belong to the same class</li>
+						<br>
+						<li>There are no ramaining attributes for further partitioning </li>
+						<br>
+						<li>There are no samples left</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<img src="https://i.pinimg.com/564x/3b/3d/87/3b3d87e5af719c802d9d9116b329f665.jpg" width="400">
+					<img src="https://i.pinimg.com/564x/24/e5/46/24e5460e0558742aa0bc569bfd0b1a84.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<h3>Regresión</h3>
+					<img src="https://i.pinimg.com/564x/3e/22/f2/3e22f26301bde63dede617471c24b2d0.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<h3>Clasificación</h3>
+					<img src="https://i.pinimg.com/564x/0e/24/ae/0e24ae7fb92fa917363652752f6d8ce3.jpg" width="600">
+				</section>
+
+				<section>
+					<h2>Decision tree</h2>
+					<h3>Criterios de separación</h3>
+					<img src="" width="1000">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<img src="https://i.pinimg.com/564x/df/ec/8d/dfec8d8a1e8443b6dc4844a27e1e62a6.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 1</h3>
+					<img src="https://i.pinimg.com/564x/bd/7d/96/bd7d96af964b296d6a2cf6ca2124b3a7.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 1</h3>
+					<img src="https://i.pinimg.com/564x/c9/93/99/c99399b8d62cfe28ce9f73e3b1cadea5.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 1</h3>
+					<img src="https://i.pinimg.com/564x/06/ea/4a/06ea4a4f4b8ab61faad73bb12ce4ffa3.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 2</h3>
+					<img src="https://i.pinimg.com/564x/f9/db/db/f9dbdb2adf49a580689e62923d285404.jpg" width="500">
+				</section>
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 2</h3>
+					<img src="images/ej2-entropy1.png" width="500">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 2</h3>
+					<img src="https://i.pinimg.com/564x/d0/39/8c/d0398cddb469348c79b52c10f46a8473.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>Entropy</h2>
+					<h3>Ejemplo 2</h3>
+					<img src="https://i.pinimg.com/564x/52/72/4c/52724c59cd16550f40377f36c1483bf9.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Gini impurity</h2>
+					<p>Gini impurity is a metric of measuring the mix of a set. The value of Gini Impurity lies between
+						0 and 1 and it quantifies the uncertainty at a node in a tree. So Gini Impurity tells us how
+						mixed up or impure a set is. Now our goal with classification is to split or partition our data
+						into as pure or unmixed sets as possible. If we reach at a 0 Gini Impurity value we stop
+						dividing the tree further</p>
+					<img src="https://i.pinimg.com/564x/06/55/3f/06553fb3662c64a19acf9e89eb07ffc3.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Gini impurity</h2>
+					<img src="https://i.pinimg.com/564x/a1/b0/0a/a1b00aa7fb13eb315431a1ade5c70282.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Gini impurity</h2>
+					<img src="https://i.pinimg.com/564x/c1/99/2e/c1992ec3bb7b8478864ef94363d16487.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Gini impurity</h2>
+					<img src="https://i.pinimg.com/564x/7c/23/18/7c2318913e6468b23f7a9df013980705.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/19/93/a6/1993a63dc1eda7ec78bdce8355a77c7b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/53/0a/e1/530ae14be43a888c60bb3e1d7a10021b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/c0/62/20/c062200f05aff2da4365ace0480a2cb1.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/d1/79/06/d179062cef2dca7825379a0088147965.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Ejemplo</h2>
+					<img src="https://i.pinimg.com/564x/d8/bf/0c/d8bf0c8922c4d80e2b8bfcfd60cafbcc.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Decision tree hyperparametrs</h2>
+					<img src="https://i.pinimg.com/564x/86/ef/bd/86efbd31c1a9c4bdf610535d3975bb3e.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ensemble learning</h2>
+					<p>The goal of ensemble methods is to combine the predictions of several base estimators built with
+						a given learning algorithm in order to improve generalizability / robustness over a single
+						estimator.</p>
+					<p>Ensemble learning, in general, is a model that makes predictions based on a number of different
+						models. By combining individual models, the ensemble model tends to be more flexible (less bias)
+						and less data-sensitive (less variance).</p>
+					<ul>
+						<li><strong>Bagging</strong> (averaging methods): the driving principle is to build several
+							estimators independently in a parallel way and then to average their predictions. Each model
+							is trained by a random subset of the data. the combined estimator is usually better than any
+							of the single base estimator because its variance is reduced. </li>
+						<li><strong>Boosting</strong>: base estimators are built sequentially and one tries to reduce
+							the bias of the combined estimator. The motivation is to combine several weak models to
+							produce a powerful ensemble.
+							. Each individual model learns from mistakes made by the previous model.
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Bagging vs Boosting</h2>
+					<img src="https://i.pinimg.com/564x/a8/19/89/a8198900b88226d8e372537c55702f30.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Bagging vs Boosting</h2>
+					<img src="https://i.pinimg.com/564x/37/b7/3c/37b73c7657a7bc1990b3abe3d7088ab1.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Bagging vs Boosting</h2>
+					<img src="https://i.pinimg.com/564x/c0/06/80/c00680e3aec3892ba2d6fe0374f63914.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Bagging vs Boosting</h2>
+					<img src="https://i.pinimg.com/564x/5f/03/71/5f037197e487701baef66a34f663cd3f.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<p>Base models that are often considered for bagging are models with high variance but low bias</p>
+					<img src="https://i.pinimg.com/564x/f9/98/0d/f9980da0008a02de703ee9fdfc107713.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/dc/ca/be/dccabe49373b05e8cadfaaee9b7a88d2.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/8c/35/41/8c354108176709794ed2a68f8ef7d94a.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/7f/5a/bb/7f5abb927add3ee548f5ba449c58d643.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/22/d9/f6/22d9f670d70d1ef2775f55c13ccdd1d6.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/e5/72/c2/e572c2bd8302f0ed27383bdff7826433.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Bagging</h2>
+					<img src="https://i.pinimg.com/564x/f1/fb/95/f1fb95766bef4a5539949354ecbaeb8d.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<img src="https://i.pinimg.com/564x/fb/d9/41/fbd9412797fa84df412448c1f271c798.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<p>Random forest is an ensemble model using bagging as the ensemble method and decision tree as the
+						individual model.</p>
+					<img src="https://i.pinimg.com/564x/2d/fe/1f/2dfe1fe680f3528caef84d77114ab3ae.jpg" width="950">
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<p>Se puede realiza en términos de observaciones y/o en términos de predictores</p>
+					<img src="https://i.pinimg.com/564x/ae/b3/2d/aeb32ddea9b44250ff254867a3386903.jpg" width="950">
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<p>
+						<smaller>Let us draw 10 samples from our distribution again and fit a Decision Tree and a Random
+							Forest containing 100 Decision Trees. We repeat this procedure 1000 times and get the
+							following picture:</smaller>
+					</p>
+					<img src="https://i.pinimg.com/564x/8e/34/8e/8e348eeabcf1f28bd67c95c361492f01.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<img src="https://i.pinimg.com/564x/8e/34/8e/8e348eeabcf1f28bd67c95c361492f01.jpg" width="700">
+					<p>We see that the vertical width of the red tube, formed by the Random Forests is smaller than the
+						Decision Trees’ black tube. So, Random Forests have a lower variance than Decision Trees, as
+						expected. Furthermore, it seems that the averages (the middle) of the two tubes are the same
+						which means that the process of averaging did not change the bias. We still hit the underlying
+						true function 3sin(x)+x quite well.</p>
+					<a>https://towardsdatascience.com/understanding-the-effect-of-bagging-on-variance-and-bias-visually-6131e6ff1385</a>
+				</section>
+
+				<section>
+					<h2>Ej- Random forest</h2>
+					<img src="https://i.pinimg.com/564x/dc/5b/92/dc5b92ae7a74fa364074eef18941b641.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Boosting</h2>
+					<p>Boosting is a method of converting weak learners into strong learners (low variance but high
+						bias) --> Shallow decision trees (stump)</p>
+					<img src="https://i.pinimg.com/564x/d8/fd/8a/d8fd8a85708054f6a14bc2126454711f.jpg" width="700">
+				</section>
+
+				<section>
+					<h2>AdaBoost</h2>
+					<p>AdaBoost (Adaptative Boosting) is a boosting ensemble model and works especially well with the
+						decision tree. Boosting model’s key is learning from the previous mistakes, e.g.
+						misclassification data points. AdaBoost learns from the mistakes by increasing the weight of
+						misclassified data points.</p>
+					<img src="https://i.pinimg.com/564x/73/8b/ff/738bff68d0c6f2241fe9dbe61779914f.jpg" width="900">
+				</section>
+
+				<section>
+					<h2>Ej1 - AdaBoost</h2>
+					<p>As you can see, the 3 points I marked with yellow are on the wrong side. For this reason, we need
+						to increase their weight for the 2nd iteration. But how?. In the 1st iteration, we have 7
+						correctly and 3 incorrectly classified points. Let’s assume we want to bring our solution into a
+						50/50 balance situation. Then we need to multiply the weight of incorrectly classified points
+						with (correct/incorrect) which is (7/3 ≈ 2.33). If we increase the weight of the incorrectly
+						classified 3 points to 2.33, our model will be 50–50%. We keep the results of 1st classification
+						in our minds and go to the 2nd iteration.</p>
+					<img src="https://i.pinimg.com/564x/fe/db/0a/fedb0a3d67b266ce047d814b7ed7bacc.jpg" width="300">
+				</section>
+
+				<section>
+					<h2>Ej1 - AdaBoost</h2>
+					<p>In the 2nd iteration, the best solution is as on the left. Correctly classified points have a
+						weight of 11, whereas incorrectly classified points’ weight is 3.
+						To bring the model back to a 50/50 balance, we need to multiply the incorrectly classified
+						points’ weight by (11/3 ≈ 3.66).
+						With new weights, we can take our model to the 3rd iteration.
+					</p>
+					<img src="https://i.pinimg.com/564x/65/d0/58/65d0589309ba2881ab1ff615e5a8000c.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Ej1 - AdaBoost</h2>
+					<p>The best solution for the 3rd iteration is as on the left. The weight of the correctly classified
+						points is 19, while the weight of the incorrectly classified points is 3 (once again).
+						We can continue the iterations, but let’s assume that we end it here.
+						We have now reached the stage of combining the 3 weak learners. But how do we do that?
+					</p>
+					<img src="https://i.pinimg.com/564x/d5/a9/f7/d5a9f75bfe689e310989222fb24269fe.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Ej1 - AdaBoost</h2>
+					<p>ln(correct/incorrect) seems to give us the coefficients we want.</p>
+					<img src="https://i.pinimg.com/564x/47/6e/2a/476e2aeeb45c58e869473d496c6e88c6.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej1 - AdaBoost</h2>
+					<p>If we consider the blue region as positive and the red region as negative; we can combine the
+						result of 3 iterations like the picture on the left.</p>
+					<img src="https://i.pinimg.com/564x/d3/6f/ee/d36feed427a4c5358a56d5b3e6b68216.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej2 - AdaBoost</h2>
+					<img src="https://i.pinimg.com/564x/41/d1/9b/41d19b3c9ee3341fa27e8ae0f092b5bb.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej2 - AdaBoost</h2>
+					<img src="https://i.pinimg.com/564x/3c/a8/2a/3ca82a0aedf51b3200b4e9f839f1599f.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej2 - AdaBoost</h2>
+					<img src="https://i.pinimg.com/564x/e2/ee/9b/e2ee9b69195583502b448eed165b83d4.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej2 - AdaBoost</h2>
+					<img src="https://i.pinimg.com/564x/d4/28/7a/d4287a08e5f621128839fd8e966292a1.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Ej2 - AdaBoost</h2>
+					<img src="https://i.pinimg.com/564x/c8/41/23/c8412308555f0809bb7e1c215ed23b4b.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/05/ee/22/05ee22d2d264a463f8c61fe4d48106cd.jpg" width="850">
+				</section>
+
+			</section>
+<!--Deep learning-->
+			<section>
+				<section>
+					<h1>Deep learning</h1>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/65/83/dd/6583dd9225ba576e6be9c5ba820690a2.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/42/e2/89/42e289ae4efdf96bf88f5ad40e15a2ca.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/a1/e4/5d/a1e45d924629abd54266611f1fca7edd.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/27/c9/c8/27c9c8829f9f3e465b9a6983fb9049ee.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Perceptron</h2>
+					<p>A perceptron is a binary classification algorithm modeled after the functioning of the human
+						brain—it was intended to emulate the neuron. The perceptron, while it has a simple structure,
+						has the ability to learn and solve very complex problems.</p>
+					<img src="https://i.pinimg.com/564x/d1/fb/ef/d1fbef4d8e341d4b6e239fc2d5c7bb08.jpg" width="750">
+				</section>
+
+				<section>
+					<h2>Multilayer Perceptron</h2>
+					<p>A multilayer perceptron (MLP) is a group of perceptrons, organized in multiple layers, that can
+						accurately answer complex questions. Each perceptron in the first layer (on the left) sends
+						signals to all the perceptrons in the second layer, and so on. An MLP contains an input layer,
+						at least one hidden layer, and an output layer. </p>
+					<img src="https://i.pinimg.com/564x/d7/77/ff/d777ff5902f05a973706e1cbb9bc3aa6.jpg" width="650">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/28/9c/d1/289cd1226e87ea8712a19af898825c2b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/16/8c/49/168c497409acf45c4bbea3fa005ff5f6.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/3c/04/e8/3c04e8290e4b356a226f6455259ae1c8.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/ca/0f/e8/ca0fe8efe100251252eb6f6275f18c06.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/a0/1d/8c/a01d8c537b17d040bb91e36459c75a8d.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/5e/11/06/5e11068f4db5dd56e4c07fedfaf99e5a.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/2c/3e/44/2c3e44b2aa30239733254bac134fd2e4.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/4d/74/05/4d740532e088c1633aa1ebadd4de7f62.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Adaline</h2>
+					<img src="https://i.pinimg.com/564x/24/e3/b3/24e3b33d65e6a1b17161ce9025a57815.jpg" width="850">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/04/8f/b9/048fb9dc6e07c60a00405ec57f08f230.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/c5/65/c6/c565c6b746c299e7acea1d239b5aa0d9.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/9f/c1/92/9fc19230f64ea3b5658f50e3b365c8b9.jpg" width="400">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/fb/8c/b2/fb8cb25e5d2db8cae5b2d0c69240c451.jpg" width="750">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/11/7c/24/117c2481cd5345cfb9086bc1cea7e761.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/originals/33/ef/77/33ef77c8904b0e31c4982a2e078e817f.png"
+						width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/236x/a8/f0/0a/a8f00ad6b2b2007d7b220cd14757ab69.jpg" width="450">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/f9/ca/7d/f9ca7d9130e7928bb3f0bf0fa7dc4353.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/a7/1d/9d/a71d9d4a7142c856aa805aa358654234.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/c7/1f/84/c71f846bc863f7e24d17bfbc629513a1.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Deep learning</h2>
+					<img src="https://i.pinimg.com/564x/17/85/68/178568a9ac6588da56a0e7d92d51cde5.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/d2/64/96/d2649678442cdf5aaa64d9bd275bdd4c.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/c2/5f/28/c25f28ebe8b629ea319e3c0aadadcffd.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/d0/b3/9e/d0b39e67ea2e681f2f54a446ac692f40.jpg" width="500">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/72/6a/fd/726afde967af113a2884720e8b31aa9c.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/61/d0/01/61d00181ed1babb5e0089f789bdd561b.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/c0/20/91/c02091423e82b6efd352674ac1279cc1.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/b1/3e/59/b13e5942cc1d7ba517ee0116e9041d43.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<img src="https://i.pinimg.com/564x/15/e4/8f/15e48f4f3c8933fa5d0b7779e978ca8e.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Función de activación</h2>
+					<h3>which one to prefer?</h3>
+					<ul>
+						<li>As a rule of thumb, you can start with ReLu as a general approximator and switch to other
+							functions if ReLu doesn't provide better results.</li>
+						<li>For CNN, ReLu is treated as a standard activation function but if it suffers from dead
+							neurons then switch to LeakyReLu</li>
+						<li>Always remember ReLu should be only used in hidden layers</li>
+						<li>For classification, Sigmoid functions(Logistic, tanh, Softmax) and their combinations work
+							well. But at the same time, it may suffer from vanishing gradient problem</li>
+						<li>For RNN, the tanh activation function is preferred as a standard activation function.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Universal Approximation Theorem</h2>
+					<p>A feedforward network with a single layer is sufficient to represent any function, but the layer
+						may be infeasibly large and may fail to learn and generalize correctly.
+						— Ian Goodfellow.</p>
+					<img src="https://i.pinimg.com/564x/a4/2f/90/a42f90d1cd6d7184705aff1b82d4dbcb.jpg" width="800">
+				</section>
+
+				<section>
+					<h2>Universal Approximation Theorem</h2>
+					<img src="https://i.pinimg.com/564x/1c/fa/05/1cfa05b36f7fefa6ff4b0a5125429035.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Universal Approximation Theorem</h2>
+					<img src="https://i.pinimg.com/564x/29/24/41/292441a4bb79918326acf548d5d8c24b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Backpropagation</h2>
+					<img src="https://i.pinimg.com/564x/42/e5/e5/42e5e590e48230aa03fe9850ab69ed45.jpg" width="650">
+				</section>
+
+				<section>
+					<h2>Backpropagation</h2>
+					<img src="https://i.pinimg.com/564x/ce/d3/e6/ced3e61984f4d1768f80915559871cca.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Hyperparameters</h2>
+					<img src="https://i.pinimg.com/564x/79/52/ad/7952ada38b480436647f68ad81237964.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>Hyperparameters</h2>
+					<img src="https://i.pinimg.com/564x/f0/c2/6f/f0c26ffb5b416fa61c26dd4f836df47e.jpg" width="1000">
+				</section>
+
+				<section>
+					<a
+						href="https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.76228&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false">Playground</a>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/cb/55/66/cb556661aa6dc0ec4389e93ea64dd5e0.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/e5/07/24/e5072438e05f1a52d9cf9ef50630637f.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/7b/bc/59/7bbc5917c4b2a079890f09d00c0a4cb8.jpg" width="1000">
+				</section>
+
+				<section>
+					<h1>Redes Neuronales Convolucionales</h1>
+					<h2>ConvNets -CNN-</h2>
+					<img src="https://i.pinimg.com/564x/af/97/0e/af970e2b7bd771c1b18ea66b00a529cd.jpg" width="750">
+				</section>
+
+				<section>
+					<h2>ConvNets -CNN-</h2>
+					<img src="https://i.pinimg.com/564x/ed/e4/65/ede4650bbb89334a22ca18052f455dcd.jpg" width="1000">
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/52/93/58/5293587d4890dda8261994b237d4134b.jpg" width="1000">
+				</section>
+
+				<section>
+					<h2>The Kernel</h2>
+					<p>The objective of the Convolution Operation is to extract the high-level features such as edges,
+						from the input image.</p>
+					<img src="https://i.pinimg.com/originals/48/95/7f/48957f3c71d0e4de9208a825a4ad8f19.gif"
+						width="1000" />
+				</section>
+
+				<section>
+					<h2>The Kernel</h2>
+					<img src="https://i.pinimg.com/originals/78/55/21/785521f68a57ed5fa60d4c5fd097cd71.gif"
+						width="800" />
+				</section>
+
+				<section>
+					<h2>The Kernel</h2>
+					<img src="https://i.pinimg.com/originals/2a/d5/ff/2ad5ff98f4d0ab3210389206c8f5f501.gif"
+						width="1000" />
+				</section>
+
+				<section>
+					<h2>The Kernel</h2>
+					<img src="https://i.pinimg.com/originals/7e/cf/8e/7ecf8ec631e92d38889947592d4d2a11.gif"
+						width="1000" />
+				</section>
+
+				<section>
+					<h2>Stride </h2>
+					<img src="https://www.oreilly.com/library/view/machine-learning-for/9781786469878/assets/09ad7edc-334f-4c54-944b-af21139b0587.png"
+						width="800" />
+					<figcaption>
+						<smaller>Convolution Operation with Stride Length = 1</smaller>
+					</figcaption>
+				</section>
+
+				<section>
+					<h2>Stride & Padding</h2>
+					<p>We can observe that the size of output is smaller that input. To maintain the dimension of output
+						as in input , we use padding. Padding is a process of adding zeros to the input matrix
+						symmetrically. In the following example,the extra grey blocks denote the padding. It is used to
+						make the dimension of output same as input. </p>
+					<img src="https://i.pinimg.com/originals/7c/1b/77/7c1b777c30843395362b0e7c4242d166.gif"
+						width="300" />
+					<figcaption>
+						<smaller>Convolution Operation with Stride Length = 1</smaller>
+					</figcaption>
+				</section>
+
+				<section>
+					<h2>Stride & Padding</h2>
+					<img src="https://i.pinimg.com/originals/7c/1b/77/7c1b777c30843395362b0e7c4242d166.gif"
+						width="400" />
+					<figcaption>
+						<smaller>SAME padding: 5x5x1 image is padded with 0s to create a 6x6x1 image</smaller>
+					</figcaption>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/d0/ce/ca/d0cecaffde6702c23dcaac1749e5a670.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/cb/50/e6/cb50e6a260daeb7afbfd413f589f1141.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/5c/a3/94/5ca394fab11680434803bc76ff45ac4b.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/61/a6/e7/61a6e7f0c73d7b53efc948c1abed0296.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Types of pooling</h2>
+					<p>There are two types of Pooling: Max Pooling and Average Pooling. Max Pooling returns the maximum
+						value from the portion of the image covered by the Kernel. On the other hand, Average
+						Pooling returns the average of all the values from the portion of the image covered by the
+						Kernel.</p>
+					<img src="https://i.pinimg.com/564x/59/b5/ec/59b5ec2b6cb620f3403a992dde24d149.jpg" width="500" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/de/4a/49/de4a4975cb208679b4de1143c78fbe78.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/0c/95/49/0c95492fea4b4ab8535eb2aa04a02f32.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Flattering</h2>
+					<p>Now that we have converted our input image into a suitable form for our Multi-Level Perceptron,
+						we shall flatten the image into a column vector. The flattened output is fed to a feed-forward
+						neural network and backpropagation applied to every iteration of training. Over a series of
+						epochs, the model is able to distinguish between dominating and certain low-level features in
+						images and classify them using the Softmax Classification technique. </p>
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/f4/48/f3/f448f3f57999adbc9c02f7a6c8e45af5.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Fully connected layer</h2>
+					<p>Adding a Fully-Connected layer is a (usually) cheap way of learning non-linear combinations of
+						the high-level features as represented by the output of the convolutional layer. The
+						Fully-Connected layer is learning a possibly non-linear function in that space. </p>
+					<img src="https://i.pinimg.com/564x/e0/bc/cf/e0bccf4245077c2c0633e5ba8233b4e9.jpg" width="700" />
+				</section>
+
+				<section>
+					<h2>CNN</h2>
+					<img src="https://i.pinimg.com/564x/04/e5/b3/04e5b35983a450868f0a4112a61a000f.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>CNN</h2>
+					<img src="https://i.pinimg.com/564x/bc/d6/69/bcd669f3c4de8a6671de6f8a8068bf2f.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>CNN</h2>
+					<img src="https://i.pinimg.com/564x/1c/95/57/1c9557c7371c4209d6cd4bdbcd9fd04e.jpg" width="1000" />
+				</section>
+
+				<section>
+					<a href="https://www.cs.cmu.edu/~aharley/vis/">Ejemplo</a><br>
+					<a href="https://www.cs.cmu.edu/~aharley/vis/conv/flat.html">Ejemplo 3D</a><br>
+					<a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html">CNN</a>
+				</section>
+
+				<section>
+					<h1>Redes Neuronales Recurrentes</h1>
+					<img src="https://i.pinimg.com/564x/3e/43/18/3e43188a51758cd788918eeb3a1ee640.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/1d/ca/0b/1dca0b5c218d838083dedc6d6ccca70e.jpg" width="1000" />
+				</section>
+
+
+				<section>
+					<img src="https://i.pinimg.com/564x/6f/c6/2c/6fc62c3791a51e699e12e44df80fc3cd.jpg" width="1000" />
+				</section>
+
+
+				<section>
+					<img src="https://i.pinimg.com/564x/80/12/59/8012593613b78c8465c9a5e01cc31962.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/44/c9/dc/44c9dcc0b69c2b63bd69c4e9bd8b2e21.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/cf/f8/a7/cff8a71fdcbabc95fd3803237e1f43b0.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/69/58/3a/69583aba7946e85b5bd6cc5b87a64dfc.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/a2/d4/4f/a2d44f1b42581f1c9f595f68d1c3b873.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/bf/5c/a9/bf5ca960df9abdfcca7c61c5fa08a303.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/69/2f/2d/692f2d93c55337f8b9fbf6e384412bfb.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/0f/6a/3e/0f6a3e33cba6706388e43d7abde7b38b.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h3>Many to one</h3>
+					<img src="" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/b4/75/07/b47507116ba0335294006659d30dfbdc.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/bf/5c/a9/bf5ca960df9abdfcca7c61c5fa08a303.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/79/56/22/79562207055a81d3cf6859309dfe1a9e.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/10/14/e2/1014e23996cb4a124ed2cbc40ccadd35.jpg" width="1000" />
+				</section>
+
+				<section>
+					<img src="https://i.pinimg.com/564x/d8/d7/d3/d8d7d3af6caab78240a3ee8a39316882.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>RNN</h2>
+					<img src="https://i.pinimg.com/564x/da/e5/02/dae50216e3f8eddbc5061653e58ca817.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Long Short Term memory (LSTM)</h2>
+					<img src="https://i.pinimg.com/564x/7d/93/21/7d932192a89b1c17d93af41fdb341eea.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Long Short Term memory (LSTM)</h2>
+					<img src="https://i.pinimg.com/564x/d1/70/9e/d1709ed8169a47f2a2308c29d5341c4a.jpg" width="1000" />
+				</section>
+
+				<section>
+					<h2>Long Short Term memory (LSTM)</h2>
+					<img src="https://i.pinimg.com/564x/85/6c/39/856c3981f153e394f1f444b1ff1aada7.jpg" width="1000" />
+				</section>
+			</section>
+<!--Time series-->
+			<section>
+
+				<section><h1>Time series</h1></section>
+
+				<section>
+					<h2>Time series</h2>
+					<p>A time-series data is data that changes over time</p>
+					<p>Timeseries data consists of at least two things:</p>
+					<ul>
+						<li>an array of numbers that represents the data itself.</li>
+						<li>another array that contains a timestamp for each datapoint</li>
+					</ul>
+					<img src="https://miro.medium.com/max/322/1*kucXL9WwXyaOHUEvZKKzow.png" width="300">
+					<figcaption>Source:<a href="https://towardsdatascience.com/time-series-analysis-using-pandas-in-python-f726d87a97d8"> towardsdatascience by Dr. Varshita Sher (Jun, 2020)</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Time series decomposition</h3>
+					<img src="https://miro.medium.com/max/850/1*a6R1ZZN9gdooJBlHF-qoiw.png">
+				</section>
+
+				<section>
+					<h3>Stationary time series</h3>
+					<p>A time series data is said to stationary if its mean and variance doesn’t vary with time. </p>
+					<img src="https://www.researchgate.net/publication/348592737/figure/fig3/AS:981645804970018@1611054006754/Examples-for-stationary-and-non-stationary-time-series.png" width="550">
+					<figcaption>Source:<a href="https://www.researchgate.net/publication/348592737_Automated_Hybrid_Time_Series_Forecasting_Design_Benchmarking_and_Use_Cases"> Bauer (2021)</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Stationarity tests</h3>
+					<p>Some of the widely used stationarity tests are as follows :</p>
+					<ul>
+						<li>Augmented Dickey-Fuller Unit Root Test</li>
+						<li>Kwiatkowski-Phillips-Schmidt-Shin Test</li>
+					</ul>
+					<img src="https://miro.medium.com/max/1002/1*ogMGJVtGMDgCxE9LgkP72g.png">
+					<figcaption><a href="https://medium.com/@rahulnkumar/hypothesis-evaluation-a5da3d4ba5b">Source: Raul Kumar (2022)</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Normality time series</h3>
+					<img src="https://assets.digitalocean.com/articles/eng_python/arima/part_2_fig_2.png" width="680">
+					<figcaption>Source:<a href="https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-arima-in-python-3"> Thomas Vincent (2017)</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Normality Tests</h3>
+					<p>To test whether a given data distribution is normal/gaussian or not, following tests are mostly used :</p>
+					<ul>
+						<li>Shapiro-Wilk Test</li>
+						<li>D’Agostino’s K² Test</li>
+						<li>Anderson-Darling Test</li>
+					</ul>
+					<img src="https://miro.medium.com/max/904/1*qjjqHx1UZIZLgtH7D6KHKA.png" width="680">
+					<figcaption><a href="https://medium.com/@rahulnkumar/hypothesis-evaluation-a5da3d4ba5b">Source: Raul Kumar (2022)</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The ARIMA Time Series Model</h3>
+					<p>AutoregRessive Integrated Moving Average -ARIMA (p,d,q) --> Together these three parameters account for seasonality, trend, and noise in datasets.</p>
+					<ul>
+						<li>p is the auto-regressive part of the model. It allows us to incorporate the effect of past values into our model. Intuitively, this would be similar to stating that it is likely to be warm tomorrow if it has been warm the past 3 days.</li>
+						<li>d is the integrated part of the model. This includes terms in the model that incorporate the amount of differencing (i.e. the number of past time points to subtract from the current value) to apply to the time series. Intuitively, this would be similar to stating that it is likely to be same temperature</li>
+						<li>q is the moving average part of the model. This allows us to set the error of our model as a linear combination of the error values observed at previous time points in the past.</li>
+					</ul>
+					<figcaption>Source: <a href="https://www.digitalocean.com/community/tutorials/a-guide-to-time-series-forecasting-with-arima-in-python-3">DigitalOcean Community By Thomas Vincent</a></figcaption>
+				</section>
+
+				<section>
+					<h3>The seasonal ARIMA</h3>
+					<p>When dealing with seasonal effects, we make use of the seasonal ARIMA, which is denoted as ARIMA(p,d,q)(P,D,Q)s. Here, (p, d, q) are the non-seasonal 
+						parameters described above, while (P, D, Q) follow the same definition but are applied to the seasonal component of the time series. The term s is 
+						the periodicity of the time series (4 for quarterly periods, 12 for yearly periods, etc.).</p>
+						<p>When looking to fit time series data with a seasonal ARIMA model, our first goal is to find the values of ARIMA(p,d,q)(P,D,Q)s that optimize a 
+							metric of interest --> SARIMAX() </p>
+				</section>
+
+			</section>
+<!--References-->
+			<section>
+				<section>
+					<h1>References</h1>
+				</section>
+
+				<section>
+					<ul>
+						<li><a
+								href="https://colab.research.google.com/github/jakevdp/PythonDataScienceHandbook/blob/master/notebooks/Index.ipynb#scrollTo=DVtaNoSK5Dvj">Python
+								Data Science Handbook</a></li>
+					</ul>
+				</section>
+
+			</section>
+
+
+
+
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/math/math.js"></script>
+
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			slideNumber: 'c/t',
+			hash: true,
+			math: {
+				// mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				TeX: {
+					Macros: {
+						R: '\\mathbb{R}',
+						set: ['\\left\\{#1 \\; ; \\; #2\\right\\}', 2]
+					}
+				}
+			},
+			menu: {
+				side: 'left', // 'left' or 'right'.
+				width: 'normal', // 'normal', 'wide', 'third', 'half', 'full', or
+				numbers: false,
+				titleSelector: 'h1, h2, h3',
+				useTextContentForMissingTitles: false,
+				hideMissingTitles: false,
+				markers: true,
+				custom: false,
+				themes: true,
+				themesPath: 'dist/theme/',
+				transitions: false,  // ['None', 'Fade', 'Slide']
+				openButton: true,
+				openSlideNumber: true,
+				keyboard: true,
+				sticky: false,
+				autoOpen: true,
+				delayInit: false,
+				openOnInit: false,
+				loadIcons: true
+			},
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu, RevealMath],
+			dependencies: [
+
+			]
+		});
+	</script>
+</body>
+
+</html>
