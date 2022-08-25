@@ -4590,8 +4590,22 @@
 				</section>
 
 				<section>
+					<h3>Time series</h3>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/forecasting_multi-step_en.gif" width="800">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
 					<h3>Time series decomposition</h3>
 					<img src="https://miro.medium.com/max/850/1*a6R1ZZN9gdooJBlHF-qoiw.png">
+				</section>
+
+				<section>
+					<h2>Decomposing time series with multiple seasonal patterns</h2>
+					<p>Generally, high-frequency data exhibits multiple seasonal patterns. For example, hourly time series data can have a daily,
+						 weekly, and annual pattern</p>
+					<img src="https://miro.medium.com/max/1134/1*aT7P8lBy9BO7SQT-eonwIQ.png">
+					<figcaption>Source: <a href="https://arxiv.org/abs/2107.13462">Bandara et al., (2021)</a></figcaption>
 				</section>
 
 				<section>
@@ -4631,6 +4645,48 @@
 				</section>
 
 				<section>
+					<h2>Forecasting</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/matrix_transformation_with_exog_variable.png" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+				
+				<section>
+					<h2>Forecasting</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/diagram-single-step-forecasting.png" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Recursive forecasting</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/diagram-recursive-mutistep-forecasting.png" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Multistep forecasting</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/diagram-direct-multi-step-forecasting.png" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Increasing training size</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/backtesting_refit.gif" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Fixed training size</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/backtesting_refit_fixed_train_size.gif" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Without refit</h2>
+					<img src="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/img/backtesting_no_refit.gif" width="680">
+					<figcaption>Source:<a href="https://joaquinamatrodrigo.github.io/skforecast/0.4.3/quick-start/introduction-forecasting.html"> skforecast Docs</a></figcaption>
+				</section>
+
+				<section>
 					<h3>The ARIMA Time Series Model</h3>
 					<p>AutoregRessive Integrated Moving Average -ARIMA (p,d,q) --> Together these three parameters account for seasonality, trend, and noise in datasets.</p>
 					<ul>
@@ -4642,12 +4698,30 @@
 				</section>
 
 				<section>
+					<h2>The ARIMA Time Series Model</h2>
+					<h3>Autorgeressive component - AR(p)</h3>
+					<p>p is the previous timestamp adjusted by a multiplier, and then adding white noise.</p>
+					<h3>Moving average - MA(q)</h3>
+					<p>q is the number of lagged forecasting error terms in the prediction</p>
+					<p>The ARMA model is a constant plus the sum of AR lags and their multipliers, plus the sum of the MA lags and their multipliers plus white noise.</p>
+					<p>The ARIMA model is an ARMA model yet with a preprocessing step included in the model that we represent using I(d). I(d) is the difference order, which is the number of transformations needed to make the data stationary.</p>
+					<figcaption>Source: <a href="https://towardsdatascience.com/time-series-forecasting-with-arima-sarima-and-sarimax-ee61099e78f6">Brendan Artley in towardsdatascience</a></figcaption>
+				</section>
+
+				<section>
 					<h3>The seasonal ARIMA</h3>
 					<p>When dealing with seasonal effects, we make use of the seasonal ARIMA, which is denoted as ARIMA(p,d,q)(P,D,Q)s. Here, (p, d, q) are the non-seasonal 
 						parameters described above, while (P, D, Q) follow the same definition but are applied to the seasonal component of the time series. The term s is 
 						the periodicity of the time series (4 for quarterly periods, 12 for yearly periods, etc.).</p>
 						<p>When looking to fit time series data with a seasonal ARIMA model, our first goal is to find the values of ARIMA(p,d,q)(P,D,Q)s that optimize a 
 							metric of interest --> SARIMAX() </p>
+				</section>
+
+				<section>
+					<h2>The kalman filter</h2>
+					<p>It is an algorithm for extracting signals from data that is either noisy or contains incomplete measurements. 
+						The premise behind Kalman filters is that not every state within a system is directly observable; instead, 
+						we can estimate the state indirectly, using observations that may be contaminated, incomplete, or noisy.</p>
 				</section>
 
 			</section>
