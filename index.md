@@ -14,6 +14,34 @@ Martes & Jueves 10:00 - 12:00 a.m.
 ## Contenido del curso
 [Ir a presentación...](/html/MachineLearning.html)
 
+### Introducción al curso
+
+### Ambiente de trabajo
+
+### Formulación de hipótesis
+
+### Toma y procesamiento de datos
+
+### Análisis exploratorio de datos
+
+### Selección de variables
+
+### Selección de hiperparámetros
+
+### Selección del modelo
+
+### Modelos no supervisados
+
+### Modelos supervisados paramétricos
+
+### Modelos supervisados no paramétricos
+
+### Modelos ensamblados
+
+### Deep learning
+
+### Series de tiempo
+
 ## Notebooks
 * [Ambiente de trabajo](/NOTEBOOKS/01_Ambiente_de_trabajo.ipynb)
 * [Importar datos](/NOTEBOOKS/02_Importar.ipynb) 
