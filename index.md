@@ -63,7 +63,7 @@ Martes & Jueves 10:00 - 12:00 a.m.
 * [Support Vector Machine](/NOTEBOOKS/18_SVM.ipynb) 
 * [Redes Neuronales Artificiales](/NOTEBOOKS/19_RedesNeuronales.ipynb) 
 * [Modelos ensamblados](/NOTEBOOKS/20_Ensembles.ipynb)
-* [Series de tiempo](/NOTEBOOKS/21_TimeSeries.ipynb)
+* Series de tiempo: [Pandas](/NOTEBOOKS/21_TimeSeries_pandas.ipynb), [preparación](/NOTEBOOKS/21a_TimeSeries_preparing.ipynb), [Descomposición](/NOTEBOOKS/21b_TimeSeries_decomposition.ipynb), [estacionalidad](/NOTEBOOKS/21c_TimeSeries_stationarity.ipynb), [SARIMAX](/NOTEBOOKS/21d_TimeSeries_SARIMAX.ipynb), [SKlearn](/NOTEBOOKS/21e_TimeSeries_sklearn.ipynb), [redes neuronales](/NOTEBOOKS/21f_TimeSeries_LSTM.ipynb)
 
 
 ## Evaluación del curso
