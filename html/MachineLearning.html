@@ -1038,6 +1038,15 @@
 				</section>
 
 				<section>
+					<h3>Scale invariance models</h3>
+					<p>A machine learning method is 'scale invariant' if rescaling any (or all) of the features--i.e. multiplying each column by a different nonzero number--does not change its predictions.</p>
+					<p>OLS is scale invariant. If you have a model $y=w_0+w_1x_1+w_2x_2$ and you replace $x_1$ with $x'=x_1/2$ and re-estimate the 
+						model $y=w_0+2w_1x'_1+w_2x_2$, you'll get a new model which gives exactly the same preditions. The new $x'_1$ is half as big, so its coefficient is now twice as big.</p>
+					<p>When using a non-scale invariant method, if the features are of different units (e.g. dollars and miles and kilograms and numbers of products). people often standardized the data (subtract off the mean and divide by the standard deviation of each column in 
+						X.</p>
+				</section>
+
+				<section>
 					<h2>Escalar</h2>
 					<img src="https://i.pinimg.com/564x/28/df/12/28df127074b36d9517b359fb2026b86a.jpg" width="850" />
 				</section>
@@ -3040,6 +3049,7 @@
 					<p >Este modelo sigue siendo lineal, ya que los coeficientes/pesos asociados con cada variable siguen
 						siendo lineales. Se puede decir que el modelo es no linear en término de las variables, pero lineal en término de
 						los coeficientes.</p>
+						<figcaption><a href="https://blog.minitab.com/en/adventures-in-statistics-2/what-is-the-difference-between-linear-and-nonlinear-equations-in-regression-analysis">Source: Minitab</a></figcaption>
 				</section>
 
 				<section>
@@ -3050,6 +3060,22 @@
 				<section>
 					<h2>Modelo no lineal en término de las variables</h2>
 					<img src="https://i.pinimg.com/originals/06/e4/fe/06e4fe9a1a4d53472a5d2791851ff722.gif" width="800">
+				</section>
+
+				<section>
+					<h3>Intercepto</h3>
+					<p>Paradoxically, while the value is generally meaningless, it is crucial to include the constant term in most regression models!...If all of the predictors can’t be zero, it is impossible to interpret the value of the constant. Don't even try!...</p>
+					<img src="https://blog.minitab.com/hubfs/Imported_Blog_Media/flp_no_constant.gif" width="400">
+					<p>The constant term is in part estimated by the omission of predictors from a regression analysis. In essence, it serves as a garbage bin for any bias that is not accounted for by the terms in the model. </p>
+					<figcaption><a href="https://blog.minitab.com/en/adventures-in-statistics-2/regression-analysis-how-to-interpret-the-constant-y-intercept">Source: Minitab</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Estandarizar las variables</h3>
+					<p>You should standardize the variables when your regression model contains polynomial terms or interaction terms. While these types of terms can provide extremely important information about the relationship between the response and predictor variables, they also produce excessive amounts of multicollinearity.
+						Multicollinearity is a problem because it can hide statistically significant terms, cause the coefficients to switch signs, and make it more difficult to specify the correct model.</p>
+						<img src="https://miro.medium.com/max/812/1*ek9zn_u2n9eU87BbAJo5Fg.png" width="300">
+						<figcaption><a href="https://blog.minitab.com/en/adventures-in-statistics-2/when-is-it-crucial-to-standardize-the-variables-in-a-regression-model">Source: Minitab</a></figcaption>
 				</section>
 
 				<section>
@@ -4692,9 +4718,6 @@
 				</section>
 
 			</section>
-
-
-
 
 		</div>
 	</div>
