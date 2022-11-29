@@ -3058,7 +3058,7 @@
 				</section>
 
 				<section>
-					<h2>Modelo no lineal en término de las variables</h2>
+					<h2>Modelo no lineal en términos de las variables</h2>
 					<img src="https://i.pinimg.com/originals/06/e4/fe/06e4fe9a1a4d53472a5d2791851ff722.gif" width="800">
 				</section>
 
@@ -3076,6 +3076,32 @@
 						Multicollinearity is a problem because it can hide statistically significant terms, cause the coefficients to switch signs, and make it more difficult to specify the correct model.</p>
 						<img src="https://miro.medium.com/max/812/1*ek9zn_u2n9eU87BbAJo5Fg.png" width="300">
 						<figcaption><a href="https://blog.minitab.com/en/adventures-in-statistics-2/when-is-it-crucial-to-standardize-the-variables-in-a-regression-model">Source: Minitab</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Multicollinearity</h3>
+					<p>Collinearity is a linear association between two explanatory variables:</p>
+					<div style="font-size: 20px;">$X_{2,i} = \alpha_0 + \alpha_1 X_{1,i}$</div>
+					<p>Multicollinearity is a linear associations between more than two explanatory variables:</p>
+					<div style="font-size: 20px;">$X_{2,i} = \alpha_0 + \alpha_1 X_{1,i} + \alpha_2 X_{2,i}$</div>
+					<p>The effect of multicollinearity (redundancy) is that it makes the estimation of model parameters impossible.</p>
+					<div style="font-size: 20px;">$r = X^TX$</div>
+					<p>To derive the ordinary least squares (OLS) estimators r must be invertible, which means the matrix must have full rank. If the matrix is rank deficient then the OLS estimator does not exist because the matrix cannot be inverted.
+						If your design matrix contains k independent explanatory variables, then rank(r) should equal k. The effect of perfect multicollinearity is to reduce the rank of r less than the maximum number of columns.
+					</p>
+				</section>
+
+				<section>
+					<h3>Variance inflation factor (VIF)</h3>
+					<p>VIF which quantifies the severity of multicollinearity in a multiple regression model. Functionally, it measures the increase in the variance of an estimated coefficient when collinearity is present</p>
+					<div style="font-size: 20px;">$VIF = \frac{1}{1-R^2}$</div>
+					<p>The coefficient of determination is derived from the regression of covariate j against the remaining k — 1 variables.
+						If the VIF is close to one this implies that covariate j is linearly independent of all other variables. 
+						Values greater than one are indicative of some degree of multicollinearity, 
+						whereas values between one and five are considered to exhibit mild to moderate multicollinearity. 
+						these variables may be left in the model, though some caution is required when interpreting their coefficients. 
+						If the VIF is greater than five this suggests moderate to high multicollinearity, you might want to consider leaving these variables out.
+					</p>
 				</section>
 
 				<section>
@@ -4671,13 +4697,6 @@
 						the periodicity of the time series (4 for quarterly periods, 12 for yearly periods, etc.).</p>
 						<p>When looking to fit time series data with a seasonal ARIMA model, our first goal is to find the values of ARIMA(p,d,q)(P,D,Q)s that optimize a 
 							metric of interest --> SARIMAX() </p>
-				</section>
-
-				<section>
-					<h2>The kalman filter</h2>
-					<p>It is an algorithm for extracting signals from data that is either noisy or contains incomplete measurements. 
-						The premise behind Kalman filters is that not every state within a system is directly observable; instead, 
-						we can estimate the state indirectly, using observations that may be contaminated, incomplete, or noisy.</p>
 				</section>
 
 			</section>
