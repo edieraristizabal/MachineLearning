@@ -2913,11 +2913,10 @@
 							Función discriminante.</li>
 						<li>No tiene hiperparámetros</li>
 						<li>Es muy similar al análisis de cluster, pero en este caso se cuenta con las clases a las
-							cuales pertenece (labels),
-							sin embargo utiliza el mismo algoritmo de PCA. Por lo que también se puede decir que es el
+							cuales pertenece (labels), sin embargo utiliza el mismo algoritmo de PCA. Por lo que también se puede decir que es el
 							mismo PCA pero arroja resultados similares en su forma a clúster (grupos homogéneos entre si pero heterogéneos
 							respecto a los demás grupos) por lo que tienen una finalidad también descriptiva (identificar la variable que mejor
-							discriminen y caracterizan a los grupos). Sin embargo los resultados se parecen a la ecuación de regresión lineal.</li>
+							discriminen y caracterizan a los grupos). </li>
 					</ul>
 				</section>
 
@@ -2940,8 +2939,9 @@
 							lineales de las variables originales para formar la función discriminante.</li>
 						<li>Determinar la función discriminante si los datos ajustan al modelo, y con ella clasificar
 							los individuos.</li>
+							<li>El máximo número de componentes que puede enconrar es igual al número de clases -1.</li>
 					</lu>
-					<div class="fragment">
+					<div>
 						\[ \begin{aligned}
 						f = g(X1,X2, X3, ....Xn)
 						\end{aligned} \]
