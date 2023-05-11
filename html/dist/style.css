@@ -1,0 +1,53 @@
+.primera #marca-agua{
+    display:none;
+    }
+
+.primera #lecture{
+    display:none;
+    }
+
+#clock {
+    font-size: 20px;
+    color: #51483D;
+    width: 120px;
+    margin: 0px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 20px;
+    }
+
+.reveal .slide-number {
+    right: 150px;
+     bottom: 3px
+}
+
+.reveal section h1 {
+    text-align: center;
+    color: blue
+    }
+
+.reveal section h2 {
+    text-align: left;
+    color: blue;
+    font-size: 35px;
+}
+
+.reveal section h3 {
+    text-align: left;
+    color: blue;
+    font-size: 35px;
+}
+
+.reveal section figcaption{
+    font-size:16px;
+    color: gray
+}
+
+.reveal section p {
+    font-size: 0.7em;
+    }
+
+    .reveal section li {
+        font-size: 0.7em;
+        }
+    
