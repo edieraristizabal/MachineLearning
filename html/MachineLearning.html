@@ -38,6 +38,18 @@
 			stroke: #000;
 			shape-rendering: crispEdges;
 		}
+
+		.reveal .twocolumn {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-gap: 10px;
+			text-align: left;
+			}
+
+		.reveal figcaption {
+			font-size: 15px;
+			color: gray;
+		}
 	</style>
 </head>
 
@@ -203,28 +215,24 @@
 				</section>
 
 				<section>
-					<h2>La era de los datos</h2>
-					<img src="https://miro.medium.com/max/1086/1*_sIf35S9d9qkLuh62phOHw.jpeg" alt="datos1"
-						width="1000" />
-					<figcaption><small></small></figcaption>
+					<img class="r-stretch" src="https://miro.medium.com/max/1086/1*_sIf35S9d9qkLuh62phOHw.jpeg"/>
+					<figcaption></figcaption>
 				</section>
 
 				<section>
-					<h2>Data store</h2>
-					<img src="https://i.pinimg.com/564x/f1/a2/61/f1a261cf9e9a6d7ee854b364534c563c.jpg" alt="store"
-						width="900" />
-					<figcaption><small></small></figcaption>
-				</section>
-
-				<section>
-					<h2>Data store</h2>
+					<h3>Data store</h3>
 					<p>Los kilobytes eran almacenados en discos, megabytes fueron almacenados en discos duros, terabytes
-						fueron
-						almacenados en arreglos de discos, y petabytes son almacenados en la nube <small>(Anderson,
+						fueron almacenados en arreglos de discos, y petabytes son almacenados en la nube <small>(Anderson,
 							2008)</small>.</p>
-					<img src="https://i.pinimg.com/originals/2d/e2/56/2de2560df25599ebe14b117ce53b1755.png" alt="store1"
-						width="900" />
-					<figcaption><small></small></figcaption>
+					<div class="twocolumn">
+						<div>
+							<img class="r-stretch" src="https://i.pinimg.com/564x/f1/a2/61/f1a261cf9e9a6d7ee854b364534c563c.jpg" width="400">
+						</div>
+						<div>
+							<img class="r-stretch" src="https://i.pinimg.com/originals/2d/e2/56/2de2560df25599ebe14b117ce53b1755.png" width="400">
+						</div>
+					</div>
+					<figcaption></figcaption>
 				</section>
 
 				<section>
@@ -329,7 +337,7 @@
 				</section>
 
 			</section>
-<!--Ambiente de trabjo-->
+<!--Ambiente de trabajo-->
 			<section>
 				<section>
 					<h1>Ambiente de trabajo</h1>
@@ -653,6 +661,11 @@
 					<p>In this setting, $\widehat{f}$ is often treated as a <i>black box</i>, in the sense that one is
 						not typically concerned
 						with the exact form of $f$, provided that it yields accurate predictions for $Y$.</p>
+				</section>
+
+				<section>
+					<h3>Black Box models</h3>
+					<img class= "r-stretch" src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*GHs2v6QS5IFiuqrVwqoRZQ.png">
 				</section>
 
 				<section>
@@ -1139,6 +1152,207 @@
 					<h2>Clases desbalanceadas</h2>
 					<img src="https://i.pinimg.com/564x/ac/e4/18/ace418892048804b0553276064a8730b.jpg" width="800" />
 				</section>
+
+				<section>
+					<h1>Frequency Distribution and Histograms</h1>
+					<p><strong>Frequency distribution table</strong> is a table that stores the categories (also called
+						“bins”), the frequency, the relative frequency and the cumulative relative
+						frequency of a single continuous interval variable</p>
+					<p>The <strong>frequency</strong> for a particular category or value (also called “observation”)
+						of a variable is the number of times the category or the value appears in the
+						dataset.</p>
+					<p><strong>Relative frequency</strong> is the proportion (%) of the observations that belong to a
+						category. It is used to understand how a sample or population is distributed
+						across bins (calculated as relative frequency = frequency/n )</p>
+					<p>The <strong>cumulative relative frequency</strong> of each row is the addition of the relative
+						frequency of this row and above. It tells us what percent of a population
+						(observations) ranges up to this bin. The final row should be 100%.</p>
+					<p>A <strong>probability density histogram</strong> is defined so that (i) The area of each box equals
+						the relative frequency (probability) of the
+						corresponding bin, (ii) The total area of the histogram equals 1</p>
+				</section>
+	
+				<section>
+					<h3>Distribución de frecuencia</h3>
+					<img src="https://www.statgraphics.com/hs-fs/hubfs/frequencytable.gif?width=520&name=frequencytable.gif"
+						width="1000">
+				</section>
+	
+	
+				<section>
+					<h3>Distribución de frecuencia</h3>
+					<img src="https://textimgs.s3.amazonaws.com/boundless-statistics/lative-vs-normal-histogram.svg"
+						width="1000">
+				</section>
+	
+				<section>
+					<h3>Distribución de frecuencia</h3>
+					<img src="https://sphweb.bumc.bu.edu/otlt/MPH-Modules/PH717-QuantCore/PH717-Module6-RandomError/Normal%20Distribution%20deviations.png"
+						width="800">
+				</section>
+	
+				<section>
+					<img src="https://www.biologyforlife.com/uploads/2/2/3/9/22392738/c101b0da6ea1a0dab31f80d9963b0368_orig.png"
+						width="1000">
+				</section>
+	
+				<section>
+					<h3>Central Limit Theorem</h3>
+					<p>When we collect sufficiently large samples from a population, the means of the samples will have a normal distribution. Even if the population is not normally distributed.</p>
+					<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*YVvUnChIQ7pBz5YrHxuVhw.png" width="600">
+					<figcaption>Source: <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Wikipedia</a></figcaption>
+				</section>
+	
+				<section>
+					<h1>Box plot</h1>
+					<p>A boxplot is a graphical representation of the key descriptive statistics of a
+						distribution.</p>
+					<p>The characteristics of a boxplot are</p>
+					<ul>
+						<li>The box is defined by using the lower quartile Q1 (25%; left vertical edge of
+							the box) and the upper quartile Q3 (75%; right vertical edge of the box). The
+							length of the box equals the interquartile range IQR = Q3 - Q1.</li>
+						<li>The median is depicted by using a line inside the box. If the median is not
+							centered, then skewness exists.</li>
+						<li>To trace and depict outliers, we have to calculate the whiskers, which are
+							the lines starting from the edges of the box and extending to the last
+							object not considered an outlier.</li>
+						<li>Objects lying further away than 1.5 IQR are considered outliers.</li>
+						<li>Objects lying more than 3.0 IQR are considered extreme outliers, and
+							those between (1.5 IQR and 3.0 IQR) are considered mild outliers. One
+							may change the 1.5 or 3.0 coefficient to another value according to the
+							study’s needs, but most statistical programs use these values by default.</li>
+						<li>Whiskers do not necessarily stretch up to 1.5 IQR but to the last object
+							lying before this distance from the upper or lower quartiles.</li>
+					</ul>
+				</section>
+	
+				<section>
+					<img src="https://www.researchgate.net/publication/340969321/figure/fig2/AS:885273386811393@1588077031036/Interquartile-range-IQR-projection-on-a-normally-distributed-density-The-median-of-IQR_Q640.jpg"
+						width="650">
+				</section>
+	
+				<section>
+					<img src="https://i.stack.imgur.com/urPEC.jpg" width="800">
+				</section>
+	
+				<section>
+					<img src="https://www.machinelearningplus.com/wp-content/uploads/2020/04/notched-pclass.png"
+						width="800">
+				</section>
+	
+				<section>
+					<h1>QQ plot</h1>
+					<p>The normal QQ plot is a graphical technique that plots data against a theoretical normal distribution
+						that forms a straight line</p>
+					<p>A normal QQ plot is used to identify if the data are normally distributed</p>
+					<p>If data points deviate from the straight line and curves appear (especially in
+						the beginning or at the end of the line), the normality assumption is violated.</p>
+				</section>
+	
+				<section>
+					<img src="https://www.learnbyexample.org/wp-content/uploads/r/typical-quantile-quantile-qq-plot.png" width="600">
+					<figcaption><a href="https://www.learnbyexample.org/r-quantile-quantile-qq-plot-base-graph/">Learn by example</a></figcaption>
+				</section>
+	
+				<section>
+					<h1>Scatter plot</h1>
+	
+					<p>A scatter plot displays the values of two variables as a set of point coordinates</p>
+	
+					<p>A scatter plot is used to identify the relations between two variables and trace
+						potential outliers.</p>
+					<p>Inspecting a scatter plot allows one to identify linear or other types of associations</p>
+	
+					<p>If points tend to form a linear pattern, a linear
+						relationship between variables is evident. If data points are scattered, the linear
+						correlation is close to zero, and no association is observed between the two
+						variables. Data points that lie further away on the x or y direction (or both) are
+						potential outliers</p>
+				</section>
+	
+				<section>
+					<h3>Statistical Probability Distributions</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*nOMS0KgevT7YfqtfnhgXUg.png" widht="500">
+					<figcaption>Source: <a href="https://awstip.com/statistical-probability-distributions-89398c4b68c7">Medium - O. Yenigun</a></figcaption>
+				</section>
+	
+				<section>
+					<h3>Underlying data distribution</h3>
+					<p>Before making modeling decisions, you need to know the underlying data distribution.</p>
+					<img src="https://miro.medium.com/max/720/1*DqaWFp-ylr9BIY_bJtJcDw.webp" width="500">
+					<figcaption><a href="https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd">E. Taskesen</a></figcaption>
+				</section>
+	
+				<section>
+					<img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*jwNNUbwU3m9PXh6SrEWTxw.jpeg" width="800">
+				</section>
+	
+				<section>
+					<h3>PMF: Probability Mass Function</h3>
+					<p>Returns the probability that a discrete random variable X is equal to a value of x. The sum of all values is equal to 1. PMF can only be used with discrete variables.</p>
+					<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*lsvW-47jdqfANlbU6COwew.png" width="800">
+					<figcaption><a href="https://awstip.com/statistical-probability-distributions-89398c4b68c7">Medium - O. Yenigun</a></figcaption>
+				</section>
+				
+				<section>
+					<h3>PDF: Probability Density Function</h3>
+					<p>It is like the version of PMF for continuous variables. Returns the probability that a continuous random variable X is in a certain range.</p>
+					<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*i2HfkBN0YyEPQD6bTxIqYQ.png" width="800">
+					<figcaption><a href="https://awstip.com/statistical-probability-distributions-89398c4b68c7">Medium - O. Yenigun</a></figcaption>
+				</section>
+	
+				<section>
+					<h3>CDF: Cumulative Density Function</h3>
+					<p>Returns the probability that a random variable X takes values less than or equal to x.</p>
+					<img src="https://modelassist.epixanalytics.com/download/attachments/1148672/1.jpg?version=1&modificationDate=1470821132000&api=v2" width="600">
+					<figcaption><a href="https://awstip.com/statistical-probability-distributions-89398c4b68c7">Medium - O. Yenigun</a></figcaption>
+				</section>
+	
+				<section>
+					<h1>Covariance matrix</h1>
+					<p>Covariance is a measure of the extent to which two variables vary together
+						(i.e., change in the same linear direction). Covariance Cov(X, Y) is calculated as:</p>
+					$cov_{x,y}=\frac{\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{n-1}$
+	
+					<p>where
+						$x_i$ is the score of variable X of the i-th object,
+						$y_i$ is the score of variable Y of the i-th object,
+						$\bar{x}$ is the mean value of variable X,
+						$\bar{y}$ is the mean value of variable Y.</p>
+					<p>For positive covariance, if variable X increases, then variable Y increases as well.
+						If the covariance is negative, then the variables change in the opposite way
+						(one increases, the other decreases). Zero covariance indicates no correlation
+						between the variables.</p>
+				</section>
+	
+				<section>
+					<img src="https://cdn-images-1.medium.com/max/800/1*5V2y7dyc7YclTRqdVjoOrQ.png" width="800">
+				</section>
+	
+				<section>
+					<h1>Correlation coefficient</h1>
+					<p>Correlation coefficient $r_{(x, y)}$ analyzes how two variables (X, Y) are
+						linearly related. Among the correlation coefficient metrics available, the most
+						widely used is the Pearson’s correlation coefficient (also called Pearson
+						product-moment correlation),</p>
+					$r_{(x, y)} = \frac{\text{cov}(X,Y)}{s_x s_y}$
+					<p>Correlation is a measure of association and not of causation.</p>
+				</section>
+	
+				<section>
+					<img src="http://www.sharetechnote.com/image/EngMath_CovarianceMatrix_09.png" width="1000">
+				</section>
+	
+				<section>
+					<img src="https://i.pinimg.com/564x/4a/ea/fd/4aeafd24be1a92284494c616cc885762.jpg" width="1000">
+				</section>
+	
+				<section>
+					<img src="https://www.math.net/img/a/probability-and-statistics/descriptive-statistics/correlation/sp.svg"
+						width="1000">
+				</section>
+	
 
 			</section>
 <!--Seleccion de variables-->
@@ -1775,7 +1989,6 @@
 							return errors;
 						}
 					</script>
-
 				</section>
 
 				<section class="level2">
@@ -2162,23 +2375,58 @@
 				</section>
 
 				<section>
-					<h1>Hypothesis evaluation</h1>
+					<h1>Statistical Inference</h1>
 				</section>
 
 				<section>
-					<h3>Statistical significance</h3>
-
-					<p>In statistics, when we wish to start asking questions about the data and interpret the results, we use statistical methods that provide 
-						a confidence or likelihood about the answers. In general, this class of methods is called statistical hypothesis testing, 
-						or significance tests.</p>
-					<p>There are various statistical test out there and one have to choose wisely which test to apply for particular problem. 
-						On a very broad level if we have prior knowledge about the under lying data distribution (mainly normal distribution) 
-						then <strong>parametric tests</strong> like T-Test, Z-Test, ANOVA test etc are used. And if we don’t have prior knowledge about the underlying 
-						data distribution then <strong>non-parametric tests</strong> like Mann-Whitney U Test is used.</p>						
+					<h3>Statistical inference</h3>
+					<p>process of analyzing sample data and making conclusions about the parameters of a population is called Statistical Inference</p>
+					<p>There are three common forms of Statistical Inference. Each one has a different way of using sample data to make conclusions about the population. They are:</p>
+					<ul>
+						<li>Point Estimation</li>
+						<li>Interval Estimation</li>
+						<li>Hypothesis Testing</li>
+					</ul>
 				</section>
 
 				<section>
-					<h3>Interpret the p-value</h3>
+					<h3>Point stimation</h3>
+					<p>For Point Estimate, we infer an unknown population parameter using a single value based on the sample data.</p>
+					<p>If we took another set of sample data (with the same sample size) and do a point estimate again, it is very likely we would end up making a different conclusion about the population. That means there is uncertainty when we draw conclusions about the population based on the sample data. Point estimation doesn’t give us any idea as to how good the estimation is.</p>
+				</section>
+
+				<section>
+					<h3>Interval stimation</h3>
+					<p>For Interval Estimation, we use an interval of values (aka Confidence Interval) to estimate an unknown population parameter, and state how confident we are that this interval would include the true population parameter.</p>
+					<p>To construct the confidence interval, we would need two metrics:</p>
+					<ul>
+						<li>the point estimate of the population parameter (e.g., sample mean)</li>
+						<li>the standard error of the point estimate (e.g., the standard error of the sample mean), which indicates how different the population parameter is likely to be from one sample statistic.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Hypothesis Testing</h3>
+
+					<p>In statistics, when we have collected data from experiments, surveys, or observations, we often want to determine if the observed differences or effects (i.e., x̄ - µ) are statistically significant or just the result of random chance. </p>
+					<p>Once the test statistic (Z statistic or T statistic) is calculated, we determine the critical region — the region of extreme values that would lead us to reject the null hypothesis. This critical region is established based on the chosen significance level (alpha), which represents the probability of making a Type I error (rejecting the null hypothesis when it is true). Common significance levels include 0.05 (5%) or 0.01 (1%).</p>
+					<p>If the calculated test statistic falls within the critical region, we reject the null hypothesis in favor of the alternative hypothesis, suggesting that the observed sample results are statistically significant.</p>
+				</section>
+
+				<section>
+					<h3>Hypothesis testing</h3>
+					<p>Unlike point estimate and interval estimate which are used to infer population parameters based on sample data, the purpose of hypothesis testing is to evaluate the strength of evidence from the sample data for making conclusions about the population</p>
+					<p>In a hypothesis test, we evaluate two mutually exclusive statements about the population. They are</p>
+					<ul>
+						<li>Null Hypothesis (H0)</li>
+						<li>Alternative Hypothesis (Ha)</li>
+					</ul>
+					<p style="font-size: x-small;">Note: A hypothesis test is NOT designed to prove the null or alternative hypothesis. Instead, it evaluates the strength of evidence AGAINST the null hypothesis using sample data.
+						If a p-value is less than the Significance Level. That means the evidence (against the null hypothesis) we found from the sample data would rarely occur by chance. Therefore, We have enough evidence to reject the null hypothesis. It doesn’t mean we’ve proved the alternative hypothesis is correct. It only means we accept the alternative hypothesis or we’re more confident that the alternative hypothesis is correct.</p>
+				</section>
+
+				<section>
+					<h3>Hypothesis Testing</h3>
 					<p>We describe a finding as statistically significant by interpreting the p-value.</p>
 					<p>A statistical hypothesis test may return a value called p or the p-value. This is a quantity that we can use to interpret or quantify the result 
 						of the test and either reject or fail to reject the null hypothesis. This is done by comparing the p-value to a threshold value chosen 
@@ -2189,6 +2437,17 @@
 								<li><strong>If p-value > alpha</strong>: Fail to reject the null hypothesis (i.e. not significant result).</li>
 								<li><strong>If p-value <= alpha</strong>: Reject the null hypothesis (i.e. significant result).</li>
 							</ul>
+				</section>
+
+				<section>
+					<h3>Hypothesis Testing</h3>
+					<p>On a very broad level if we have prior knowledge about the under lying data distribution (mainly normal distribution) 
+						then <strong>parametric tests</strong> like T-Test, Z-Test, ANOVA test etc are used. And if we don’t have prior knowledge about the underlying 
+						data distribution then <strong>non-parametric tests</strong> like Mann-Whitney U Test is used.</p>
+				</section>
+
+				<section>
+					<img class="r-stretch" src="https://miro.medium.com/v2/resize:fit:1100/format:webp/0*87v1LsNFW2jVs9Q1.jpeg">
 				</section>
 
 				<section>
@@ -3091,6 +3350,12 @@
 				</section>
 
 				<section>
+					<h3>OLS & MLE estimators</h3>
+					<img class="r-stretch"  src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*1piDJety0j6_De-xA4gVUA.png" >
+					<figcaption>Source: <a href="https://towardsdatascience.com/linear-regression-vs-logistic-regression-ols-maximum-likelihood-estimation-gradient-descent-bcfac2c7b8e4">Aaron Zhu in Medium</a></figcaption>
+				</section>
+
+				<section>
 					<h3>Multicollinearity</h3>
 					<p>Collinearity is a linear association between two explanatory variables:</p>
 					<div style="font-size: 20px;">$X_{2,i} = \alpha_0 + \alpha_1 X_{1,i}$</div>
@@ -3160,7 +3425,33 @@
 					<h3>The assumptions</h3>
 					<img src="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions/_jcr_content/par/styledcontainer_2069/par/lightbox_eb1f/lightboxImage.img.png/1548351202073.png" width="850">
 					<figcaption>Source: <a href="https://www.jmp.com/en_us/statistics-knowledge-portal/what-is-regression/simple-linear-regression-assumptions.html">Statistics Knowledge Portal</a></figcaption>
-				</section>				
+				</section>	
+				
+				<section>
+					<h3>Transformation</h3>
+					<p>Logarithmic transformations are useful in various situations, including:</p>
+						<ul style="font-size:smaller;">
+							<li>Reducing the impact of outliers</li>
+							<li>Transforming skewed data to approximate normality</li>
+							<li>Linearizing relationships between variables</li>
+							<li>Stabilizing variance in heteroscedastic data</li>
+							<li>Simplifying complex relationships</li>
+						</ul>
+
+							<p>Before applying a logarithmic transformation, it’s essential to consider the following:</p>
+
+						<ul style="font-size:smaller;">
+							<li>Ensure that all data values are positive, as the logarithm of zero or negative numbers is undefined.</li>
+							<li>If necessary, add a constant to all data points to make them positive.</li>
+							<li>Choose an appropriate logarithm base for your analysis.</li>
+						</ul>
+					<p style="font-size:x-small;">
+						 Note: When interpreting results after applying a logarithmic transformation, keep in mind that the transformation has changed the scale of the data. To make meaningful interpretations, you may need to back-transform the results to the original scale.
+					</p>
+					<figcaption>Source: Juan Esteban de la Calle -<a href="https://juandelacalle.medium.com/best-tips-and-tricks-when-and-why-to-use-logarithmic-transformations-in-statistical-analysis-9f1d72e83cfc">Medium</a>-</figcaption>
+							
+						
+				</section>
 
 				<section>
 					<h2>$R^2$</h2>
@@ -3392,6 +3683,8 @@
 
 				<section>
 					<h2>Función de costo</h2>
+					<p>En regresión logística no se puede utilizar el estimador OLS, ya que en este caso no tiene una solución analítica y no se puede utilizar gradiente descendente
+						 por que no es una función convexa. En su defecto, se utiliza MLE y Binary cross-entropy.</p>
 					<p><img src="https://i.pinimg.com/564x/bf/d8/d1/bfd8d1e2d810d33759df71a86b892c2d.jpg" width="900" />
 					</p>
 				</section>
