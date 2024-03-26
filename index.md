@@ -2,8 +2,7 @@
 
 El curso **Machine Learning** está orientado para estudiantes de posgrados que deseen adquirir conocimientos sobre modelos multivariados, para establecer patrones y análisis de inferencia estadística y predicción de una variable dependiente a partir de variables independentes o predictoras, con herramientas de aprendizaje automático (*Machine learning*), minería de datos (*Data Mining*) y *Big Data*, bajo un ambiente de trabajo *Python* en *Notebooks* sobre *Jupyter Lab*. 
 
-El curso es teórico - práctico. Se dictarán clases teóricas con las técnicas y modelos a utilizar, pero exige que el estudiante seleccione una base de datos para poner en práctica el conocimiento adquirido en el curso. El contenido del curso incluye una introducción al ambiente de trabajo en *Python*, construcción de un modelo basado en datos, métodos no supervisados, métodos supevisados,
-series de tiempo y finalmente intro a *Deep learning*.
+El curso es teórico - práctico. Se dictarán clases teóricas con las técnicas y modelos a utilizar, pero exige que el estudiante seleccione una base de datos para poner en práctica el conocimiento adquirido en el curso. El contenido del curso incluye una introducción al ambiente de trabajo en *Python*, construcción de un modelo basado en datos, métodos no supervisados, métodos supevisados, y finalmente intro a *Deep learning*.
 
 ## Programa del curso
 [Ir al programa...](/Programa_MachineLearning.pdf)
@@ -41,8 +40,6 @@ Lecture: [Landslides prediction from machine learning](https://onlinelibrary.wil
 
 #### Deep learning
 
-#### Series de tiempo
-
 ## Notebooks
 * [Ambiente de trabajo](/NOTEBOOKS/01_Ambiente_de_trabajo.ipynb)
 * [Importar datos](/NOTEBOOKS/02_Importar.ipynb) 
@@ -64,7 +61,6 @@ Lecture: [Landslides prediction from machine learning](https://onlinelibrary.wil
 * [Support Vector Machine](/NOTEBOOKS/18_SVM.ipynb) 
 * [Redes Neuronales Artificiales](/NOTEBOOKS/19_RedesNeuronales.ipynb) 
 * [Modelos ensamblados](/NOTEBOOKS/20_Ensembles.ipynb)
-* Series de tiempo: [Pandas](/NOTEBOOKS/21_TimeSeries_pandas.ipynb), [preparación](/NOTEBOOKS/21a_TimeSeries_preparing.ipynb), [Descomposición](/NOTEBOOKS/21b_TimeSeries_decomposition.ipynb), [estacionalidad](/NOTEBOOKS/21c_TimeSeries_stationarity.ipynb), [SARIMAX](/NOTEBOOKS/21d_TimeSeries_SARIMAX.ipynb), [SKlearn](/NOTEBOOKS/21e_TimeSeries_sklearn.ipynb), [redes neuronales](/NOTEBOOKS/21f_TimeSeries_LSTM.ipynb), [cluster](/NOTEBOOKS/21g_TimeSeries_cluster.ipynb)
 
 
 ## Evaluación del curso
