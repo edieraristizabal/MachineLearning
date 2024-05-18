@@ -1,0 +1,167 @@
+**CURSO**: Análisis Geoespacial, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
+**Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
+**Credits**: The content of this notebook is based on [UCLA](https://stats.oarc.ucla.edu/r/dae/mixed-effects-logistic-regression/).
+
+# Mixed Effects Logistic Regression
+
+La regresión logística de efectos mixtos se utiliza para modelar variables de resultado binarias, en las cuales las probabilidades logarítmicas de los resultados se modelan como una combinación lineal de las variables predictoras cuando los datos están agrupados o existen efectos tanto fijos como aleatorios.
+
+```{r}
+require(ggplot2)
+require(GGally)
+require(reshape2)
+require(lme4)
+require(compiler)
+require(parallel)
+require(boot)
+require(lattice)
+```
+
+## Ejemplo
+
+Una gran organización de mantenimiento de la salud (HMO) quiere saber qué factores relacionados con los pacientes y los médicos están más relacionados con la remisión del cáncer de pulmón de un paciente después del tratamiento. Esto forma parte de un estudio más amplio sobre los resultados del tratamiento y la calidad de vida en pacientes con cáncer de pulmón.
+
+```{r}
+hdp <- read.csv("https://stats.idre.ucla.edu/stat/data/hdp.csv")
+```
+
+```{r}
+hdp <- within(hdp, {
+  Married <- factor(Married, levels = 0:1, labels = c("no", "yes"))
+  DID <- factor(DID)
+  HID <- factor(HID)
+  CancerStage <- factor(CancerStage)
+})
+```
+
+Ahora vamos a graficar nuestras variables predictoras continuas. La visualización de datos nos puede ayudar a entender las distribuciones, detectar errores de codificación (por ejemplo, sabemos que una variable solo toma valores de 0 a 7, pero vemos un 999 en la gráfica), y darnos una idea de la relación entre nuestras variables. Por ejemplo, podríamos ver que dos predictores están altamente correlacionados y decidir que solo queremos incluir uno en el modelo, o podríamos notar una relación curvilínea entre dos variables. La visualización de datos es una forma rápida e intuitiva de verificar todo esto a la vez. Si la mayoría de sus predictores parecen independientes entre sí, está bien. Esto da forma a sus expectativas del modelo. Por ejemplo, si son independientes, la estimación para un predictor no debería cambiar mucho cuando ingresa otro predictor (aunque el error estándar y las pruebas de significación sí lo puedan hacer). Podemos obtener toda esta información e intuición sobre qué y cómo modelar los datos simplemente visualizándolos.
+
+```{r}
+ggpairs(hdp[, c("IL6", "CRP", "LengthofStay", "Experience")])
+```
+
+No parece haber fuertes relaciones lineales entre nuestras variables predictoras continuas. Echemos un vistazo a las distribuciones de nuestras variables por estadio de cáncer (CancerStage). Debido a que la duración de la estancia (LengthofStay) está codificada de forma discreta en días, podemos examinar cómo se asocia con el estadio de cáncer utilizando gráficos de burbujas. El área de cada burbuja es proporcional al número de observaciones con esos valores. Para las variables predictoras continuas, usamos gráficos de violín con datos dispersos (jittered). Todos los datos sin procesar se presentan separados por estadio de cáncer. Para aliviar el sobregrafiado (overplotting) y ver mejor los valores, agregamos una pequeña cantidad de ruido aleatorio (principalmente al eje x) y configuramos la transparencia alfa. Si bien los puntos dispersos son útiles para ver los datos sin procesar, puede ser difícil obtener una idea precisa de la distribución. Para eso, agregamos gráficos de violín. Los gráficos de violín son solo gráficos de densidad kernel reflejados alrededor del eje de trazado. Trazamos los gráficos de violín sobre los puntos dispersos con una transparencia para que aún pueda ver los datos sin procesar, pero los gráficos de violín dominan. Debido a que tanto IL6 como CRP tienden a tener distribuciones sesgadas, usamos una escala de raíz cuadrada en el eje y. Las distribuciones parecen bastante normales y simétricas, aunque aún puede ver la cola larga a la derecha, incluso usando una escala de raíz cuadrada (tenga en cuenta que solo se cambió la escala, los valores mismos no se transforman, lo cual es importante porque le permite ver e interpretar las puntuaciones reales, en lugar de la raíz cuadrada de las puntuaciones).
+
+```{r}
+ggplot(hdp, aes(x = CancerStage, y = LengthofStay)) +
+  stat_sum(aes(size = ..n.., group = 1)) +
+  scale_size_area(max_size=10);
+```
+
+```{r}
+tmp <- melt(hdp[, c("CancerStage", "IL6", "CRP")], id.vars="CancerStage")
+ggplot(tmp, aes(x = CancerStage, y = value)) +
+  geom_jitter(alpha = .1) +
+  geom_violin(alpha = .75) +
+  facet_grid(variable ~ .) +
+  scale_y_sqrt()
+```
+
+Ya que es difícil ver cómo cambian las variables binarias a lo largo de los niveles de las variables continuas, podemos darle la vuelta al problema y observar la distribución de las variables continuas en cada nivel del resultado binario.
+
+```{r}
+tmp <- melt(hdp[, c("remission", "IL6", "CRP", "LengthofStay", "Experience")],
+  id.vars="remission")
+ggplot(tmp, aes(factor(remission), y = value, fill=factor(remission))) +
+  geom_boxplot() +
+  facet_wrap(~variable, scales="free_y")
+```
+
+A continuación se muestra una lista de métodos de análisis que quizás haya considerado:
+
+-   **Regresión logística de efectos mixtos:** Es el método principal de esta página.
+-   **Regresión probit de efectos mixtos:** Es muy similar a la regresión logística de efectos mixtos, pero utiliza la función de distribución acumulada (CDF) normal en lugar de la CDF logística. Ambas modelan resultados binarios y pueden incluir efectos fijos y aleatorios.
+-   **Regresión logística de efectos fijos:** En este caso, la regresión logística de efectos fijos es limitada porque puede ignorar los efectos aleatorios necesarios y/o la no independencia en los datos.
+-   **Regresión probit de efectos fijos:** En este caso, la regresión probit de efectos fijos es limitada porque puede ignorar los efectos aleatorios necesarios y/o la no independencia en los datos.
+-   **Regresión logística con errores estándar agrupados:** Éste método puede ajustar la no independencia, pero no permite efectos aleatorios.
+-   **Regresión probit con errores estándar agrupados:** Éste método puede ajustar la no independencia, pero no permite efectos aleatorios.
+
+A continuación, usamos el comando `glmer` para estimar un modelo de regresión logística de efectos mixtos con `Il6`, `CRP` y `LengthofStay` como predictores continuos a nivel de paciente, `CancerStage` como un predictor categórico a nivel de paciente (I, II, III o IV), `Experience` como un predictor continuo a nivel de médico y un intercepto aleatorio por `DID` (identificador del doctor).
+
+La estimación e interpretación de modelos lineales mixtos generalizados (GLMM, de los cuales la regresión logística de efectos mixtos es uno) puede ser bastante desafiante. Si recién comienza, le recomendamos encarecidamente que primero lea esta página [Introducción a los GLMM](https://arxiv.org/pdf/2303.12657). Cubre algunos de los antecedentes y la teoría, así como las opciones de estimación, inferencia y dificultades con más detalle.
+
+```{r}
+# estimate the model and store results in m
+m <- glmer(remission ~ IL6 + CRP + CancerStage + LengthofStay + Experience +
+    (1 | DID), data = hdp, family = binomial, control = glmerControl(optimizer = "bobyqa"),
+    nAGQ = 10)
+
+# print the mod results without correlations among fixed effects
+print(m, corr = FALSE)
+```
+
+La primera parte nos dice que las estimaciones se basan en una aproximación adaptativa de Hermite gaussiana de la verosimilitud. En particular, usamos 10 puntos de integración. A medida que usamos más puntos de integración, la aproximación se vuelve más precisa y converge a las estimaciones de máxima verosimilitud (ML); sin embargo, más puntos requieren más recursos computacionales y pueden ser extremadamente lentos o incluso imposibles de manejar con la tecnología actual. Para evitar una advertencia de no convergencia, especificamos un optimizador diferente con el argumento `control=glmerControl(optimizer="bobyqa")`. Aunque el modelo producirá resultados casi idénticos sin el nuevo argumento, preferimos usar modelos sin tales advertencias.
+
+La siguiente sección nos brinda información básica que se puede utilizar para comparar modelos, seguida de las estimaciones de efectos aleatorios. Esto representa la variabilidad estimada en la intercepción en la escala logit. Si hubiera habido otros efectos aleatorios, como pendientes aleatorias, también aparecerían aquí. La sección superior concluye con el número total de observaciones y el número de observaciones de nivel 2. En nuestro caso, esto incluye el número total de pacientes (8,525) y médicos (407).
+
+La última sección es una tabla de las estimaciones de efectos fijos. Para muchas aplicaciones, esto es lo que más interesa a la gente. Las estimaciones representan los coeficientes de regresión. No están estandarizados y están en la escala logit. Las estimaciones son seguidas por sus errores estándar (SE). Como es común en los modelos lineales generalizados (GLM), los SE se obtienen invirtiendo la matriz de información observada (matriz de la segunda derivada negativa). Sin embargo, para los GLMM, esto nuevamente es una aproximación. Las aproximaciones de las estimaciones de los coeficientes probablemente se estabilicen más rápido que las de los SE. Por lo tanto, si está usando menos puntos de integración, las estimaciones pueden ser razonables, pero la aproximación de los SE puede ser menos precisa. Las pruebas de Wald, (`\frac{Estimación}{SE}`), se basan en la teoría asintótica, refiriéndose aquí a que el tamaño de la unidad del nivel más alto converge al infinito, estas pruebas se distribuirán normalmente y, a partir de eso, valores p (la probabilidad de obtener la estimación observada o más extrema, dado que la estimación verdadera es 0).
+
+Puede ser bueno obtener intervalos de confianza (IC). Podemos obtener estimaciones aproximadas utilizando los errores estándar.
+
+```{r}
+se <- sqrt(diag(vcov(m)))
+# table of estimates with 95% CI
+(tab <- cbind(Est = fixef(m), LL = fixef(m) - 1.96 * se, UL = fixef(m) + 1.96 * se))
+```
+
+Si quisiéramos odds ratios en lugar de coeficientes en la escala logit, podríamos exponenciar las estimaciones y los IC.
+
+```{r}
+exp(tab)
+
+```
+
+## Regresión logística mixta de tres niveles
+
+Hemos examinado en profundidad un modelo logístico de dos niveles con un intercepto aleatorio. Este es el modelo logístico mixto más simple posible. Ahora veremos brevemente cómo puede agregar un tercer nivel y efectos de pendiente aleatoria además de interceptos aleatorios.
+
+A continuación, estimamos un modelo logístico de tres niveles con un intercepto aleatorio para médicos y un intercepto aleatorio para hospitales. En este ejemplo, los médicos están anidados dentro de los hospitales, lo que significa que cada médico pertenece a un solo hospital. El caso alternativo a veces se denomina "clasificado cruzado", lo que significa que un médico puede pertenecer a varios hospitales, como si algunos de los pacientes del médico fueran del hospital A y otros del hospital B. En `glmer` no es necesario especificar si los grupos están anidados o clasificados cruzados, R puede determinarlo en función de los datos. Usamos la misma sintaxis general `(1 | ID)` para indicar que el intercepto (1) varía según alguna identificación (ID). Para modelos con más de un efecto aleatorio escalar único, `glmer` solo admite un punto de integración, por lo que usamos `nAGQ=1`.
+
+```{r}
+# estimate the model and store results in m
+m3a <- glmer(remission ~ Age + LengthofStay + FamilyHx + IL6 + CRP +
+  CancerStage + Experience + (1 | DID) + (1 | HID),
+  data = hdp, family = binomial, nAGQ=1)
+```
+
+```{r}
+# print the mod results without correlations among fixed effects
+print(m3a, corr=FALSE)
+```
+
+La salida nos dice la familia (binomial para resultados binarios) y el enlace (logit). Seguido de los índices de ajuste habituales y la varianza de los efectos aleatorios. En este caso, la variabilidad en el intercepto (en la escala de log odds) entre médicos y entre hospitales. También se muestra la desviación estándar (simplemente la raíz cuadrada de la varianza, no el error estándar de la estimación de la varianza). También obtenemos el número de unidades únicas en cada nivel. Por último, están los efectos fijos, como antes.
+
+También puede ser útil observar la distribución de los modos condicionales, lo que hacemos con gráficos caterpillar a continuación. Los puntos azules son los modelos condicionales con barras de error. Hacemos esto tanto para médicos como para hospitales. Por ejemplo, para los médicos, podemos ver una cola larga a la derecha, ya que hay valores positivos más extremos que negativos. Para los médicos, suprimimos sus identificaciones (usando el argumento `scales=list(y = list(alternating=0))`) porque hay muchos, pero los dejamos para los hospitales.
+
+```{r}
+lattice::dotplot(ranef(m3a, which = "DID", condVar = TRUE), scales = list(y = list(alternating = 0)))
+```
+
+```{r}
+lattice::dotplot(ranef(m3a, which = "HID", condVar = TRUE))
+
+```
+
+También podemos agregar fácilmente pendientes aleatorias al modelo y permitir que varíen en cualquier nivel. Solo agregaremos una pendiente aleatoria para `LengthofStay` que varía entre médicos. Al igual que en las fórmulas `R` habituales, usamos el operador `+` para "agregar" un efecto, y lo hacemos en la sección de efectos aleatorios del doctor. Todos los términos en un grupo de paréntesis usan una matriz de covarianza no estructurada, puede obtener una estructura de covarianza diagonal dividiendo el grupo en partes separadas. Se asume que entre grupos son independientes.
+
+```{r}
+# estimate the model and store results in m
+m3b <- glmer(remission ~ Age + LengthofStay + FamilyHx + IL6 + CRP + CancerStage +
+    Experience + (1 + LengthofStay | DID) + (1 | HID), data = hdp, family = binomial,
+    nAGQ = 1)
+```
+
+```{r}
+print(m3b, corr = FALSE)
+
+```
+
+```{r}
+lattice::dotplot(ranef(m3b, which = "DID", condVar = TRUE), scales = list(y = list(alternating = 0)))
+
+```
+
+```{r}
+lattice::dotplot(ranef(m3b, which = "HID", condVar = TRUE), scales = list(y = list(alternating = 0)))
+
+```

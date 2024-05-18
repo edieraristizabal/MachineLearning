@@ -1,0 +1,380 @@
+**CURSO**: Análisis Geoespacial, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
+**Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
+**Credits**: The content of this notebook is based on [Coding Club](https://ourcodingclub.github.io/tutorials/modelling/) by Gergana
+
+## LINEAR MODELS
+
+## Ejemplos de Modelos Lineales en R
+
+Los modelos lineales son una herramienta fundamental para analizar relaciones entre variables. En R, la función `lm()` se utiliza para ajustar modelos de regresión lineal. A continuación, se presentan dos ejemplos que ilustran el uso de `lm()` para modelar distintas relaciones.
+
+**Ejemplo 1: Efecto de la elevación sobre la temperatura del suelo**
+
+```         
+temp.m <- lm(soil.temp ~ elevation)
+```
+
+En este ejemplo, se ajusta un modelo lineal para determinar el efecto de la elevación (variable independiente o predictora) sobre la temperatura del suelo (variable dependiente o respuesta). La hipótesis plantea que la temperatura del suelo disminuye a medida que aumenta la elevación, lo que se reflejaría en un coeficiente negativo (pendiente descendente).
+
+**Ejemplo 2: Abundancia de alondras en granjas**
+
+```         
+skylark.m <- lm(abundance ~ treatment + farm.area, family = poisson, data = skylarks)
+```
+
+Este modelo es ligeramente más complejo. Se modela la abundancia (variable respuesta) en función de dos variables independientes:
+
+-   `treatment`: variable categórica que describe diferentes tipos de granjas.
+-   `farm.area`: tamaño de cada granja donde se recolectaron los datos de abundancia.
+
+El argumento `family` especifica la distribución de los datos. En este caso, la abundancia representa datos de conteo con inflados de ceros (permite observaciones con valor cero), para lo cual una distribución de Poisson es adecuada. El argumento `data` indica el marco de datos donde están almacenadas todas las variables.
+
+Estos ejemplos demuestran cómo la función `lm()` se puede utilizar para modelar relaciones lineales entre variables en R. La elección de las variables independientes y la distribución de los datos son aspectos cruciales para ajustar un modelo adecuado.
+
+Es importante ser consciente de los múltiples factores que pueden influir en las variables de respuesta, pero si su modelo tiene muchas variables, también corre el peligro de sufrir un sobreajuste. Esto significa que simplemente no hay suficiente variación en su conjunto de datos (a menudo porque es demasiado pequeño) para ser contabilizada por todas esas variables, y su modelo terminará siendo súper adaptado a este conjunto de datos específico, pero no necesariamente representativo del proceso generalizado. o relación que estás tratando de describir. El sobreajuste puede generar dudas sobre el resultado de su modelo, así que piense detenidamente en la estructura de su modelo y lea más sobre cómo detectar y evitar el sobreajuste aquí.
+
+Otra cosa en la que pensar es la colinealidad entre las variables explicativas. Si dos variables en su conjunto de datos están muy correlacionadas entre sí, es probable que ambas expliquen cantidades similares de variación en su variable de respuesta, ¡pero la misma variación, no aspectos diferentes o complementarios de la misma! Imagine que mide la altura de los árboles mientras camina por una montaña y en cada punto de medición registra su elevación y la temperatura del aire. Como es de esperar que la temperatura del aire disminuya al aumentar la elevación, incluir ambos factores como variables explicativas puede ser riesgoso.
+
+```{r}
+library(agridat)
+
+# Loading the dataset from agridat
+apples <- agridat::archbold.apple
+head(apples)
+summary(apples)
+```
+
+```{r}
+theme.clean <- function(){
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 12, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 12),
+        axis.title.x = element_text(size = 14, face = "plain"),             
+        axis.title.y = element_text(size = 14, face = "plain"),             
+        panel.grid.major.x = element_blank(),                                          
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),  
+        plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), units = , "cm"),
+        plot.title = element_text(size = 20, vjust = 1, hjust = 0.5),
+        legend.text = element_text(size = 12, face = "italic"),          
+        legend.position = "right")
+}
+```
+
+```{r}
+apples$spacing2 <- as.factor(apples$spacing)
+
+library(ggplot2)
+
+(apples.p <- ggplot(apples, aes(spacing2, yield)) +
+    geom_boxplot(fill = "#CD3333", alpha = 0.8, colour = "#8B2323") +
+    theme.clean() +  
+    theme(axis.text.x = element_text(size = 12, angle = 0)) +
+  labs(x = "Spacing (m)", y = "Yield (kg)"))
+```
+
+En nuestro diagrama de caja, podemos ver que el rendimiento es bastante similar en las diferentes distancias de espaciado. Aunque existe una tendencia hacia un mayor rendimiento con un mayor espaciamiento, el rango de datos entre las categorías se superpone casi por completo. Al observar únicamente este diagrama de caja, uno podría pensar que nuestra hipótesis de un mayor rendimiento con un mayor espaciamiento no está respaldada. Ejecutemos un modelo para probar esto explícitamente.
+
+```{r}
+apples.m <- lm(yield ~ spacing2, data = apples)
+summary(apples.m)
+```
+
+## Análisis del Rendimiento de la Manzana en Relación al Espaciamiento
+
+El análisis de los datos sobre el rendimiento de la manzana revela resultados interesantes:
+
+-   **Efecto significativo del espaciamiento:** El modelo indica que el espaciamiento entre árboles tiene un efecto significativo sobre el rendimiento de la manzana (se rechaza la hipótesis nula de ningún efecto).
+-   **Mayor rendimiento con mayor espaciamiento:** Los resultados apoyan nuestras ideas ecológicas iniciales: a mayor distancia entre árboles, menor limitación para su crecimiento y, por lo tanto, mayor rendimiento.
+-   **Interpretación de los coeficientes:**
+    -   Al ser `spacing2` un factor, obtenemos resultados para `spacing210` y `spacing214`.
+    -   La categoría `spacing26` es el intercepto. R toma la primera categoría alfabéticamente como intercepto.
+    -   Los valores estimados para las otras categorías se presentan en relación con el nivel de referencia.
+    -   Por ejemplo, para la categoría de espaciamiento de 10 m, el valor estimado del modelo no es 35.9, sino 35.9 + 120.6 = 156.5.
+
+## R-cuadrado como medida de ajuste
+
+-   El modelo proporciona valores de R-cuadrado múltiple y R-cuadrado ajustado.
+-   Estos valores indican cuánto de la variación en el rendimiento (variable dependiente) se explica por la variable predictora (espaciamiento).
+-   Los valores de R-cuadrado van de 0 a 1. Un valor de 1 indica que las variables del modelo explican el 100% de la variación.
+-   Si bien el R-cuadrado tiende a aumentar al agregar términos al modelo, hay que evitar el sobreajuste.
+-   El R-cuadrado ajustado considera el número de términos del modelo y la cantidad de datos disponibles.
+
+## Evaluación crítica del modelo
+
+-   El modelo indica un efecto significativo del espaciamiento en el rendimiento, pero quizás no muy importante en comparación con otros factores posibles que influyen en el rendimiento.
+-   El espaciamiento solo explica alrededor del 15% de la variación en el rendimiento.
+-   Es importante considerar otros factores que podrían afectar el rendimiento, como la fertilización, las condiciones climáticas y la disponibilidad de agua.
+
+## Más práctica: otro modelo
+
+Ahora que hemos escrito un modelo y comprendido su resultado, analicemos otro conjunto de datos y aprendamos a leer su resultado también. Presentaremos algo un poco diferente.
+
+Usaremos el conjunto de datos ilri.sheep, también del paquete agridat, para responder a la pregunta: ¿El peso de los corderos al destete es función de su edad al destete?, con la hipótesis de que los corderos que se destetan más tarde también son más pesados.
+
+```{r}
+sheep <- agridat::ilri.sheep   # load the data
+
+library(dplyr)
+sheep <- filter(sheep, ewegen == "R")   # there are confounding variables in this dataset that we don't want to take into account. We'll only consider lambs that come from mothers belonging to the breed "R".
+
+head(sheep)  # overview of the data; we'll focus on weanwt (wean weight) and weanage
+
+sheep.m1 <- lm(weanwt ~ weanage, data = sheep)   # run the model
+summary(sheep.m1)                                # study the output
+
+```
+
+## Diferencias entre el modelo del manzano y el modelo del cordero
+
+El modelo del rendimiento de la manzana y el modelo del peso del cordero a destete presentan una diferencia clave en sus predictores:
+
+-   **Manzano:** La variable predictora `spacing` es **categórica**. El modelo proporciona estimaciones del rendimiento (promedio) para cada nivel de espaciamiento (siendo "Intercept" el nivel de referencia).
+-   **Cordero:** La variable predictora `weanage` es **continua**. El modelo estima el valor de Y cuando X es 0 (peso de un cordero recién nacido en este caso).
+
+### Interpretación de los coeficientes en el modelo del cordero
+
+-   **Intercepto:** En este modelo específico, el intercepto (2.60 kg) podría representar el peso promedio de un cordero recién nacido.
+-   **Pendiente:** La estimación del modelo (0.08 kg) representa la pendiente de la relación lineal. Cada día que se retrasa el destete de un cordero, su peso aumenta en promedio 0.08 kg.
+-   **Ecuación lineal:** La ecuación del modelo se puede expresar como `peso del cordero = 2.60 + 0.08(edad)`.
+
+### Considerando otros factores que afectan el peso
+
+El modelo actual, con `weanage` como único predictor, solo explica el 20% de la variación en el peso al destete. Es probable que otros factores, como el sexo del cordero, también influyan en el aumento de peso. Se puede ajustar un nuevo modelo para evaluar este efecto.
+
+```{r}
+sheep.m2 <- lm(weanwt ~ weanage*sex, data = sheep)
+summary(sheep.m2)
+```
+
+## Ecuaciones para el peso del cordero según el sexo y la edad
+
+Las ecuaciones lineales nos permiten predecir el peso de un cordero en destete en función de su edad y sexo.
+
+**1. Cordero hembra (grupo de referencia):**
+
+-   Ecuación: peso del cordero hembra = 3.66 + 0.06(edad)
+-   Interpretación:
+    -   El peso inicial estimado para una cordera recién nacida (edad = 0) es de 3.66 kg.
+    -   Por cada día que aumenta la edad, el peso aumenta en 0.06 kg.
+-   Ejemplo: para una cordera de 100 días, el peso estimado sería: 3.66 + 0.06(100) = 9.66 kg.
+
+**2. Cordero macho:**
+
+-   Ecuación: peso del cordero macho = 3.66 + [-2.52] + 0.06(edad) + [0.03(edad)]
+-   Interpretación:
+    -   Se necesitan ajustes para los machos porque representan un nivel diferente del factor "sexo".
+    -   [-2.52] representa la diferencia en el intercepto para los machos (el peso inicial promedio de un cordero macho es 2.52 kg menos que el de una hembra).
+    -   [0.03(edad)] representa la diferencia en la pendiente para los machos (los corderos machos aumentan su peso 0.03 kg más por día que las hembras).
+-   Ejemplo: para un cordero macho de 100 días, el peso estimado sería: 3.66 - 2.52 + (0.06 + 0.03)(100) = 10.14 kg.
+
+```{r}
+(sheep.p <- ggplot(sheep, aes(x = weanage, y = weanwt)) +
+      geom_point(aes(colour = sex)) +                                # scatter plot, coloured by sex
+      labs(x = "Age at weaning (days)", y = "Wean weight (kg)") +
+      stat_smooth(method = "lm", aes(fill = sex, colour = sex)) +    # adding regression lines for each sex
+      scale_colour_manual(values = c("#FFC125", "#36648B")) +
+      scale_fill_manual(values = c("#FFC125", "#36648B")) +
+      theme.clean() )
+```
+
+## Terminología de Modelos Lineales y el caso especial de ANOVA
+
+La terminología de modelos lineales puede resultar confusa, pero aquí está la clave para aclararla:
+
+-   **Regresión Lineal y Modelo Lineal:** Son sinónimos. Los usamos para cuantificar el efecto de una variable explicativa **continua** sobre una variable respuesta **continua**. Analizamos cómo cambia la variable Y por un cambio de 1 unidad en la variable X.
+
+-   Ejemplo: En el caso de los corderos, el modelo lineal describe cómo aumenta el peso por cada día adicional antes del destete (variable explicativa continua).
+
+-   **ANOVA (Análisis de Varianza):** Se utiliza para cuantificar el efecto de una variable explicativa **discreta** o **categórica** sobre una variable respuesta **continua**.
+
+-   Ejemplo: En el caso de los manzanos, el ANOVA analiza cómo varía el rendimiento promedio (variable respuesta continua) según la categoría de espaciamiento (variable explicativa categórica).
+
+**ANOVA como un caso especial de Regresión Lineal:**
+
+-   ANOVA es esencialmente una regresión lineal, pero en lugar de obtener una pendiente para predecir el rendimiento para cualquier valor de espaciamiento, obtenemos una estimación del rendimiento para cada categoría.
+
+**Recapitulando:**
+
+-   ANOVA es un tipo de regresión lineal.
+-   La función `anova` se puede aplicar a un objeto de modelo lineal para obtener el mismo valor p que se obtiene con el análisis ANOVA.
+
+En resumen, ANOVA es una herramienta poderosa para analizar datos con variables explicativas categóricas, pero en el fondo, se basa en los mismos principios de la regresión lineal.
+
+## Verificación de los Supuestos del Modelo Lineal
+
+Una vez que hemos ajustado un modelo lineal y explorado su interpretación ecológica, debemos asegurarnos de que cumpla con los supuestos de este tipo de modelo. Estas verificaciones son cruciales para garantizar la validez de las inferencias estadísticas obtenidas.
+
+**1. Normalidad de los Residuales:**
+
+-   Los residuales representan la diferencia entre los valores observados de la variable dependiente (Y) y los valores predichos por el modelo.
+-   Una suposición clave es que los residuales se distribuyen de forma normal (gaussiana).
+-   Se pueden realizar pruebas de normalidad gráfica (como histogramas y diagramas de Q-Q) o analíticas (como la prueba de Shapiro-Wilk) para evaluar esta suposición.
+
+**2. Homoscedasticidad:**
+
+-   La homoscedasticidad se refiere a la igualdad de la varianza de los residuales en todos los valores de la variable predictora (X).
+-   La presencia de heteroscedasticidad (varianza desigual) puede afectar la validez de las pruebas de significación.
+-   Se pueden realizar visualizaciones gráficas (como la dispersión de los residuales frente a la variable predictora) para evaluar esta suposición.
+
+**3. Independencia de las Observaciones:**
+
+-   La independencia de las observaciones implica que el valor de Y para una unidad muestral no está influenciado por el valor de Y para ninguna otra unidad muestral.
+-   La violación de la independencia (autocorrelación) puede conducir a errores en las estimaciones de varianza.
+-   En el caso de datos con estructura temporal o espacial, puede ser necesario aplicar técnicas de modelado específicas para abordar la dependencia.
+
+## Importancia de la Verificación de Supuestos
+
+La verificación de los supuestos del modelo lineal es un paso fundamental en el análisis de regresión. Si los supuestos se violan, las inferencias estadísticas como los valores p y los intervalos de confianza pueden no ser fiables. En tales casos, puede ser necesario transformar los datos, utilizar modelos alternativos o recolectar datos adicionales para cumplir con los supuestos del modelo lineal.
+
+```{r}
+
+# Checking that the residuals are normally distributed
+apples.resid <- resid(apples.m)              # Extracting the residuals
+shapiro.test(apples.resid)                   # Using the Shapiro-Wilk test
+# The null hypothesis of normal distribution is accepted: there is no significant difference (p > 0.05) from a normal distribution
+
+# Checking for homoscedasticity
+bartlett.test(apples$yield, apples$spacing2)
+bartlett.test(yield ~ spacing2, data = apples)  # Note that these two ways of writing the code give the same results
+# The null hypothesis of homoscedasticity is accepted
+```
+
+## Verificación de Supuestos y Ajuste del Modelo Lineal
+
+Una vez revisados los supuestos del modelo lineal (normalidad de los residuales, homoscedasticidad e independencia de las observaciones), podemos continuar con el análisis del ajuste del modelo. Afortunadamente, en este caso, se asume que los datos cumplen con los supuestos.
+
+Si los supuestos se hubieran violado, se podrían considerar transformaciones de los datos (logarítmica o raíz cuadrada) para intentar cumplir con ellos.
+
+Ahora podemos profundizar en el ajuste del modelo mediante la exploración de algunos gráficos:
+
+-   **Histograma de residuales:** Este gráfico permite visualizar la distribución de los residuales. Un histograma simétrico y acampanado sugiere normalidad.
+-   **Diagrama Q-Q de residuales:** Esta gráfica compara la distribución cuantil de los residuales con una distribución normal teórica. Los puntos alineados a lo largo de la diagonal indican normalidad.
+-   **Dispersión de residuales vs variable predictora:** Esta gráfica muestra la relación entre los residuales y la variable predictora. La ausencia de patrones (como un embudo o abanico) sugiere homoscedasticidad.
+
+Analizando estos gráficos, podremos evaluar visualmente si el modelo lineal se ajusta adecuadamente a los datos y si cumple con los supuestos subyacentes.
+
+```{r}
+plot(apples.m)  # you will have to press Enter in the command line to view the plots
+```
+
+## Modelos Lineales Generalizados (GLM) en Ecología y Ciencias Ambientales
+
+Los modelos lineales generales (GLM) son una extensión de los modelos lineales que permiten analizar variables dependientes que no siguen una distribución normal. En ecología y ciencias ambientales, a menudo nos encontramos con datos que no cumplen con todos los supuestos de un modelo lineal clásico (normalidad, homoscedasticidad, etc.). Los GLM ofrecen una solución al permitirnos especificar diferentes distribuciones de la variable dependiente.
+
+En esta sección, nos centraremos en dos distribuciones comunes en ecología: la distribución de Poisson y la distribución binomial.
+
+**4.1 Modelo con distribución de Poisson**
+
+La distribución de Poisson se utiliza para modelar datos de conteo (ejemplos: número de individuos por trampa, número de semillas por fruto). Un modelo con distribución de Poisson se ajusta mediante un GLM.
+
+**Ejemplo con el dataset shagLPI.csv:**
+
+1.  **Importar el dataset:** Use la función `read.csv` para importar el dataset `shagLPI.csv` a su entorno de trabajo de R.
+
+2.  **Comprobar el resumen:** Ejecute `summary(shagLPI)` para ver un resumen del dataset.
+
+3.  **Corregir el tipo de variable:** Es posible que R haya reconocido la variable `year` como un factor (carácter) en lugar de una variable numérica. Para evitar problemas futuros, podemos convertirla explícitamente a numérica utilizando la función `as.numeric()`.
+
+```{r}
+shag <- read.csv(url("https://raw.githubusercontent.com/ourcodingclub/CC-8-Modelling/master/shagLPI.csv"))
+shag$year <- as.numeric(shag$year)
+```
+
+Ahora que el dataset está importado y las variables tienen los tipos correctos, podemos proceder con el análisis del modelo GLM con distribución de Poisson.
+
+```{r}
+# Making a histogram to assess data distribution
+(shag.hist <- ggplot(shag, aes(pop)) + geom_histogram() + theme.clean())
+```
+
+## Analizando Abundancia con Modelos Lineales Generalizados (GLM)
+
+El análisis de datos de abundancia (número de individuos) en ecología y ciencias ambientales a menudo se realiza utilizando modelos lineales generalizados (GLM). En este caso, la variable dependiente `pop` representa datos de conteo de Shags Europeos, por lo que una distribución de Poisson es adecuada.
+
+**Ajuste del GLM con distribución de Poisson:**
+
+1.  **Justificación de la distribución de Poisson:**
+
+    -   La distribución de Poisson se utiliza para modelar datos de conteo no negativos (0, 1, 2, ...).
+    -   En este caso, `pop` representa el número entero de individuos, lo que hace que la distribución de Poisson sea una opción apropiada.
+
+2.  **Inflación de ceros:**
+
+    -   A veces, los datos de conteo pueden tener una cantidad desproporcionada de valores cero, lo que se conoce como inflación de ceros.
+    -   Aunque nuestros datos no parecen mostrar esta inflación, la distribución de Poisson sigue siendo adecuada para modelar conteos no negativos.
+
+**Ventajas de la distribución de Poisson:**
+
+-   La distribución de Poisson es una opción común para analizar datos de conteo, incluso sin inflación de ceros.
+-   Es una distribución relativamente flexible que puede capturar patrones en datos de conteo ecológicos.
+
+```{r}
+shag.m <- glm(pop ~ year, family = poisson, data = shag)
+summary(shag.m)
+```
+
+```{r}
+(shag.p <- ggplot(shag, aes(x = year, y = pop)) +
+    geom_point(colour = "#483D8B") +
+    geom_smooth(method = glm, colour = "#483D8B", fill = "#483D8B", alpha = 0.6) +
+    scale_x_continuous(breaks = c(1975, 1980, 1985, 1990, 1995, 2000, 2005)) +
+    theme.clean() +
+    labs(x = " ", y = "European Shag abundance"))
+```
+
+## Modelo Lineal Generalizado (GLM) con Distribución Binomial
+
+Los modelos lineales generalizados (GLM) también se utilizan para analizar variables dependientes binarias (sí/no, verdadero/falso, presencia/ausencia). En este caso, estudiaremos el daño causado por el picudo al pino silvestre (Pinus sylvestris) a partir del dataset `Weevil_damage.csv`.
+
+**2. Justificación de la distribución Binomial:**
+
+-   La variable dependiente en este caso representa la presencia o ausencia de daño por picudo (`damage`), la cual es una variable binaria (TRUE/FALSE).
+-   Debido a la naturaleza binaria de la variable respuesta, un modelo con distribución binomial es la opción adecuada para analizar la relación entre el daño y el bloque donde se encuentran los árboles.
+
+**3. Hipótesis ecológica:**
+
+-   Analizaremos si el daño por picudo varía según el bloque donde se ubican los árboles.
+-   Podemos plantear la hipótesis de que las poblaciones de pinos silvestres en diferentes bloques pueden tener distinta susceptibilidad al daño por picudo.
+
+**4. Ventajas de la distribución binomial:**
+
+-   La distribución binomial es específica para modelar variables binarias.
+-   Nos permite estimar la probabilidad de que ocurra un evento (daño por picudo en este caso) en función de la variable predictora (bloque).
+
+```{r}
+
+Weevil_damage <- read.csv(url("https://raw.githubusercontent.com/ourcodingclub/CC-8-Modelling/master/Weevil_damage.csv"))
+
+# Making block a factor (a categorical variable)
+Weevil_damage$block <- as.factor(Weevil_damage$block)
+
+# Running the model
+weevil.m <- glm(damage_T_F ~ block, family = binomial, data = Weevil_damage)
+summary(weevil.m)
+```
+
+## Análisis del Daño por Picudo en Pinos Silvestres con un GLM Binomial
+
+Hemos analizado el daño causado por el picudo al pino silvestre (Pinus sylvestris) utilizando un modelo lineal generalizado (GLM) con distribución binomial.
+
+**Resumen del modelo:**
+
+-   El resumen del modelo indica que la probabilidad de que un pino sufra daño por picudo varía significativamente según el bloque donde se encuentra el árbol.
+-   La interpretación de los estimadores en un modelo logístico (como este) no es tan directa como en los modelos lineales. En modelos lineales, el estimador representa el cambio en Y por un cambio de 1 unidad en X.
+-   Los modelos de regresión logística se basan en razones de probabilidades log-transformadas (log odds ratios). No profundizaremos en este aspecto aquí.
+-   Un valor estimado mayor en un modelo binomial sigue indicando una mayor influencia de la variable predictora (bloque en este caso). Sin embargo, es importante recordar que no se trata de una relación lineal.
+
+**Ajuste del modelo:**
+
+-   A diferencia de los modelos lineales clásicos, los modelos logísticos no proporcionan un valor R-cuadrado para evaluar el ajuste del modelo.
+-   Para evaluar el ajuste en este caso, podemos comparar la devianza nula (variabilidad explicada por un modelo nulo, por ejemplo `glm(damage_T_F ~ 1)`) con la devianza residual (la variabilidad restante después de explicar parte de la varianza con la variable predictora).
+-   Cuanto mayor sea la reducción en la devianza, mejor será el modelo para explicar la relación entre daño por picudo y bloque.
+
+**En resumen:**
+
+-   El modelo GLM binómico nos permite analizar la relación entre una variable dependiente binaria (daño por picudo) y una variable predictora categórica (bloque).
+-   La significancia estadística indica que el bloque donde se encuentra el árbol influye en la probabilidad de sufrir daño por picudo.
+-   La interpretación de los estimadores requiere considerar razones de probabilidades log-transformadas en lugar de cambios lineales directos.
+-   La comparación de la devianza nula y la devianza residual nos permite evaluar el ajuste del modelo.

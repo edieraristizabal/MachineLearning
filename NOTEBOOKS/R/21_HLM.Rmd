@@ -1,0 +1,707 @@
+**CURSO**: Análisis Geoespacial, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
+**Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
+**Credits**: The content of this notebook is based on [Coding Club](https://ourcodingclub.github.io/tutorials/mixed-models/) by Gabriela K Hajduk
+
+# Linear Mixed Models
+
+Los datos en geociencias a menudo son complejos y desordenados. Enfrentamos diversos desafíos al analizarlos:
+
+-   **Factores de agrupación:** Las muestras pueden provenir de diferentes grupos, como poblaciones, especies, sitios de recolección, etc.
+-   **Tamaño de muestra:** El tamaño de la muestra puede ser limitado, especialmente al ajustar modelos complejos con muchos parámetros.
+-   **Dependencia espacial:** Los puntos de datos pueden no ser verdaderamente independientes. Por ejemplo, si recolectamos datos en parcelas dentro de sitios, las parcelas están anidadas dentro de los sitios, creando una estructura en los datos.
+
+**Modelos Mixtos: Una solución poderosa**
+
+Para abordar estos desafíos, se desarrollaron los modelos mixtos. Estos modelos permiten:
+
+-   **Manejar datos desordenados:** Los modelos mixtos pueden lidiar con factores de agrupación, tamaños de muestra limitados y dependencia espacial en los datos.
+-   **Aprovechar todos los datos:** Utilizan todos los datos disponibles, incluso con tamaños de muestra pequeños.
+-   **Incluir covariables:** Permiten incorporar múltiples variables explicativas (covariables) en el análisis.
+-   **Ahorrar grados de libertad:** En comparación con los modelos lineales estándar, los modelos mixtos pueden ahorrar grados de libertad, lo que los hace más eficientes.
+
+Nos centraremos en los modelos mixtos lineales. Sin embargo, si necesitas "extender" tu modelo lineal para analizar datos con distribuciones de error no normales, existen modelos mixtos lineales generalizados (GLMM, por sus siglas en inglés).
+
+## Estudio de la Inteligencia de Dragones: Análisis con Modelos Mixtos
+
+Para adentrarnos en el mundo de los modelos mixtos, utilizaremos un ejemplo ficticio: un estudio sobre la inteligencia de dragones. Supongamos que hemos entrenado dragones y queremos analizar su puntaje en una prueba de inteligencia (testScore) como predictor de su aptitud. Hemos recolectado datos de dragones con diferentes longitudes corporales (bodyLength) en tres sitios de ocho cadenas montañosas distintas. Comencemos por cargar y explorar los datos.
+
+**Paso 1: Cargar los datos**
+
+Necesitaríamos un conjunto de datos que incluya las siguientes variables:
+
+-   `testScore`: Puntaje en la prueba de inteligencia del dragón.
+-   `bodyLength`: Longitud corporal del dragón.
+-   `site`: Identificador del sitio donde se recolectaron los datos (1, 2, o 3).
+-   `mountainRange`: Identificador de la cadena montañosa a la que pertenece el sitio (cadena 1, cadena 2, ..., cadena 8).
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+load(url("https://github.com/ourcodingclub/CC-Linear-mixed-models/raw/master/dragons.RData"))
+head(dragons)
+```
+
+```{r}
+# Explora los datos
+str(dragons)
+summary(dragons)
+```
+
+**Paso 2: Exploración inicial**
+
+Una vez cargados los datos, podemos explorarlos para entender su distribución y posibles relaciones entre las variables. Esto podría incluir:
+
+-   Visualizar la distribución de `testScore` y `bodyLength` usando histogramas o diagramas de caja.
+-   Crear gráficos de dispersión para observar la relación entre `testScore` y `bodyLength` para cada sitio o cadena montañosa.
+-   Calcular estadísticas descriptivas básicas para cada variable agrupadas por sitio y cadena montañosa.
+
+```{r}
+hist(dragons$testScore)  # seems close to a normal distribution - good!
+```
+
+Es una buena práctica **estandarizar** las variables explicativas antes de continuar para que tengan una media de cero (''centrado'') y una desviación estándar de uno (''escalado''). Esto asegura que todos los coeficientes estimados estén en la misma escala, lo que facilita la comparación del tamaño de los efectos. Puedes usar la función `scale()` para hacer esto:
+
+```{r}
+dragons$bodyLength2 <- scale(dragons$bodyLength, center = TRUE, scale = TRUE)
+```
+
+## Análisis Inicial de la Inteligencia de Dragones: Regresión Lineal Simple
+
+Si bien los modelos mixtos son la herramienta ideal para analizar nuestros datos teniendo en cuenta la estructura de anidamiento (sitios dentro de cadenas montañosas), podemos comenzar con un análisis más simple para tener una idea inicial de la relación entre la inteligencia de los dragones (puntaje de prueba) y la longitud corporal.
+
+**1. Regresión Lineal Simple:**
+
+En este paso, ajustaremos un modelo de regresión lineal simple ignorando por ahora los sitios y las cadenas montañosas. Consideraremos el puntaje de prueba (`testScore`) como la variable respuesta y la longitud corporal (`bodyLength`) como la variable predictora.
+
+**2. Ajuste del Modelo:**
+
+Podemos utilizar la función `lm` (linear models) en R para ajustar el modelo. El código se vería algo así:
+
+``` r
+# Assuming your data is stored in a data.frame named 'dragon_data'
+model <- lm(testScore ~ scaled_bodyLength, data = dragon_data)
+
+# View the model summary
+summary(model)
+```
+
+**3. Interpretación de la Salida:**
+
+El resumen del modelo proporcionará información valiosa, como:
+
+-   **Coeficiente de regresión:** Representa la pendiente de la línea de regresión y describe cómo cambia el puntaje de prueba promedio en relación con la longitud corporal.
+-   **Valor p:** Indica la significancia estadística del coeficiente de regresión. Un valor p bajo (inferior a 0.05) sugiere que la relación observada entre las variables es poco probable que se deba al azar.
+-   **R-cuadrado (R²)**: Representa la proporción de la varianza del puntaje de prueba explicada por la longitud corporal en este modelo simple.
+
+**4. Limitaciones:**
+
+Este análisis inicial no considera la estructura de anidamiento de los datos (sitios dentro de cadenas montañosas). Es posible que la inteligencia de los dragones varíe sistemáticamente entre sitios o cadenas montañosas. Los modelos mixtos nos permitirán abordar esta complejidad en el siguiente paso.
+
+Un análisis inicial mediante regresión lineal simple nos brinda una primera aproximación a la relación entre la inteligencia de los dragones y la longitud corporal. Sin embargo, para tener un análisis más completo que considere la estructura de anidamiento de los datos, necesitaremos utilizar modelos mixtos.
+
+```{r}
+basic.lm <- lm(testScore ~ bodyLength2, data = dragons)
+summary(basic.lm)
+```
+
+```{r}
+library(tidyverse)  # load the package containing both ggplot2 and dplyr
+
+(prelim_plot <- ggplot(dragons, aes(x = bodyLength, y = testScore)) +
+  geom_point() +
+  geom_smooth(method = "lm"))
+  
+```
+
+## Analizando los residuos del modelo lineal simple: ¿Hay problemas de supuestos?
+
+Ajustamos un modelo lineal simple para explorar la relación entre la inteligencia de los dragones (puntaje de prueba) y la longitud corporal. Ahora es importante verificar si los supuestos del modelo se cumplen para garantizar la validez de los resultados.
+
+Uno de los supuestos clave en la regresión lineal es la homoscedasticidad, que significa que la varianza de los residuos (la diferencia entre los valores observados y los predichos por el modelo) debe ser constante a lo largo de los valores del predictor (longitud corporal en este caso).
+
+**1. Visualización de los residuos:**
+
+Para verificar la homoscedasticidad, podemos trazar los residuos del modelo contra la variable predictora (longitud corporal). En un escenario ideal, los residuos deberían dispersarse aleatoriamente alrededor de una línea horizontal cercana a cero. Si la varianza de los residuos aumenta o disminuye a medida que aumenta la longitud corporal, se estaría violando el supuesto de homoscedasticidad.
+
+**2. Interpretación de la gráfica:**
+
+-   **Línea roja:** Representa la tendencia de los residuos a lo largo del eje x (longitud corporal).
+-   **Línea gris discontinua:** Representa una línea horizontal ideal donde la varianza de los residuos es constante.
+
+Si la línea roja se asemeja a la línea gris discontinua, es una buena indicación de que la homoscedasticidad se cumple. Sin embargo, si la línea roja muestra un patrón (por ejemplo, embudo o abanico), podría haber heteroscedasticidad, lo que sugiere que la varianza de los residuos no es constante.
+
+```{r}
+plot(basic.lm, which = 1)  # not perfect... 
+## but since this is a fictional example we will go with it
+## for your own data be careful:
+## the bigger the sample size, the less of a trend you'd expect to see
+```
+
+```{r}
+plot(basic.lm, which = 2)  # a bit off at the extremes, but that's often the case; again doesn't look too bad
+```
+
+## Preocupación por la independencia de las observaciones: Efecto de las cadenas montañosas
+
+El análisis previo se centró en la relación entre la inteligencia de los dragones (puntaje de prueba) y la longitud corporal. Sin embargo, surge una pregunta importante: ¿son independientes las observaciones de nuestro estudio?
+
+**Dependencia espacial en las cadenas montañosas:**
+
+Hemos recolectado datos de ocho cadenas montañosas diferentes. Es muy probable que los dragones dentro de la misma cadena montañosa compartan características ambientales o genéticas similares que podrían influir en su inteligencia. Esto significa que las observaciones de la misma cadena montañosa podrían estar correlacionadas, violando el supuesto de independencia de las observaciones en el modelo lineal simple.
+
+**Explorando la estructura de los datos:**
+
+Para evaluar si las observaciones de las cadenas montañosas están correlacionadas, podemos explorar los datos de varias maneras:
+
+-   **Visualización:** Crear gráficos de dispersión o boxplots para cada cadena montañosa por separado y compararlos entre sí. Buscar patrones o tendencias que sugieran diferencias sistemáticas entre las cadenas montañosas.
+-   **Pruebas estadísticas:** Realizar pruebas estadísticas formales para evaluar si las medias o las varianzas del puntaje de prueba difieren significativamente entre las cadenas montañosas.
+
+```{r}
+boxplot(testScore ~ mountainRange, data = dragons)  # certainly looks like something is going on here
+```
+
+```{r}
+(colour_plot <- ggplot(dragons, aes(x = bodyLength, y = testScore, colour = mountainRange)) +
+  geom_point(size = 2) +
+  theme_classic() +
+  theme(legend.position = "none"))
+```
+
+## Abordando la Dependencia Espacial: Hacia los Modelos Mixtos
+
+Los análisis previos han puesto de manifiesto dos aspectos importantes de nuestro estudio sobre la inteligencia de dragones:
+
+1.  **Relación entre longitud corporal y puntaje de prueba:** El modelo lineal simple inicial indicó una correlación positiva entre la longitud corporal y el puntaje de prueba.
+2.  **Dependencia espacial:** Las observaciones de las diferentes cadenas montañosas parecen estar correlacionadas. Los dragones dentro de la misma cadena montañosa podrían compartir características que influyen en su inteligencia, violando el supuesto de independencia en el modelo lineal simple.
+
+**Limitaciones del modelo lineal simple:**
+
+El modelo lineal simple no tiene en cuenta la estructura jerárquica de los datos (sitios dentro de cadenas montañosas) ni la posible dependencia espacial entre las observaciones de las mismas cadenas montañosas. Esto podría conducir a resultados engañosos y estimaciones de coeficientes sesgadas.
+
+**Introducción de los modelos mixtos:**
+
+Para abordar estos desafíos, necesitamos un enfoque estadístico más robusto: los modelos mixtos. Los modelos mixtos permiten:
+
+-   **Incorporar la estructura jerárquica:** Podemos especificar los sitios como factor anidado dentro de las cadenas montañosas, lo que permite estimar el efecto de la cadena montañosa en el puntaje de prueba.
+-   **Considerar la dependencia espacial:** Los modelos mixtos pueden incluir términos aleatorios para capturar la variación adicional no explicada por las variables fijas del modelo (longitud corporal en este caso). Esta variación adicional podría deberse a las cadenas montañosas o a otros factores no medidos.
+
+```{r}
+(split_plot <- ggplot(aes(bodyLength, testScore), data = dragons) + 
+  geom_point() + 
+  facet_wrap(~ mountainRange) + # create a facet for each mountain range
+  xlab("length") + 
+  ylab("test score"))
+```
+
+## Problemas con el análisis por separado y la introducción de modelos mixtos como solución
+
+El planteamiento de analizar los datos de forma aislada para cada sitio dentro de cada cadena montañosa parece intuitivo a primera vista. Sin embargo, existen varias desventajas asociadas a este enfoque:
+
+**1. Múltiples análisis y estimaciones de parámetros:**
+
+-   Deberíamos estimar una pendiente y un intercepto para cada regresión, lo que resultaría en un total de 48 parámetros (2 parámetros \* 3 sitios \* 8 cadenas montañosas).
+-   Esto significaría un aumento drástico en la complejidad del análisis y la dificultad para interpretar los resultados.
+
+**2. Reducción del tamaño muestral:**
+
+-   Si analizamos cada sitio por separado, el tamaño muestral para cada análisis se reduciría a solo 20 dragones por sitio.
+-   Un tamaño muestral pequeño reduce la precisión de las estimaciones y la potencia del análisis para detectar efectos verdaderos.
+
+**3. Aumento de errores Tipo I:**
+
+-   Realizar múltiples comparaciones sin tener en cuenta la estructura jerárquica de los datos aumenta la probabilidad de cometer errores Tipo I.
+-   Esto significa que podríamos rechazar incorrectamente la hipótesis nula (efecto nulo de la longitud corporal en el puntaje de prueba) debido a la casualidad y no a un efecto real.
+
+**Modelos Mixtos: Una solución eficiente**
+
+En lugar de realizar análisis independientes para cada sitio, los modelos mixtos ofrecen una solución más eficiente y poderosa. Los modelos mixtos permiten:
+
+-   **Aprovechar todos los datos:** Utilizan todos los datos disponibles de manera conjunta, lo que proporciona estimaciones más precisas y estables de los parámetros del modelo.
+-   **Tener en cuenta la estructura jerárquica:** Incorporan la estructura de anidamiento de los datos (sitios dentro de cadenas montañosas) en el análisis.
+-   **Controlar la dependencia espacial:** Pueden incluir términos aleatorios para capturar la variación adicional no explicada por las variables fijas del modelo.
+-   **Reducir errores Tipo I:** Al tener en cuenta la estructura de los datos, los modelos mixtos controlan la inflación de errores Tipo I asociada a las comparaciones múltiples.
+-   **Menos parámetros para estimar:** Se estima un número menor de parámetros en comparación con el enfoque de análisis por separado.
+
+```{r}
+mountain.lm <- lm(testScore ~ bodyLength2 + mountainRange, data = dragons)
+summary(mountain.lm)
+```
+
+Ahora la longitud del cuerpo no es significativa. Pero pensemos por un segundo en lo que estamos haciendo aquí. El modelo anterior estima la diferencia en los puntajes de las pruebas entre las cadenas montañosas; podemos verlos todos en el resultado del modelo devuelto por summary(). Pero no estamos interesados ​​en cuantificar los puntajes de las pruebas para cada cadena montañosa específica: solo queremos saber si la longitud del cuerpo afecta los puntajes de las pruebas y simplemente queremos controlar la variación proveniente de las cadenas montañosas.
+
+Esto es lo que llamamos “factores aleatorios” y así llegamos a modelos de efectos mixtos.
+
+## Modelos mixtos
+
+```{r}
+library(lme4)
+```
+
+## Efectos Fijos y Aleatorios en Modelos Mixtos: Una distinción importante
+
+Los modelos mixtos incorporan dos tipos de efectos para modelar la variación en la variable respuesta: efectos fijos y efectos aleatorios. Entender la diferencia entre ellos es crucial para interpretar adecuadamente los resultados del modelo.
+
+**Efectos Fijos:**
+
+-   Representan variables explicativas que se espera que tengan un efecto directo sobre la variable respuesta.
+-   En nuestro ejemplo, la longitud corporal del dragón es un efecto fijo. Nos interesa estudiar cómo la longitud corporal impacta el puntaje de prueba de los dragones.
+-   Los efectos fijos se suelen corresponder con variables continuas o categóricas que manipulamos o seleccionamos en el experimento.
+-   Las estimaciones de los coeficientes de los efectos fijos nos permiten evaluar la fuerza y dirección de su relación con la variable respuesta.
+
+**Efectos Aleatorios:**
+
+-   Representan factores de agrupamiento que introducen variación adicional en la variable respuesta, pero no son de interés principal en sí mismos.
+-   En nuestro caso, las cadenas montañosas podrían considerarse un efecto aleatorio.
+-   Se suelen utilizar variables categóricas para definir los grupos (por ejemplo, escuelas, sitios, etc.).
+-   No nos interesa necesariamente cuantificar el efecto de cada grupo individual sobre la variable respuesta.
+-   Sin embargo, reconocemos que las cadenas montañosas pueden introducir variación en el puntaje de prueba (por ejemplo, debido a diferencias en el clima o la alimentación).
+-   Los efectos aleatorios permiten "controlar" esta variación adicional y obtener estimaciones más precisas de los efectos fijos.
+-   Los modelos mixtos estiman la varianza asociada a los efectos aleatorios, lo que proporciona información sobre la variabilidad entre los grupos.
+
+**Analogía:**
+
+Imaginemos que estamos estudiando el rendimiento académico de estudiantes en diferentes escuelas. La dificultad del examen (efecto fijo) podría afectar las calificaciones de los estudiantes. Sin embargo, las escuelas específicas (efecto aleatorio) también podrían introducir variación en las calificaciones debido a factores como la calidad de la enseñanza o la composición socioeconómica del alumnado. No nos interesa necesariamente el ranking de las escuelas, pero sí queremos tener en cuenta su efecto en las calificaciones para evaluar con mayor precisión el impacto de la dificultad del examen.
+
+En nuestro caso particular, buscamos controlar los efectos de la cordillera. No hemos muestreado todas las cadenas montañosas del mundo (tenemos ocho), por lo que nuestros datos son solo una muestra de todas las cadenas montañosas existentes. No estamos realmente interesados ​​en el efecto de cada cadena montañosa específica en la puntuación de la prueba: ¡esperamos que nuestro modelo también sea generalizable a dragones de otras cadenas montañosas! Sin embargo, sabemos que las puntuaciones de las pruebas dentro de los rangos pueden estar correlacionadas, por lo que queremos controlar eso.
+
+Si elegimos específicamente ocho cadenas montañosas particulares a priori y estuviéramos interesados en esas cadenas y quisiéramos hacer predicciones sobre ellas, entonces la cadena montañosa se ajustaría como un efecto fijo.
+
+```{r}
+mixed.lmer <- lmer(testScore ~ bodyLength2 + (1|mountainRange), data = dragons)
+summary(mixed.lmer)
+```
+
+Tenga en cuenta que el efecto aleatorio de la cadena montañosa pretende capturar todas las influencias de las cadenas montañosas en los puntajes de las pruebas del dragón, ya sea que hayamos observado esas influencias explícitamente o no, si esas influencias son grandes o pequeñas, etc. Podrían ser muchas, muchas. Influencias diminutas que, cuando se combinan, afectan los puntajes de las pruebas y eso es lo que esperamos controlar.
+
+Podemos ver la varianza de mountainRange = 339,7. Las cadenas montañosas son claramente importantes: explican muchas variaciones. ¿Cómo lo sabemos? Podemos tomar la varianza del rango de montaña y dividirla por la varianza total:
+
+```{r}
+339.7/(339.7 + 223.8)  # ~60 %
+```
+
+Como siempre, es una buena práctica echar un vistazo a los gráficos para comprobar nuestras suposiciones:
+
+```{r}
+plot(mixed.lmer)  # looks alright, no patterns evident
+```
+
+```{r}
+qqnorm(resid(mixed.lmer))
+qqline(resid(mixed.lmer))  # points fall nicely onto the line - good!
+```
+
+## Efectos Aleatorios Cruzados: Más allá de la jerarquía
+
+Los modelos mixtos con efectos aleatorios no se limitan únicamente a estructuras jerárquicas. También podemos analizar datos con efectos aleatorios cruzados o parcialmente cruzados, que no necesariamente representan niveles dentro de una jerarquía.
+
+**1. Terminología:**
+
+Es importante tener cuidado con la terminología. Existen modelos lineales jerárquicos (HLM) o modelos multinivel, pero mientras que todos los HLM son modelos mixtos, no todos los modelos mixtos son jerárquicos. Esto se debe a que podemos tener factores aleatorios cruzados (o parcialmente cruzados) que no representan niveles en una jerarquía.
+
+**2. Ejemplo: Dragones y Cadenas Montañosas:**
+
+Imaginemos un estudio donde monitoreamos dragones (sujeto) en diferentes cadenas montañosas (contexto). Además, observamos a cada dragón múltiples veces administrando la prueba en varias ocasiones (lo que podría introducir pseudorreplicación, pero lo abordaremos más adelante).
+
+-   **Cruce de efectos:** Dada la capacidad de volar de los dragones, podríamos observar al mismo dragón en diferentes cadenas montañosas, pero también es posible que no veamos a todos los dragones visitando todas las cadenas.
+-   **Efectos aleatorios cruzados:** Por lo tanto, podemos modelar la identidad del dragón y la cadena montañosa como efectos aleatorios cruzados o parcialmente cruzados.
+
+**3. Ejemplo: Factor Cruzado Completo:**
+
+Un factor se considera completamente cruzado cuando todos los sujetos han experimentado todos los niveles de ese factor. Por ejemplo:
+
+-   **Experimento de fertilización:** Si realizamos un experimento de fertilización en plántulas que crecen en un bosque estacional y tomamos medidas repetidas a lo largo del tiempo (digamos 3 años) en cada estación, podríamos tener un factor cruzado llamado "estación" (verano1, otoño1, invierno1, primavera1, verano2, ..., primavera3).
+-   **Efecto del tiempo:** Este factor tendría en cuenta que todas las plantas del experimento, independientemente del efecto fijo (fertilizado o no), podrían haber experimentado un verano muy caluroso en el segundo año o una primavera muy lluviosa en el tercer año. Esas condiciones podrían afectar los patrones esperados.
+
+**4. Ventajas:**
+
+Incluir efectos aleatorios cruzados en el modelo mixto permite:
+
+-   **Tener en cuenta la dependencia:** Considerar la dependencia entre las observaciones que comparten un nivel específico de un factor cruzado.
+-   **Controlar la varianza:** Controlar la varianza adicional debida a los efectos cruzados, lo que conduce a resultados más precisos.
+-   **Comprender la variabilidad:** Comprender mejor la variabilidad en la variable respuesta a diferentes niveles de los factores cruzados.
+
+**5. Diferencia con efectos anidados:**
+
+Los efectos aleatorios cruzados difieren de los anidados en que no representan una estructura jerárquica. En los efectos anidados, las unidades de un nivel están contenidas dentro de las unidades del nivel superior (por ejemplo, plantas dentro de camas). Los efectos cruzados, por el contrario, operan de forma independiente entre sí (por ejemplo, estaciones en un experimento).
+
+## Efectos Aleatorios Anidados: Muñecas Rusas y Datos Jerárquicos
+
+Los modelos mixtos con efectos aleatorios anidados son una herramienta poderosa para analizar datos jerárquicos, donde las observaciones se agrupan dentro de otras unidades. Entender este concepto es crucial para evitar errores de análisis y obtener resultados precisos.
+
+**1. Analogía de las muñecas rusas:**
+
+La analogía de las muñecas rusas es una forma creativa de ilustrar los efectos aleatorios anidados. Imagine un conjunto de muñecas rusas que encajan una dentro de otra. La muñeca más grande representa el grupo más amplio, y cada muñeca sucesivamente más pequeña representa un subgrupo anidado dentro del anterior.
+
+**2. Datos jerárquicos:**
+
+En el contexto del análisis de datos, los datos jerárquicos presentan una estructura de anidamiento. Por ejemplo, en un estudio sobre el crecimiento de las plantas, podríamos tener:
+
+-   **Temporada (más grande):** Representa el grupo más amplio (anual).
+-   **Cama (dentro de la temporada):** Representa subgrupos dentro de cada temporada (tratamientos experimentales o control).
+-   **Planta (dentro de la cama):** Representa subgrupos dentro de cada cama (plantas individuales).
+-   **Hoja (dentro de la planta):** Representa las unidades más pequeñas (mediciones individuales).
+
+**3. Ejemplo:**
+
+Continuando con el ejemplo del experimento de fertilización, supongamos que medimos la longitud de 5 hojas de cada planta en cada cama, a lo largo de 4 estaciones durante 3 años. Esto genera una gran cantidad de datos (60,000 mediciones en total).
+
+**4. Importancia de la estructura jerárquica:**
+
+Si ignoramos la estructura jerárquica de los datos y realizamos un análisis simple de regresión lineal (por ejemplo, longitud de la hoja \~ tratamiento), estaríamos cometiendo pseudorreplicación. Esto significa tratar observaciones no independientes como independientes, lo que infla artificialmente el tamaño de la muestra y conduce a resultados engañosos.
+
+**5. Efectos aleatorios anidados:**
+
+Los modelos mixtos con efectos aleatorios anidados nos permiten abordar la estructura jerárquica de los datos. Podemos especificar términos de error aleatorios para cada nivel del anidamiento:
+
+-   **(1\|Cama/Planta/Hoja):** Representa el efecto aleatorio de la cama, anidado dentro del efecto aleatorio de la planta, que a su vez está anidado dentro del efecto aleatorio de la hoja.
+
+**6. Beneficios:**
+
+Al incluir efectos aleatorios anidados, el modelo tiene en cuenta la dependencia entre las observaciones dentro del mismo grupo. Esto conduce a estimaciones más precisas de los efectos fijos (por ejemplo, el efecto del tratamiento en el crecimiento de la hoja) y una mejor comprensión de la variabilidad a diferentes niveles del anidamiento.
+
+**7. Efectos cruzados:**
+
+En el caso mencionado donde medimos las hojas en todas las estaciones, podríamos incluir un efecto aleatorio adicional para la temporada:
+
+-   **(1\|Bed/Plant/Leaf) + (1\|Season):** Esto permitiría estimar la varianza adicional debida a las estaciones, junto con la varianza debida a los efectos anidados de cama, planta y hoja.
+
+## Anidamiento Implícito vs. Explícito en Efectos Aleatorios Anidados
+
+Los modelos mixtos con efectos aleatorios anidados son una herramienta poderosa para analizar datos jerárquicos. Una parte crucial del análisis consiste en garantizar que los datos estén codificados correctamente para reflejar la estructura jerárquica.
+
+**1. Importancia de la codificación:**
+
+Una codificación adecuada de los datos facilita el análisis y evita confusiones al especificar los efectos aleatorios anidados en el modelo mixto.
+
+**2. Ejemplo: Dragones y Sitios**
+
+Imaginemos que nuestro estudio sobre dragones no solo recolectó datos en diferentes cadenas montañosas, sino también en varios sitios dentro de cada cadena montañosa.
+
+**3. Anidamiento de sitios:**
+
+Debemos asumir que los datos recopilados dentro de los sitios pueden estar correlacionados. Por lo tanto, incluir "sitio" como un efecto aleatorio adicional en el modelo mixto es crucial.
+
+**4. Problema con el anidamiento implícito:**
+
+La variable "sitio" en el ejemplo actual presenta un anidamiento implícito. Los sitios se denominan "a", "b" y "c", y su significado depende de la cadena montañosa a la que pertenecen. Por ejemplo, el sitio "b" en la cadena montañosa "Bavaria" no tiene relación con el sitio "b" en la cadena montañosa "Central".
+
+**5. Solución: anidamiento explícito:**
+
+Para evitar confusiones y garantizar un modelado correcto, podemos crear una nueva variable que represente explícitamente el anidamiento. En este caso, la llamamos "muestra":
+
+```{r}
+dragons <- within(dragons, sample <- factor(mountainRange:site))
+```
+
+**6. Beneficios del anidamiento explícito:**
+
+La variable "sample" codifica explícitamente la estructura jerárquica. Contiene 24 niveles (8 cadenas montañosas x 3 sitios), lo que refleja el verdadero número de grupos anidados.
+
+**Recordatorio:** Si sus efectos aleatorios no están anidados, ¡entonces son cruzados!
+
+Con base en lo anterior, usar la siguiente especificación sería **incorrecto**, ya que implicaría que solo hay tres sitios con observaciones en cada una de las 8 cadenas montañosas (cruzadas):
+
+```{r}
+mixed.WRONG <- lmer(testScore ~ bodyLength2 + (1|mountainRange) + (1|site), data = dragons)  # treats the two random effects as if they are crossed
+summary(mixed.WRONG)
+```
+
+Pero podemos seguir adelante y ajustar un nuevo modelo, uno que tenga en cuenta tanto las diferencias entre las cadenas montañosas como las diferencias entre los sitios dentro de esas cadenas montañosas utilizando nuestra variable de muestra.
+
+Nuestra pregunta vuelve a ajustarse ligeramente: ¿Existe una asociación entre la longitud del cuerpo y la inteligencia en los dragones después de controlar la variación en las cadenas montañosas y los sitios dentro de las cadenas montañosas?
+
+```{r}
+mixed.lmer2 <- lmer(testScore ~ bodyLength2 + (1|mountainRange) + (1|sample), data = dragons)  # the syntax stays the same, but now the nesting is taken into account
+summary(mixed.lmer2)
+```
+
+## Teniendo en cuenta los efectos de las cadenas montañosas y sitios mediante efectos aleatorios anidados
+
+En el análisis de los dragones inteligentes, nuestro objetivo es comprender cómo la longitud corporal afecta la puntuación de la prueba, teniendo en cuenta las posibles variaciones debidas a las cadenas montañosas y los sitios específicos dentro de cada cadena. Para lograr esto, podemos utilizar efectos aleatorios anidados en un modelo mixto.
+
+**1. Efectos aleatorios anidados:**
+
+Los efectos aleatorios anidados son una técnica poderosa para modelar datos jerárquicos, donde las observaciones se agrupan dentro de otras unidades. En este caso:
+
+-   **Nivel superior:** Cadenas montañosas (efecto aleatorio)
+-   **Nivel inferior:** Sitios dentro de cada cadena montañosa (efecto aleatorio anidado)
+
+**2. Control de la varianza:**
+
+Al incluir efectos aleatorios anidados en el modelo mixto, esperamos capturar la varianza adicional debida tanto a las cadenas montañosas como a los sitios específicos. Esto nos permite controlar estas fuentes de variación y obtener estimaciones más precisas del efecto de la longitud corporal en la puntuación de la prueba.
+
+**3. Sintaxis del modelo:**
+
+Existen diferentes formas de especificar efectos aleatorios anidados en el modelo mixto. Aquí hay algunas opciones comunes:
+
+-   `(1|mountainRange/site)`: Esta sintaxis indica que el efecto aleatorio se define en el nivel del sitio, anidado dentro del nivel de la cadena montañosa.
+-   `(1|mountainRange) + (1|mountainRange:site)`: Esta opción también modela efectos aleatorios anidados, pero trata los efectos de la cadena montañosa y del sitio como aditivos.
+
+**4. Importancia del anidamiento explícito:**
+
+Se recomienda codificar explícitamente el anidamiento en los datos. En lugar de usar variables separadas para "cadena montañosa" y "sitio", podemos crear una nueva variable que combine ambas, como "muestra" (cadena montañosa:sitio). Esto facilita la interpretación del modelo y evita confusiones sobre la estructura jerárquica.
+
+```{r}
+(mm_plot <- ggplot(dragons, aes(x = bodyLength, y = testScore, colour = site)) +
+      facet_wrap(~mountainRange, nrow=2) +   # a panel for each mountain range
+      geom_point(alpha = 0.5) +
+      theme_classic() +
+      geom_line(data = cbind(dragons, pred = predict(mixed.lmer2)), aes(y = pred), linewidth = 1) +  # adding predicted line from mixed model 
+      theme(legend.position = "none",
+            panel.spacing = unit(2, "lines"))  # adding space between panels
+)
+```
+
+## Introduciendo Pendientes Aleatorias en Modelos Mixtos
+
+En el análisis de la inteligencia de los dragones, hemos visto hasta ahora modelos mixtos con efectos aleatorios solo en la intercepción. Esto significa que:
+
+-   Se permite que la intercepción varíe entre los niveles de los efectos aleatorios (cadenas montañosas en este caso).
+-   La pendiente de la relación entre la longitud corporal y la puntuación de la prueba se mantiene constante para todas las cadenas montañosas.
+
+**1. Limitaciones del modelo de intercepción aleatoria:**
+
+Este modelo asume que la relación entre la longitud corporal y la inteligencia es la misma en todas las cadenas montañosas. Sin embargo, en la vida real, es posible que esta relación varíe entre poblaciones debido a factores ambientales, genéticos, etc.
+
+**2. Pendientes Aleatorias:**
+
+Para abordar esta posibilidad, podemos introducir pendientes aleatorias en el modelo mixto. Esto permite que la pendiente de la relación entre la longitud corporal y la puntuación de la prueba varíe entre las cadenas montañosas.
+
+**3. Ejemplo:**
+
+Imaginemos que los dragones en cadenas montañosas muy frías y cálidas han evolucionado con diferentes formas corporales para la conservación del calor. En consecuencia, los dragones de las montañas frías podrían ser más inteligentes que el promedio a pesar de tener un tamaño corporal menor.
+
+**4. Especificación del modelo:**
+
+Para incorporar pendientes aleatorias, solo necesitamos una pequeña modificación en el modelo mixto. Se agrega la variable fija (longitud corporal en este caso) dentro de los corchetes del efecto aleatorio. Por ejemplo:
+
+**Sin pendientes aleatorias:**
+
+```         
+testScore ~ bodyLength + (1|mountainRange)
+```
+
+**Con pendientes aleatorias:**
+
+```         
+testScore ~ bodyLength + (bodyLength|mountainRange) + (1|mountainRange)
+```
+
+**5. Interpretación:**
+
+El modelo con pendientes aleatorias permite estimar:
+
+-   La intercepción promedio para la puntuación de la prueba en todas las cadenas montañosas.
+-   El efecto promedio de la longitud corporal en la puntuación de la prueba en todas las cadenas montañosas.
+-   Cómo varía el efecto de la longitud corporal en la puntuación de la prueba entre las cadenas montañosas.
+
+**6. Ventajas:**
+
+Los modelos con pendientes aleatorias proporcionan una mayor flexibilidad para analizar datos jerárquicos, ya que permiten capturar la variación en la relación entre variables a diferentes niveles del factor aleatorio.
+
+```{r}
+mixed.ranslope <- lmer(testScore ~ bodyLength2 + (1 + bodyLength2|mountainRange/site), data = dragons) 
+
+summary(mixed.ranslope)
+```
+
+Aquí, lo que estamos diciendo es modelar la inteligencia de los dragones en función de la longitud del cuerpo, sabiendo que las poblaciones tienen diferentes líneas de base de inteligencia y que la relación puede variar entre las poblaciones.
+
+Veámoslo con un gráfico rápido (trazaremos las predicciones con más detalle en la siguiente sección). ¿Observas cómo las pendientes de los diferentes sitios y cadenas montañosas ya no son paralelas?
+
+```{r}
+### plot
+(mm_plot <- ggplot(dragons, aes(x = bodyLength, y = testScore, colour = site)) +
+      facet_wrap(~mountainRange, nrow=2) +   # a panel for each mountain range
+      geom_point(alpha = 0.5) +
+      theme_classic() +
+      geom_line(data = cbind(dragons, pred = predict(mixed.ranslope)), aes(y = pred), size = 1) +  # adding predicted line from mixed model 
+      theme(legend.position = "none",
+            panel.spacing = unit(2, "lines"))  # adding space between panels
+)
+```
+
+A menudo querrás visualizar tu modelo como una línea de regresión con algún error alrededor, tal como lo harías con un modelo lineal simple. Sin embargo, las opciones de estadísticas de ggplot2 no están diseñadas para estimar correctamente los objetos del modelo de efectos mixtos, por lo que usaremos el paquete ggeffects para ayudarnos a dibujar los gráficos.
+
+```{r}
+library(ggeffects)  # install the package first if you haven't already, then load it
+
+# Extract the prediction data frame
+pred.mm <- ggpredict(mixed.lmer2, terms = c("bodyLength2"))  # this gives overall predictions for the model
+
+# Plot the predictions 
+
+(ggplot(pred.mm) + 
+   geom_line(aes(x = x, y = predicted)) +          # slope
+   geom_ribbon(aes(x = x, ymin = predicted - std.error, ymax = predicted + std.error), 
+               fill = "lightgrey", alpha = 0.5) +  # error band
+   geom_point(data = dragons,                      # adding the raw data (scaled values)
+              aes(x = bodyLength2, y = testScore, colour = mountainRange)) + 
+   labs(x = "Body Length (indexed)", y = "Test Score", 
+        title = "Body length does not affect intelligence in dragons") + 
+   theme_minimal()
+)
+```
+
+¿Qué sucede si desea visualizar cómo varían las relaciones según diferentes niveles de efectos aleatorios? Puede especificar type = "re" (para "efectos aleatorios") en la función ggpredict() y agregar el nombre del efecto aleatorio al argumento de términos.
+
+También demostramos una forma de trazar el gráfico más rápido con la función plot() de ggEffects:
+
+```{r}
+ggpredict(mixed.lmer2, terms = c("bodyLength2", "mountainRange"), type = "re") %>% 
+   plot() +
+   labs(x = "Body Length", y = "Test Score", title = "Effect of body size on intelligence in dragons") + 
+   theme_minimal()
+```
+
+Puedes ver claramente las intersecciones aleatorias y las pendientes fijas en este gráfico. Al evaluar la calidad de su modelo, siempre es una buena idea observar los datos sin procesar, el resultado resumido y las predicciones en conjunto para asegurarse de comprender lo que está sucediendo (y de haber especificado el modelo correctamente).
+
+Otra forma de visualizar los resultados del modelo mixto, si está interesado en mostrar la variación entre los niveles de sus efectos aleatorios, es trazar la desviación de la estimación general del modelo para las intersecciones y las pendientes, si tiene un modelo de pendiente aleatorio:
+
+```{r}
+library(sjPlot)
+
+# Visualise random effects 
+(re.effects <- plot_model(mixed.ranslope, type = "re", show.values = TRUE))
+
+# show summary
+summary(mixed.ranslope)
+
+```
+
+¡Cuidado aquí! Los valores que ve NO son valores reales, sino más bien la diferencia entre el valor general de la intersección o la pendiente que se encuentra en el resumen de su modelo y la estimación para este nivel específico de efecto aleatorio. Por ejemplo, la relación para los dragones en la Cordillera Marítima tendría una pendiente de (-2,91 + 0,67) = -2,24 y una intersección de (20,77 + 51,43) = 72,20.
+
+```{r}
+library(stargazer)
+
+stargazer(mixed.lmer2, type = "text",
+          digits = 3,
+          star.cutoffs = c(0.05, 0.01, 0.001),
+          digit.separator = "")
+
+```
+
+## Estructura de Efectos Fijos en Modelos Mixtos con lme4
+
+Los modelos mixtos con lme4 son una herramienta poderosa para analizar datos jerárquicos. En esta sección, nos centramos en la estructura de efectos fijos del modelo, que representan las variables independientes que se cree que influyen en la variable dependiente.
+
+**1. Importancia de los Efectos Fijos:**
+
+La mayoría de los investigadores suelen centrarse principalmente en los efectos fijos, ya que permiten comprender las relaciones de causa y efecto entre las variables independientes y la variable dependiente.
+
+**2. Pruebas de Hipótesis en lme4:**
+
+A diferencia de otros programas de análisis estadístico, lme4 no proporciona valores p por defecto para los parámetros de los efectos fijos. Esto se debe a que existen limitaciones asociadas con los valores p, y los enfoques basados en la verosimilitud son generalmente preferidos.
+
+**3. Métodos para Evaluar Modelos Mixtos Lineales (LMM):**
+
+A continuación, presentamos algunos métodos para evaluar la significancia de los efectos fijos en modelos mixtos lineales, ordenados de menos a más recomendado:
+
+-   **Peor opción:** Pruebas Z de Wald: este método no es ideal debido a su dependencia de la normalidad y la homogeneidad de la varianza.
+-   **Opción algo mejor:** Pruebas t de Wald (solo para LMM balanceados y anidados): estas pruebas pueden ser más robustas que las pruebas Z de Wald, pero aún tienen limitaciones.
+-   **Mejor opción:** Pruebas de razón de verosimilitud (con anova() o drop1()): este método compara modelos completos y reducidos para evaluar la significancia de un efecto fijo. Se considera generalmente más confiable que las pruebas Wald.
+-   **Mejor opción (avanzado):** Intervalos de confianza basados en MCMC o bootstrap paramétrico: estos métodos son computacionalmente más intensivos pero ofrecen información más precisa sobre la incertidumbre de los parámetros.
+
+**4. Pruebas de Razón de Verosimilitud con anova()**
+
+En este taller, nos centraremos en las pruebas de razón de verosimilitud utilizando la función `anova()` de lme4. Este método es adecuado para muestras grandes, donde los valores p basados en la razón de verosimilitud suelen ser aproximaciones fiables.
+
+**5. Pasos para la Prueba:**
+
+-   **Ajustar dos modelos:**
+    -   Un modelo completo que incluya todos los efectos fijos de interés.
+    -   Un modelo reducido que excluya el efecto fijo que deseamos probar (por ejemplo, eliminando bodyLength2).
+-   **Utilizar la función anova()** para comparar la verosimilitud de los modelos completo y reducido. La salida de `anova()` proporciona un valor p para cada efecto fijo, que indica la significancia de ese efecto en el modelo.
+
+**6. Limitaciones:**
+
+-   Con muestras pequeñas, se recomienda utilizar aproximaciones como Kenward-Roger o Satterthwaite para obtener valores p más precisos (modelos REML).
+-   El paquete `pbkrtest` ofrece funciones para realizar estas aproximaciones.
+
+```{r}
+full.lmer <- lmer(testScore ~ bodyLength2 + (1|mountainRange) + (1|sample), 
+				  data = dragons, REML = FALSE)
+reduced.lmer <- lmer(testScore ~ 1 + (1|mountainRange) + (1|sample), 
+					     data = dragons, REML = FALSE)
+```
+
+```{r}
+anova(reduced.lmer, full.lmer)  # the two models are not significantly different
+```
+
+Observe que hemos equipado nuestros modelos con REML = FALSE.
+
+REML significa máxima verosimilitud restringida (o “residual”) y es el criterio de estimación de parámetros predeterminado para modelos lineales mixtos. Como probablemente habrás adivinado, ML significa máxima probabilidad: puedes establecer REML = FALSE en tu llamada a lmer para usar estimaciones de ML. Sin embargo, se sabe que las estimaciones ML están sesgadas y, como REML suele ser menos sesgado, generalmente se prefieren las estimaciones REML de los componentes de la varianza. Es por eso que en nuestros modelos anteriores omitimos la configuración de REML; simplemente lo dejamos como predeterminado (es decir, REML = TRUE).
+
+REML supone que la estructura de efectos fijos es correcta. Debe utilizar la máxima verosimilitud al comparar modelos con diferentes efectos fijos, ya que ML no se basa en los coeficientes de los efectos fijos, y es por eso que estamos reajustando nuestros modelos completos y reducidos anteriores con la adición de REML = FALSE en la llamada.
+
+Aunque utilice ML para comparar modelos, debe informar las estimaciones de parámetros de su "mejor" modelo REML final, ya que ML puede subestimar la varianza de los efectos aleatorios.
+
+NOTA 2: Los modelos también se pueden comparar utilizando la función AICc del paquete AICcmodavg. El Criterio de Información de Akaike (AIC) es una medida de la calidad del modelo. AICc corrige el sesgo creado por un tamaño de muestra pequeño al estimar AIC. Generalmente, si los modelos están a una distancia de 2 unidades AICc entre sí, son muy similares. Dentro de 5 unidades son bastante similares, más de 10 unidades de diferencia y probablemente puedas estar contento con el modelo con AICc más bajo. Sin embargo, al igual que con los valores p, no existe una “línea dura” que sea siempre correcta.
+
+NOTA 3: En realidad, no existe una forma acordada de abordar la varianza de los efectos aleatorios en modelos mixtos cuando se trata de evaluar la significancia. Tanto los valores p como los tamaños del efecto tienen problemas, aunque por lo que deduzco, los valores p parecen causar más desacuerdo que los tamaños del efecto, al menos en la comunidad R.
+
+## Estructura de Efectos Aleatorios en Modelos Mixtos con lme4
+
+Los modelos mixtos con lme4 permiten analizar datos jerárquicos teniendo en cuenta tanto los efectos fijos como los aleatorios. En esta sección, nos centramos en la estructura de efectos aleatorios del modelo, que representan la variabilidad debida a grupos o niveles anidados en el diseño del estudio.
+
+**1. Selección de Efectos Aleatorios:**
+
+La selección de los efectos aleatorios a incluir en el modelo mixto depende de varios factores:
+
+-   **Diseño experimental:** La estructura de su estudio y cómo se recolectaron los datos determinan qué efectos aleatorios son necesarios para abordar la pseudorreplicación y la variabilidad no tenida en cuenta por los efectos fijos.
+-   **Sistema biológico:** La comprensión del sistema biológico que se está estudiando permite identificar fuentes potenciales de variabilidad que podrían ser capturadas por efectos aleatorios.
+-   **Preguntas de investigación:** Los efectos aleatorios deben ser relevantes para las preguntas que se intentan responder con el análisis.
+
+**2. Efectos Aleatorios para Pseudorreplicación:**
+
+-   Si los efectos aleatorios se utilizan para abordar la pseudorreplicación (observaciones tratadas como independientes cuando no lo son), entonces deben incluirse en el modelo independientemente de su significancia estadística.
+-   Por ejemplo, si se evalúan múltiples veces los mismos dragones, la identidad del dragón debe incluirse como un efecto aleatorio para tener en cuenta la variabilidad individual.
+
+**3. Efectos Aleatorios para la Variabilidad Adicional:**
+
+-   Si los efectos aleatorios se utilizan para explicar variabilidad adicional que se cree que podría ser importante, la decisión de incluirlos puede basarse en la selección de modelos.
+-   Por ejemplo, si se mide la masa de dragones a lo largo de su vida, se podría incluir el año como un efecto aleatorio para capturar la variabilidad temporal (sequías, escasez de recursos).
+
+**4. Selección de Modelos con REML:**
+
+-   Para seleccionar la estructura óptima de efectos aleatorios, se puede recurrir a técnicas de selección de modelos.
+-   Se recomienda utilizar estimadores REML (Máxima Verosímilitud Restringida) para comparar modelos con diferentes estructuras aleatorias, manteniendo los efectos fijos constantes.
+-   Esta recomendación se basa en el hecho de que la Máxima Verosímilitud (ML) no es adecuada para comparar modelos con estructuras anidadas de efectos aleatorios debido a sesgos en los estimadores de varianza.
+
+**5. Recomendaciones:**
+
+-   No modifique simultáneamente los efectos fijos y aleatorios. Analice primero la estructura de efectos aleatorios y luego la de efectos fijos.
+-   No compare modelos lmer con lm (modelos lineales mixtos vs. lineales) o glmer con glm (modelos lineales mixtos generalizados vs. generalizados).
+
+## Selección de Modelos Completa en Modelos Mixtos con lme4
+
+La selección de modelos es un paso crucial en el análisis de datos con modelos mixtos lineales (LME) utilizando el paquete `lme4` en R. En esta sección, abordaremos el proceso de selección de modelos recomendado por Zuur et al. (2009).
+
+**1. Enfoques para la Selección de Modelos:**
+
+Existen dos enfoques principales para la selección de modelos:
+
+-   **De arriba hacia abajo (Top-down):** Se comienza con un modelo complejo que incluye todos los efectos fijos y aleatorios posibles, y luego se eliminan gradualmente términos no significativos para llegar a un modelo más parsimonioso.
+-   **De abajo hacia arriba (Step-up):** Se comienza con un modelo simple que solo incluye efectos fijos o aleatorios básicos, y luego se agregan términos paso a paso hasta encontrar el mejor modelo.
+
+**2. Estrategias de Selección de Modelos:**
+
+El proceso de selección de modelos recomendado por Zuur et al. (2009) sigue un enfoque de arriba hacia abajo e implica los siguientes pasos:
+
+1.  **Ajuste de un Modelo Completo:** Iniciar con un modelo que incluya todos los efectos fijos y aleatorios que se consideren relevantes, incluso si sospecha que algunos podrían ser no significativos.
+2.  **Selección de Efectos Aleatorios:** Utilizar estimadores REML (Máxima Verosímilitud Restringida) para comparar modelos con diferentes estructuras de efectos aleatorios. Se pueden emplear criterios como la verosimilitud REML, AIC (Criterio de Información Akaike) o BIC (Criterio de Información Bayesiano) para elegir la estructura óptima de efectos aleatorios.
+3.  **Selección de Efectos Fijos:** Una vez definida la estructura de efectos aleatorios, centrarse en los efectos fijos. Se pueden utilizar diferentes métodos para la selección de efectos fijos, como:
+    -   Pruebas F o t de REML para evaluar la significancia individual de cada efecto fijo.
+    -   Comparación de modelos anidados con Máxima Verosímilitud (ML), manteniendo constante la estructura de efectos aleatorios.
+
+**4. Importancia del Conocimiento Especifico:**
+
+Si bien la selección de modelos basada en criterios estadísticos es importante, se recomienda tener en cuenta el conocimiento del sistema que se está estudiando. La incorporación de este conocimiento previo puede ayudar a orientar la selección de modelos y evitar decisiones basadas únicamente en la significancia estadística.
+
+**5. Consideraciones Adicionales:**
+
+-   No elimine automáticamente un efecto fijo solo porque no sea significativo. Si tiene una base sólida para incluirlo, puede considerarlo como parte del modelo final.
+-   El modelo final debe presentarse utilizando estimadores REML, ya que son más adecuados para modelos mixtos lineales.

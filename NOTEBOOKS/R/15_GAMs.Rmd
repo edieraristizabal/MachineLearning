@@ -1,0 +1,114 @@
+**CURSO**: Machine Learning, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
+**Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
+**Credits**: The content of this notebook is based on [fromthebottomoftheheap](https://fromthebottomoftheheap.net/2018/04/21/fitting-gams-with-brms/) by Gavin Simpson
+
+# Modelos GAMs
+
+```{r}
+## packages
+library('mgcv')
+library('brms')
+library('ggplot2')
+library('schoenberg')
+theme_set(theme_bw())
+```
+
+Para ilustrar las capacidades de ajuste de modelos aditivos generalizados (GAM) de brms, usaremos el conjunto de datos `mcycle` que viene con el paquete `MASS`. Éste contiene un conjunto de medidas de la fuerza de aceleración sobre la cabeza de un piloto durante una simulación de choque de motocicleta y el tiempo, en milisegundos, posterior a la colisión. Los datos se cargan usando la función `data()` y echamos un vistazo a las primeras filas.
+
+```{r}
+## load the example data mcycle
+data(mcycle, package = 'MASS')
+
+## show data
+head(mcycle)
+```
+
+```{r}
+ggplot(mcycle, aes(x = times, y = accel)) +
+    geom_point() +
+    labs(x = "Miliseconds post impact", y = "Acceleration (g)",
+         title = "Simulated Motorcycle Accident",
+         subtitle = "Measurements of head acceleration")
+```
+
+Modelaremos la aceleración como una función suave del tiempo utilizando un modelo aditivo generalizado (GAM) y la base spline de regresión de placa delgada predeterminada. Esto se puede hacer usando la función `gam()` en el paquete `mgcv` y, para compararlo con el modelo completamente bayesiano que ajustaremos en breve, usamos `method = "REML"` para estimar el parámetro de suavidad para la spline en forma de modelo mixto usando REML.
+
+```{r}
+m1 <- gam(accel ~ s(times), data = mcycle, method = "REML")
+summary(m1)
+```
+
+Como podemos ver en el resumen del modelo, la curva suave estimada utiliza aproximadamente 8.5 grados efectivos de libertad y en la prueba de efecto cero, la hipótesis nula se rechaza enfáticamente. La spline ajustada explica alrededor del 80% de la varianza o desviación en los datos.
+
+Para graficar la curva suave ajustada, podríamos usar el método `plot()` proporcionado por `mgcv`, pero este usa gráficos básicos. En cambio, podemos usar el método `draw()` del paquete `schoenberg`, que actualmente puede manejar la mayoría de las curvas suaves univariadas en `mgcv` además de las curvas suaves del producto tensor 2-d.
+
+```{r}
+draw(m1)
+```
+
+El modelo equivalente se puede estimar utilizando un enfoque completamente bayesiano a través de la función `brm()` en el paquete `brms`. De hecho, `brm()` utilizará las funciones de especificación suave de `mgcv`, lo que nos facilitará mucho la vida. Sin embargo, la principal diferencia es que no puede usar suavizados `te()` o `ti()` en los modelos `brm()`; en su lugar, necesita usar suavizados de producto tensorial `t2()`. Esto se debe a que las curvas suaves en el modelo se tratarán como efectos aleatorios y el modelo se estima como un GLMM (modelo lineal mixto generalizado), que aprovecha la dualidad de las splines como efectos aleatorios. En esta representación, las partes onduladas de la base spline se tratan como un efecto aleatorio y su parámetro de varianza asociado controla el grado de ondulación de la spline ajustada. Las partes perfectamente lisas de la base se tratan como un efecto fijo. De esta forma, el modelo aditivo generalizado (GAM) se puede estimar utilizando software GLMM estándar; es lo que permite a la función `gamm4()` ajustar GAMM utilizando el paquete `lme4` por ejemplo. Esta es también la razón por la cual no podemos usar suavizados `te()` o `ti()`; esos suavizados no tienen penalizaciones separables de manera agradable, lo que significa que no se pueden escribir en la forma requerida para ajustarse utilizando un software de modelo mixto típico.
+
+La versión `brm()` del GAM se ajusta usando el código a continuación. Tenga en cuenta que he cambiado algunas cosas de sus valores predeterminados ya que:
+
+-   el modelo requería más que el número predeterminado de muestras MCMC — `iter = 4000`
+-   las muestras necesitaban un adelgazamiento para lidiar con una fuerte autocorrelación en las cadenas de Markov — `thin = 10`
+-   el parámetro `adapt.delta`, un parámetro de ajuste en el muestreador NUTS para el Monte Carlo Hamiltoniano, potencialmente necesitaba aumentarse — hubo una advertencia sobre una posible transición divergente, pero debería haber revisado si lo era o no; en su lugar, simplemente aumenté el parámetro de ajuste a `0.99`
+-   se ajustaron cuatro cadenas de forma predeterminada, pero quería que se ajustaran usando 4 núcleos de CPU
+-   `seed` establece la semilla del generador de números aleatorios interno, lo que permite la reproducibilidad de los modelos
+-   para esta publicación no quería imprimir el progreso del muestreador — `refresh = 0` — normalmente no querrá hacer esto para poder ver cómo progresa el muestreo.
+
+El resto del modelo es bastante similar a la versión `gam()` que ajustamos anteriormente. La principal diferencia es que utilizo la función `bf()` para crear una fórmula especial `brms` que especifica el modelo. En realidad, no necesita hacer esto para un modelo tan simple, pero en una publicación posterior lo usaremos para ajustar GAM distribucionales. Tenga en cuenta que estoy dejando todos los priors en el modelo con los valores predeterminados. Analizaré la definición de priors en una publicación posterior; por ahora, solo voy a usar los priors predeterminados que usa `brm()`.
+
+```{r}
+m2 <- brm(bf(accel ~ s(times)),
+          data = mcycle, family = gaussian(), cores = 4, seed = 17,
+          iter = 4000, warmup = 1000, thin = 10, refresh = 0,
+          control = list(adapt_delta = 0.99))
+
+summary(m2)
+
+```
+
+Esta salida muestra detalles del modelo ajustado más las estimaciones de los parámetros (como medias posteriores), errores estándar, intervalos de credibilidad del 95% (por defecto) y otros dos diagnósticos:
+
+-   Eff.Sample (Efectivo Muestra) es el tamaño de muestra efectivo de las muestras posteriores en el modelo.
+-   Rhat es el factor de reducción de escala potencial o diagnóstico de Gelman-Rubin y es una medida de qué tan bien han convergido las cadenas e idealmente debería ser igual a 1.
+
+El resumen incluye dos entradas para la curva suave de times:
+
+-   sds(stimes_1) es el parámetro de varianza, que tiene el efecto de controlar la ondulación de la curva suave - cuanto mayor sea este valor, más ondulada será la curva. Podemos ver que el intervalo creíble no incluye 0, por lo que hay evidencia de que se requiere una curva suave además de un efecto paramétrico lineal de times, cuyos detalles se dan a continuación.
+-   stimes_1 es la parte de efecto fijo de la spline, que es la función lineal perfectamente suave.
+
+La tabla de parámetros final incluye información sobre la varianza de los datos sobre la media condicional de la respuesta.
+
+¿Cómo se compara este modelo con el ajustado usando gam()? Podemos usar la función `gam.vcomp()` para calcular la representación del componente de varianza de la curva suave estimada mediante `gam()`. Para que sea comparable con el valor mostrado para el modelo `brms`, no deshacemos el reescalado de la matriz de penalización que realiza `gam()` para ayudar con la estabilidad numérica durante el ajuste del modelo.
+
+```{r}
+gam.vcomp(m1, rescale = FALSE)
+```
+
+```{r}
+msms <- conditional_smooths(m2)
+```
+
+```{r}
+plot(msms)
+```
+
+Dada la similitud en los componentes de varianza de los dos modelos, no es sorprendente que las dos curvas suaves estimadas también se vean similares. La función `marginal_smooths()` es efectivamente el equivalente del método `plot()` para los GAM basados en `mgcv`.
+
+Hay mucho que podemos y debemos hacer para verificar el ajuste del modelo. Por ahora, veremos dos gráficos de verificación predictiva posterior que brms, a través del paquete `bayesplot` (Gabry y Mahr, 2018), facilita mucho la producción utilizando la función `pp_check()`.
+
+```{r}
+pp_check(m2)
+```
+
+El valor predeterminado produce un gráfico de densidad superpuesto de los valores de respuesta originales (la línea negra gruesa) con 10 extracciones de la distribución posterior del modelo. Si el modelo se ajusta bien a los datos, las muestras de datos extraídas del mismo en los valores observados de la (s) covariable (s) deben ser similares entre sí.
+
+Otro tipo de gráfico de verificación predictiva posterior es la función de distribución acumulada empírica de las observaciones y los extractos aleatorios del posterior del modelo, que podemos producir con `type = "ecdf_overlay"`.
+
+```{r}
+pp_check(m2, type = "ecdf_overlay")
+```
+
+Ambos gráficos muestran desviaciones significativas entre las simulaciones posteriores y los datos observados. Los malos resultados de la verificación predictiva posterior se deben en gran parte a la varianza no constante de los datos de aceleración condicional a la covariable. Ambos modelos suponían que las observaciones se distribuían de forma Gaussiana con medias iguales a los valores ajustados (esperanza estimada de la respuesta) con la misma varianza σ\^2. Las observaciones parecen tener diferentes varianzas, las cuales podemos modelar con un modelo distribucional, que permite modelar todos los parámetros de la distribución de la respuesta con predictores lineales. Analizaremos estos modelos en una publicación futura.

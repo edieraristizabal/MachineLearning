@@ -1,0 +1,163 @@
+------------------------------------------------------------------------
+
+<https://stats.oarc.ucla.edu/r/dae/logit-regression/>
+
+------------------------------------------------------------------------
+
+# Logistic regresión
+
+```{r}
+library(aod)
+library(ggplot2)
+```
+
+```         
+Suppose that we are interested in the factors that influence whether a political candidate wins an election. The outcome (response) variable is binary (0/1); win or lose. The predictor variables of interest are the amount of money spent on the campaign, the amount of time spent campaigning negatively and whether or not the candidate is an incumbent.
+```
+
+```{r}
+mydata <- read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
+head(mydata)
+
+```
+
+This dataset has a binary response (outcome, dependent) variable called **`admit`**. There are three predictor variables: **`gre`**, **`gpa`** and **`rank`**. We will treat the variables **`gre`** and **`gpa`** as continuous. The variable **`rank`** takes on the values 1 through 4. Institutions with a rank of 1 have the highest prestige, while those with a rank of 4 have the lowest. We can get basic descriptives for the entire data set by using **`summary`**. To get the standard deviations, we use **`sapply`** to apply the **`sd`** function to each variable in the dataset.
+
+```{r}
+summary(mydata)
+```
+
+```{r}
+sapply(mydata, sd)
+```
+
+```{r}
+## two-way contingency table of categorical outcome and predictors we want
+## to make sure there are not 0 cells
+xtabs(~admit + rank, data = mydata)
+```
+
+The code below estimates a logistic regression model using the glm (generalized linear model) function. First, we convert rank to a factor to indicate that rank should be treated as a categorical variable.
+
+```{r}
+mydata$rank <- factor(mydata$rank)
+mylogit <- glm(admit ~ gre + gpa + rank, data = mydata, family = "binomial")
+summary(mylogit)
+```
+
+En la salida anterior, lo primero que vemos es la llamada, esto es R recordándonos qué modelo ejecutamos, qué opciones especificamos, etc. A continuación, vemos los residuos de desviación, que son una medida del ajuste del modelo. Esta parte de la salida muestra la distribución de los residuos de desviación para casos individuales utilizados en el modelo. A continuación, discutimos cómo usar resúmenes de la estadística de desviación para evaluar el ajuste del modelo. La siguiente parte de la salida muestra los coeficientes, sus errores estándar, el z-estadístico (a veces llamado z-estadístico de Wald) y los valores p asociados. Tanto gre como gpa son estadísticamente significativos, al igual que los tres términos para el rango. Los coeficientes de regresión logística dan el cambio en los logaritmos de las probabilidades del resultado para un aumento de una unidad en la variable predictora. Por cada cambio de una unidad en gre, los logaritmos de las probabilidades de admisión (versus no admisión) aumentan en 0.002. Para un aumento de una unidad en gpa, los logaritmos de las probabilidades de ser admitido en la escuela de posgrado aumentan en 0.804. Las variables indicadoras de rango tienen una interpretación ligeramente diferente. Por ejemplo, haber asistido a una institución de pregrado con un rango de 2, en lugar de una institución con un rango de 1, cambia los logaritmos de las probabilidades de admisión en -0.675. A continuación de la tabla de coeficientes se encuentran los índices de ajuste, incluidos los residuos nulos y de desviación y el AIC. Más adelante mostramos un ejemplo de cómo puede usar estos valores para ayudar a evaluar el ajuste del modelo. Podemos usar la función confint para obtener intervalos de confianza para las estimaciones de coeficientes. Tenga en cuenta que para modelos logísticos, los intervalos de confianza se basan en la función de log-verosimilitud perfilada. También podemos obtener IC basados solo en los errores estándar usando el método predeterminado.
+
+```{r}
+confint(mylogit)
+```
+
+```{r}
+confint.default(mylogit)
+```
+
+Podemos probar un efecto global de rango usando la función wald.test de la biblioteca aod. El orden en el que se dan los coeficientes en la tabla de coeficientes es el mismo que el orden de los términos en el modelo. Esto es importante porque la función wald.test se refiere a los coeficientes por su orden en el modelo. Usamos la función wald.test. b suministra los coeficientes, mientras que Sigma suministra la matriz de varianza covarianza de los términos de error, finalmente Terms le dice a R qué términos en el modelo se van a probar, en este caso, los términos 4, 5 y 6, son los tres términos para los niveles de rango.
+
+```{r}
+wald.test(b = coef(mylogit), Sigma = vcov(mylogit), Terms = 4:6)
+```
+
+La estadística de prueba chi-cuadrado de 20.9, con tres grados de libertad, está asociada con un valor p de 0.00011, lo que indica que el efecto global de rango es estadísticamente significativo.
+
+También podemos probar hipótesis adicionales sobre las diferencias en los coeficientes para los diferentes niveles de rango. A continuación, probamos que el coeficiente para rango=2 es igual al coeficiente para rango=3. La primera línea de código a continuación crea un vector l que define la prueba que queremos realizar. En este caso, queremos probar la diferencia (sustracción) de los términos para rango=2 y rango=3 (es decir, los 4to y 5to términos en el modelo). Para contrastar estos dos términos, multiplicamos uno de ellos por 1 y el otro por -1. Los otros términos en el modelo no están involucrados en la prueba, por lo que se multiplican por 0. La segunda línea de código a continuación usa L=l para indicarle a R que deseamos basar la prueba en el vector l (en lugar de usar la opción Terms como hicimos anteriormente).
+
+```{r}
+l <- cbind(0, 0, 0, 1, -1, 0)
+wald.test(b = coef(mylogit), Sigma = vcov(mylogit), L = l)
+```
+
+La estadística de prueba chi-cuadrado de 5.5 con 1 grado de libertad está asociada con un valor p de 0.019, lo que indica que la diferencia entre el coeficiente para rango=2 y el coeficiente para rango=3 es estadísticamente significativa.
+
+También puedes exponenciar los coeficientes e interpretarlos como odds ratios. R realizará este cálculo por ti. Para obtener los coeficientes exponenciados, le indicas a R que quieres exponenciar (exp), y que el objeto que deseas exponenciar se llama coeficientes y es parte de mylogit (coef(mylogit)). Podemos usar la misma lógica para obtener las razones de momios y sus intervalos de confianza, exponenciando los intervalos de confianza de antes. Para ponerlo todo en una tabla, usamos cbind para unir los coeficientes e intervalos de confianza en columnas.
+
+```{r}
+## odds ratios only
+exp(coef(mylogit))
+```
+
+```{r}
+## odds ratios and 95% CI
+exp(cbind(OR = coef(mylogit), confint(mylogit)))
+```
+
+Ahora podemos decir que para un aumento de una unidad en gpa, las probabilidades de ser admitido en la escuela de posgrado (en comparación con no ser admitido) aumentan en un factor de 2.23. Para obtener más información sobre la interpretación de las razones de momios, consulta nuestra página de preguntas frecuentes ¿Cómo interpreto las razones de momios en la regresión logística?. Ten en cuenta que aunque R lo produce, la razón de momios para la intersección generalmente no se interpreta.
+
+También puedes usar probabilidades predichas para ayudarte a entender el modelo. Las probabilidades predichas se pueden calcular tanto para variables predictoras categóricas como continuas. Para crear probabilidades predichas, primero necesitamos crear un nuevo marco de datos con los valores que queremos que tomen las variables independientes para crear nuestras predicciones.
+
+Comenzaremos calculando la probabilidad predicha de admisión en cada valor de rango, manteniendo gre y gpa en sus medias. Primero creamos y visualizamos el marco de datos.
+
+```{r}
+newdata1 <- with(mydata, data.frame(gre = mean(gre), gpa = mean(gpa), rank = factor(1:4)))
+
+## view data frame
+newdata1
+```
+
+Estos objetos deben tener los mismos nombres que las variables en tu regresión logística anterior (por ejemplo, en este ejemplo, la media para gre debe llamarse gre). Ahora que tenemos el marco de datos que queremos usar para calcular las probabilidades predichas, podemos decirle a R que cree las probabilidades predichas. La primera línea de código a continuación es bastante compacta, la dividiremos para discutir qué hacen varios componentes. newdata1\$rankP le dice a R que queremos crear una nueva variable en el conjunto de datos (marco de datos) newdata1 llamada rankP, el resto del comando le dice a R que los valores de rankP deben ser predicciones hechas usando la función predict( ). Las opciones dentro de los paréntesis le dicen a R que las predicciones deben basarse en el análisis mylogit con valores de las variables predictoras provenientes de newdata1 y que el tipo de predicción es una probabilidad predicha (type="response"). La segunda línea de código enumera los valores en el marco de datos newdata1. Aunque no es particularmente atractivo, esta es una tabla de probabilidades predichas.
+
+```{r}
+newdata1$rankP <- predict(mylogit, newdata = newdata1, type = "response")
+newdata1
+```
+
+En la salida anterior, vemos que la probabilidad predicha de ser aceptado en un programa de posgrado es 0.52 para los estudiantes de las instituciones de pregrado de mayor prestigio (rango=1), y 0.18 para los estudiantes de las instituciones de menor rango (rango=4), manteniendo gre y gpa en sus medias. Podemos hacer algo muy similar para crear una tabla de probabilidades predichas variando el valor de gre y el rango. Vamos a graficar estos, así que crearemos 100 valores de gre entre 200 y 800, en cada valor de rango (es decir, 1, 2, 3 y 4).
+
+```{r}
+newdata2 <- with(mydata, data.frame(gre = rep(seq(from = 200, to = 800, length.out = 100),
+    4), gpa = mean(gpa), rank = factor(rep(1:4, each = 100))))
+```
+
+El código para generar las probabilidades predichas (la primera línea a continuación) es igual que antes, excepto que también vamos a pedir errores estándar para poder graficar un intervalo de confianza. Obtenemos las estimaciones en la escala del enlace y transformamos de nuevo tanto los valores predichos como los límites de confianza en probabilidades.
+
+```{r}
+newdata3 <- cbind(newdata2, predict(mylogit, newdata = newdata2, type = "link",
+    se = TRUE))
+newdata3 <- within(newdata3, {
+    PredictedProb <- plogis(fit)
+    LL <- plogis(fit - (1.96 * se.fit))
+    UL <- plogis(fit + (1.96 * se.fit))
+})
+
+## view first few rows of final dataset
+head(newdata3)
+```
+
+También puede ser útil utilizar gráficos de probabilidades predichas para entender y/o presentar el modelo. Utilizaremos el paquete ggplot2 para graficar. A continuación, creamos un gráfico con las probabilidades predichas e intervalos de confianza del 95%.
+
+```{r}
+ggplot(newdata3, aes(x = gre, y = PredictedProb)) + geom_ribbon(aes(ymin = LL,
+    ymax = UL, fill = rank), alpha = 0.2) + geom_line(aes(colour = rank),
+    size = 1)
+
+```
+
+También podemos desear ver medidas de qué tan bien se ajusta nuestro modelo. Esto puede ser particularmente útil al comparar modelos competidores. La salida producida por summary(mylogit) incluía índices de ajuste (mostrados debajo de los coeficientes), incluidos los residuos nulos y de desviación y el AIC. Una medida de ajuste del modelo es la significancia del modelo en general. Esta prueba pregunta si el modelo con predictores se ajusta significativamente mejor que un modelo solo con una intercepción (es decir, un modelo nulo). La estadística de prueba es la diferencia entre la desviación residual para el modelo con predictores y el modelo nulo. La estadística de prueba se distribuye chi-cuadrado con grados de libertad iguales a las diferencias en grados de libertad entre el modelo actual y el modelo nulo (es decir, el número de variables predictoras en el modelo). Para encontrar la diferencia en desviación para los dos modelos (es decir, la estadística de prueba) podemos usar el comando:
+
+```{r}
+with(mylogit, null.deviance - deviance)
+```
+
+Los grados de libertad para la diferencia entre los dos modelos son iguales al número de variables predictoras en el modelo, y se pueden obtener usando:
+
+```{r}
+with(mylogit, df.null - df.residual)
+
+```
+
+Finalmente, el valor p se puede obtener usando:
+
+```{r}
+with(mylogit, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
+
+```
+
+La chi-cuadrado de 41.46 con 5 grados de libertad y un valor p asociado de menos de 0.001 nos indica que nuestro modelo en su conjunto se ajusta significativamente mejor que un modelo vacío. A esto a veces se le llama prueba de razón de verosimilitudes (el residuo de desviación es -2\* log verosimilitud). Para ver la log verosimilitud del modelo, escribimos:
+
+```{r}
+logLik(mylogit)
+
+```
