@@ -145,7 +145,7 @@
 					</ul>
 					<p>Las herramientas de procesamiento serán:</p>
 					<ul>
-						<li>Lenguaje de programación Python y R en Notebooks (*.ipnyb) a traves de Google Colab y/o Jupyter Lab distribuido por Conda</li>
+						<li>Lenguaje de programación Python y R en Notebooks (Markdown) a traves de Google Colab y/o Jupyter Lab distribuido por Conda</li>
 					</ul>
 				</section>
 
@@ -591,7 +591,7 @@
 					<h2>Data structures in machine learning</h2>
 					<p> There are two basic types of data and one hybrid:</p>
 					<p><strong>Cross-Sectional data:</strong> sample of observations on individual units taken at a single point in time.
-					Individual observations have no natural ordering adn statistically independent.</p>
+					Individual observations have no natural ordering and statistically independent.</p>
 					<p><strong>Time series data:</strong> consists of a sample of observations on one or more variables over successive periods of time.
 					They have a chronological ordering.</p>
 					<p><strong>Hybrid data structures:</strong> combine the inherent characteristics of cross-sectional and time-series data sets.
@@ -2285,6 +2285,11 @@
 				</section>
 
 				<section>
+					<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*ljCHgdd8vYLzsXI3wwPeFQ.png" width="700">
+					<figcaption>Fuente: The intuitive basics of Optimization por Jarom Hulet (Medium)</figcaption>
+				</section>
+
+				<section>
 					<h2>Función de optimización</h2>
 					<p>Gradually, with the help of some optimization function, loss function learns to reduce the error
 						in prediction. An optimization algorithm is a procedure which is executed iteratively by comparing various
@@ -3053,6 +3058,110 @@
 
 			</section>
 
+<!--GLM-->
+			<section>
+				<section>
+					<h1> Generalized Linear Models (GLM's)</h1>
+				</section>
+
+				<section>
+					<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*JxFCWwQq3i5Me6YT74i--Q.png">
+					<figcaption>Source: What’s so Funny about Science? by Sidney Harris (1977)</figcaption>
+				</section>
+
+				<section>
+					<h2>General Linear Models</h2>
+					$
+					Y_i=\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_nx_n+\epsilon
+					$
+
+					$
+					Y_i \sim N(u,\sigma^2)
+					$
+					<ul>
+						<li>Our response variable and error term follows Normal distribution.</li>
+						<li>Relationship between response and explanatory variable is linear.</li>
+						<li>Errors are homoscedastic and non-correlated.</li>
+						<li>If the independent explanatory variables are not correlated.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Generalized Linear Models (GLMs)</h2>
+					<p>The generalized linear model (GLM) is a flexible generalization of General Linear model that allows for response variable that have error 
+						distribution models normal and non-normal distribution as well. It allows the linear predictor (e.g. $b_0+b_1X$)to be related to the response 
+						via a function which is called link function.</p>
+					<ul>
+						<li>Random Component: means the probability distribution of response $y_i$.</li>
+						<li>Systematic Component: linear combination of explanatory variables.</li>
+						<li>Link Function: defines how the expected value of response is related to the linear predictor of explanatory variables.</li>
+					</ul>
+					<p>Note: General Linear Models are specific GLMS when errors are independent and follows normal distribution. And the link function is identity 
+						because we model the mean directly in case of General Linear Models.</p>
+				</section>
+
+				<section>
+					<h2>Modelo Lineal</h2>
+					$
+					y=\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_nx_n+\epsilon
+					$
+					<h2>GAMs</h2>
+					$
+					G(y)=\beta_0+W_1F_1x_1+W_2F_2x_2+...+W_nF_nx_n+\epsilon
+					$
+					<p>Donde:</p>
+					<p>F1(X1), F1(X2), …. Fn(Xn) are non-parametric functions (smoothing functions)</p>
+					<p>G(Y) is a link function connecting the expected value to input features X1,X2….Xn</p>
+				</section>
+
+				<section>
+					<h2>Supuestos de GML</h2>
+					<ul>
+						<li>The data are independently distributed, i.e., cases are independent.</li>
+						<li>The dependent variable does NOT need to be normally distributed, but it typically assumes a distribution from an exponential family 
+							(e.g. binomial, Poisson, multinomial, normal, etc.).</li>
+						<li>A GLM does NOT assume a linear relationship between the response variable and the explanatory variables, but it does assume a linear 
+							relationship between the transformed expected response in terms of the link function and the explanatory variables; e.g., for binary 
+							logistic regression </li>
+						<li>Explanatory variables can be nonlinear transformations of some original variables.</li>
+						<li>The homogeneity of variance does NOT need to be satisfied. In fact, it is not even possible in many cases given the model structure.</li>
+						<li>Errors need to be independent but NOT normally distributed.</li>
+						<li>Parameter estimation uses maximum likelihood estimation (MLE) rather than ordinary least squares (OLS).</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Hierarchical Linear Models (HLM)</h3>
+					<img src="https://i.pinimg.com/736x/26/3a/c6/263ac67dd1ff8f6d814f05ca1b4a9775.jpg" alt="">
+					<figcaption><a href="https://www.bristol.ac.uk/cmm/learning/videos/random-slopes.html">Source: Bristol</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Random Intercept model</h3>
+					<img src="https://i.pinimg.com/736x/22/b1/81/22b181d2b2d21315ebda9a0507a4d203.jpg" alt="">
+					<figcaption><a href="https://www.bristol.ac.uk/cmm/learning/videos/random-slopes.html">Source: Bristol</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Random slope model</h3>
+					<img src="https://i.pinimg.com/736x/11/55/34/11553485364510873e541559160e16c3.jpg">
+					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Random slope model</h3>
+					<img src="https://i.pinimg.com/736x/07/a1/45/07a1457b739196ebbe516e3ba5f69552.jpg">
+					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Covariance</h3>
+					<img src="https://i.pinimg.com/736x/a6/e0/21/a6e0218f0a177eb8bc592e3cbf1c4b66.jpg">
+					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+				</section>
+
+			</section>	
+
 <!--Regresion Lineal-->
 			<section>
 				<section>
@@ -3176,6 +3285,46 @@
 						If the VIF is greater than five this suggests moderate to high multicollinearity, you might want to consider leaving these variables out.
 					</p>
 				</section>
+
+				<section>
+					<h3>Interactions</h3>
+					<p>We use multiple regression to examine how one predictor variable (X1) is associated with some outcome variable (Y) while 
+						controlling/adjusting for some other variable(s) (X2). That is, we test whether X1 significantly predicts Y while holding X2 
+						constant.</p>
+					<p>What if X1’s relation to Y looks very different depending on which value of X2 we’re talking about?</p>
+				</section>
+
+				<section>
+					<h2>Interactions</h2>
+					<p>Birthweight of Newborn = b0 + b1(Smoke) + b2(Age) + b3(Smoke x Age)+ e</p>
+					<img src="https://i.pinimg.com/736x/42/35/c2/4235c273384ae0dcaae642e60a9da159.jpg" width="850">
+				</section>
+
+				<section>
+					<h2>Interactions</h2>
+					<p style="font-size: 22px;">Birthweight of Newborn = b0 + b1(Smoke) + b2(Age) + e</p>
+					<img src="https://i.pinimg.com/736x/d0/cd/af/d0cdaf8e68e434d87fffb135fc5b8853.jpg" width="200">
+					<p style="font-size: 20px;">Circled in blue, this would mean that with Smoke equal to exactly 0, a one-unit increase in Age predicts an increase in birthweight of 
+						27.60 gr. Does that 27.60 number sound familiar? </p>
+					<p style="font-size: 20px;">Circled in orange, the effect of a one-unit increase in Age on Birthweight changes by -46.52 as we go from non-smokers to smokers. 
+						In other words, the interaction coefficient (-46.52) tells us the difference in Age’s slope when we switch from non-smokers to smokers.</p>
+					<p style="font-size: 20px;">If we take the coefficient on Age from the smoker model above (-18.92) and subtract from it the coefficient on Age from 
+						the non-smoker model above (27.60), we get…-46.52 — that’s the coefficient on the interaction term!. How can this be? Because in 
+						both cases (the separate models and the interaction model), we are learning the exact same thing: the change in Age’s slope when we increase Smoke by one unit!</p>
+					<p style="font-size: 16px;">The model must estimate not only a coefficient on the interaction, but also a separate coefficient for each 
+						variable that is included in the interaction (we call these the “constitutive terms”)</p>
+				</section>
+
+				<section>
+					<h2>Interactions</h2>
+					<img src="https://i.pinimg.com/736x/23/9d/d9/239dd9a2f2c5989843304a565973bacd.jpg" width="600">
+				</section>
+
+				<section>
+					<h2>Interactions</h2>
+					<img src="https://i.pinimg.com/736x/fb/6e/4b/fb6e4b35348d9db658fd26a9f8b8af38.jpg" width="600">
+				</section>
+
 
 				<section>
 					<h2>The assumptions</h2>
@@ -3766,12 +3915,20 @@
 
 				<section>
 					<h2>Kernel trick</h2>
+					<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*LlAXJzA6DJOdm9iWIJTodA.png" width="1000" />
+					<figcaption>Source: <a href="https://jonathan-hui.medium.com/kernels-for-machine-learning-3f206efa9418">Medium - Jonathan Hui</a></figcaption>
+				</section>
+
+				<section>
+					<h2>Kernel trick</h2>
 					<img src="https://i.pinimg.com/564x/b5/c9/84/b5c984a732ac59dd895c6c71ca83bccd.jpg" width="1000" />
+					<figcaption>Source: <a href="https://jonathan-hui.medium.com/kernels-for-machine-learning-3f206efa9418">Medium - Jonathan Hui</a></figcaption>
 				</section>
 
 				<section>
 					<h2>Kernel trick</h2>
 					<img src="https://i.pinimg.com/564x/25/9f/5e/259f5efbbb5c2b2cfedebbb8f2220aa8.jpg" width="1000" />
+					<figcaption>Source: <a href="https://jonathan-hui.medium.com/kernels-for-machine-learning-3f206efa9418">Medium - Jonathan Hui</a></figcaption>
 				</section>
 
 				<section>
@@ -4659,112 +4816,233 @@
 					<h2>Long Short Term memory (LSTM)</h2>
 					<img src="https://i.pinimg.com/564x/85/6c/39/856c3981f153e394f1f444b1ff1aada7.jpg" width="1000" />
 				</section>
-			</section>
 
-<!--GLM-->
+				<section>
+					<h2>Physics-Informed Neural Networks (PINNs)</h2>
+					<p>Physics-Informed Neural Networks (PINNs) are a type of neural network explicitly designed to incorporate the laws of physics 
+					into the learning process. They are particularly useful for solving Partial Differential Equations (PDEs) that describe various 
+					physical phenomena such as fluid dynamics, heat transfer, electromagnetism, and more.</p>
+
+					<p>PINNs use physical laws as a “guiding force,” ensuring that the predictions remain consistent with fundamental physics</p>
+					<img src="https://miro.medium.com/v2/resize:fit:600/format:webp/1*aSTHQxFaXKuKtYyB7ybEIQ.gif" width="300" />
+				</section>
+
+				<section>
+					<h2>Physics-Informed Neural Networks (PINNs)</h2>
+					<p>The core idea of PINNs is to incorporate the governing physical laws of the system (e.g., a PDE) into the neural network’s loss
+						 function. Typically, the total loss L in a PINN consists of two components:</p>
+					<img src="https://i.pinimg.com/736x/e9/12/dd/e912dda22f16fb5023088790819c2be7.jpg" width="500" />
+					<img src="https://i.pinimg.com/736x/77/77/04/777704af4c1900dce526cd00e224dc9b.jpg" width="500" />
+					<img src="https://i.pinimg.com/736x/c2/b7/c0/c2b7c0905003308bf071e2925cb9f8d7.jpg" width="500" />
+
+				</section>
+
+
+			</section>
+		
+<!--GP-->
 			<section>
 				<section>
-					<h1> Generalized Linear Models (GLM's)</h1>
+					<h1> Gaussian Processes</h1>
+					<figcaption><a href="https://distill.pub/2019/visual-exploration-gaussian-processes/">A Visual Exploration of Gaussian Processes</a></figcaption>
 				</section>
 
 				<section>
-					<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*JxFCWwQq3i5Me6YT74i--Q.png">
-					<figcaption>Source: What’s so Funny about Science? by Sidney Harris (1977)</figcaption>
+					<h3>Distribución Gaussiana multivariada</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*ype37VGh84MlQCmnUOK-WA.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
 				</section>
 
 				<section>
-					<h2>General Linear Models</h2>
-					$
-					Y_i=\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_nx_n+\epsilon
-					$
-
-					$
-					Y_i \sim N(u,\sigma^2)
-					$
-					<ul>
-						<li>Our response variable and error term follows Normal distribution.</li>
-						<li>Relationship between response and explanatory variable is linear.</li>
-						<li>Errors are homoscedastic and non-correlated.</li>
-						<li>If the independent explanatory variables are not correlated.</li>
-					</ul>
+					<h3>Distribución marginal</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*f56P_Ulva67v488tzMC3mw.png" width="500">
+					<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*6AmLB_iNanNL8HO-iQcmNw.png" width="500">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
 				</section>
 
 				<section>
-					<h2>Generalized Linear Models (GLMs)</h2>
-					<p>The generalized linear model (GLM) is a flexible generalization of General Linear model that allows for response variable that have error 
-						distribution models normal and non-normal distribution as well. It allows the linear predictor (e.g. $b_0+b_1*X$)to be related to the response 
-						via a function which is called link function.</p>
-					<ul>
-						<li>Random Component:-means the probability distribution of response yi.</li>
-						<li>Systematic Component:- linear combination of explanatory variables.</li>
-						<li>Link Function:- defines how the expected value of response is related to the linear predictor of explanatory variables.</li>
-					</ul>
-					<p>Note: General Linear Models are specific GLMS when errors are independent and follows normal distribution. And the link function is identity 
-						because we model the mean directly in case of General Linear Models.</p>
+					<h3>Distribución condicionada</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*wVp9Algwer-DV8rI4oAEqg.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
 				</section>
 
 				<section>
-					<h2>Modelo Lineal</h2>
-					$
-					y=\beta_0+\beta_1x_1+\beta_2x_2+...+\beta_nx_n+\epsilon
-					$
-					<h2>GAMs</h2>
-					$
-					G(y)=\beta_0+W_1F_1x_1+W_2F_2x_2+...+W_nF_nx_n+\epsilon
-					$
-					<p>Donde:</p>
-					<p>F1(X1), F1(X2), …. Fn(Xn) are non-parametric functions (smoothing functions)</p>
-					<p>G(Y) is a link function connecting the expected value to input features X1,X2….Xn</p>
+					<h3>Matriz de covarianza</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60500191-ccc33380-9cb1-11e9-8f80-5b695d896000.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h2>Supuestos de GML</h2>
-					<ul>
-						<li>The data are independently distributed, i.e., cases are independent.</li>
-						<li>The dependent variable does NOT need to be normally distributed, but it typically assumes a distribution from an exponential family 
-							(e.g. binomial, Poisson, multinomial, normal, etc.).</li>
-						<li>A GLM does NOT assume a linear relationship between the response variable and the explanatory variables, but it does assume a linear 
-							relationship between the transformed expected response in terms of the link function and the explanatory variables; e.g., for binary 
-							logistic regression </li>
-						<li>Explanatory variables can be nonlinear transformations of some original variables.</li>
-						<li>The homogeneity of variance does NOT need to be satisfied. In fact, it is not even possible in many cases given the model structure.</li>
-						<li>Errors need to be independent but NOT normally distributed.</li>
-						<li>Parameter estimation uses maximum likelihood estimation (MLE) rather than ordinary least squares (OLS).</li>
-					</ul>
+					<h3>Matriz de covarianza</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60500289-faa87800-9cb1-11e9-84d0-50685c54a535.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h3>Hierarchical Linear Models (HLM)</h3>
-					<img src="https://i.pinimg.com/736x/26/3a/c6/263ac67dd1ff8f6d814f05ca1b4a9775.jpg" alt="">
-					<figcaption><a href="https://www.bristol.ac.uk/cmm/learning/videos/random-slopes.html">Source: Bristol</a></figcaption>
+					<h3>Matriz de covarianza</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60500307-03994980-9cb2-11e9-9efe-22cabecc0a27.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h3>Random Intercept model</h3>
-					<img src="https://i.pinimg.com/736x/22/b1/81/22b181d2b2d21315ebda9a0507a4d203.jpg" alt="">
-					<figcaption><a href="https://www.bristol.ac.uk/cmm/learning/videos/random-slopes.html">Source: Bristol</a></figcaption>
+					<h3>2D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60428229-4e528d00-9bf0-11e9-8813-9931dd159fb8.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h3>Random slope model</h3>
-					<img src="https://i.pinimg.com/736x/11/55/34/11553485364510873e541559160e16c3.jpg">
-					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+					<h3>2D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397330-eba76a00-016a-11ea-9950-d1dec3ee1285.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h3>Random slope model</h3>
-					<img src="https://i.pinimg.com/736x/07/a1/45/07a1457b739196ebbe516e3ba5f69552.jpg">
-					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+					<h3>2D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397339-ee09c400-016a-11ea-94c9-a3121f725deb.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
 				<section>
-					<h3>Covariance</h3>
-					<img src="https://i.pinimg.com/736x/a6/e0/21/a6e0218f0a177eb8bc592e3cbf1c4b66.jpg">
-					<figcaption><a href="https://www.bristol.ac.uk/media-library/sites/cmm/migrated/documents/randomslopeweb.pdf">Source: Bristol</a></figcaption>
+					<h3>5D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397343-f06c1e00-016a-11ea-8ad3-8203f940f495.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
 				</section>
 
+				<section>
+					<h3>5D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397344-f104b480-016a-11ea-84f3-32e7485b965e.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
 
-			</section>			
+				<section>
+					<h3>20D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397345-f235e180-016a-11ea-9ebb-a81bb34d2033.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>20D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/68397346-f2ce7800-016a-11ea-96d2-cce9ee1c8116.gif">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>20D Gaussian</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/61446482-1f098300-a947-11e9-8658-18c0b6e4d50d.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Gaussian Process (infinite D)</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60430108-61fff280-9bf4-11e9-8ef4-a989734b859f.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Hiper-parámetros</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/60430623-a2ac3b80-9bf5-11e9-952d-7181bbec066a.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Hiper-parámetros</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/61697612-82245c80-ad2f-11e9-8540-cef3b0715617.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Kernel</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*C3WQ-renLrAoiBXDBRF2Fg.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Kernel</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2W4g87U8NHB8fHA5YwkOjw.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Kernel</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QBoQWDZPbnJxfBFTTNeyLw.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Nuevos datos</h3>
+					<img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*rORgBHYMhp3A7tYNiAAckQ.png">
+					<img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6u5cNG-Taw0Bz_nfjO3B9Q.png">
+					<figcaption>Source: <a href="https://medium.com/the-quantastic-journal/mathematical-understanding-of-gaussian-process-eaffc9c8a6d6">Medium - Yuki Shizuya</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Predicción</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/61702038-09290300-ad37-11e9-911a-346d4e5a9727.png" width="300">
+					<img src="https://user-images.githubusercontent.com/18204038/61702480-c156ab80-ad37-11e9-94e7-8c7989fefd0a.png" width="300">
+					<img src="https://user-images.githubusercontent.com/18204038/61703635-ea783b80-ad39-11e9-9606-54b5995df95c.png" width="300">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Predicción</h3>
+					<img src="https://i.pinimg.com/736x/38/f3/8c/38f38c849ebafcc59755a9299a9cf404.jpg">
+					<figcaption>Source: Wikipedia</figcaption>
+				</section>
+
+				<section>
+					<h3>Predicción</h3>
+					<img src="https://user-images.githubusercontent.com/18204038/61706770-d5eb7180-ad40-11e9-9235-b802afec85c4.png">
+					<figcaption>Source: <a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">Yuge Shi, The Gradient, 2019.</a></figcaption>
+				</section>
+
+				
+
+			</section>		
+
+
+<!--SHAP-->
+			<section>
+				<section>
+					<h1>SHapley Additive exPlanations (SHAP)</h1>
+				</section>
+
+				<section>
+					<h3>SHapley Additive exPlanations (SHAP)</h3>
+					<img src="https://i.pinimg.com/736x/78/c5/72/78c572a5a4f647b61bf95899d17a7031.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
+				<section>
+					<h3>SHapley Additive exPlanations (SHAP)</h3>
+					<img src="https://i.pinimg.com/736x/c7/7b/2b/c77b2bbe8213d00697d3f7f38c076e71.jpg">
+					<img src="https://i.pinimg.com/736x/d7/a1/c9/d7a1c922a942781d81871bc531fe313b.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Water fall plot</h3>
+					<img src="https://i.pinimg.com/736x/5f/13/3c/5f133c2ab37bebb41ea62171da119c33.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Force plot</h3>
+					<img src="https://i.pinimg.com/736x/b5/91/f5/b591f53ba8e6f830c1338e204e4f9b5e.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
+				<section>
+					<h3>Global plot</h3>
+					<img src="https://i.pinimg.com/736x/34/cb/2c/34cb2c8b27b79567e1c3a96e4c936a43.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
+				<section>
+					<h3>SHAP variants</h3>
+					<img src="https://i.pinimg.com/736x/7e/d0/0f/7ed00f5f752b6a333cf95ea6ec8df722.jpg">
+					<figcaption>Source: <a href="https://medium.com/data-science/shap-explain-any-machine-learning-model-in-python-72f0bea35f7c">Medium - Louis Chan</a></figcaption>
+				</section>
+
 
 <!--References-->
 			<section>

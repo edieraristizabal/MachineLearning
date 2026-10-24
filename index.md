@@ -19,6 +19,7 @@ Lecture: [Landslides prediction from machine learning](https://onlinelibrary.wil
 #### Ambiente de trabajo
 
 #### Formulación de hipótesis
+Lecture: [Physically-based machine learning](https://www.researchgate.net/publication/311925961_Theory-guided_Data_Science_A_New_Paradigm_for_Scientific_Discovery)
 
 #### Toma y procesamiento de datos
 
