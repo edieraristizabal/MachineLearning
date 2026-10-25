@@ -137,6 +137,7 @@ Material fuente que **no** se sube (libros guía, presentaciones originales, doc
 
 Cada cambio al repositorio se anota aquí, el más reciente primero, con el formato `- **AAAA-MM-DD**: qué se cambió y por qué (archivos principales).` Esta sección es la memoria del curso entre sesiones: leerla antes de empezar a trabajar.
 
+- **2026-10-25**: `README.md` con la sección "Enlaces del curso" (página, presentación y libro publicados) y el enlace a la página personal https://edieraristizabal.github.io/.
 - **2026-10-24**: Commit de respaldo de los cambios locales pendientes antes de unificar.
 - **2026-10-24**: Interfaz en español: `_layouts/default.html` traducido; encabezados de créditos de los notebooks traducidos.
 - **2026-10-24**: Revisión de idioma: traducidos al español unos 250 bloques de texto y 185 títulos de diapositivas de `html/MachineLearning.html` (se corrigió además que Lasso es L1 y Ridge es L2, estaban invertidos), las celdas de texto en inglés de los notebooks de Python (01, 02, 05, 06, 07, 12, 13, 15, 18, 21, 22, 23) y de R (BHGLMS, GLMS, HLRMs_BRMS, HLRMs_lme4, GAMs, LRM, BM), unos 300 comentarios de código y 18 títulos de notebooks. Quedan en inglés los títulos de obras, las referencias y los nombres técnicos de uso habitual (bagging, boosting, kernel, SHAP).
