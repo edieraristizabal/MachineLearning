@@ -137,6 +137,7 @@ Material fuente que **no** se sube (libros guía, presentaciones originales, doc
 
 Cada cambio al repositorio se anota aquí, el más reciente primero, con el formato `- **AAAA-MM-DD**: qué se cambió y por qué (archivos principales).` Esta sección es la memoria del curso entre sesiones: leerla antes de empezar a trabajar.
 
+- **2026-10-25**: Revisión de figuras de la presentación en el navegador; se reemplazaron 19 imágenes rotas de html/MachineLearning.html: 17 recuperadas del Internet Archive y 2 figuras nuevas generadas con matplotlib (búsqueda de hiperparámetros en malla y aleatoria, convolución con paso); todas fijadas en el tablero machine-learning de Pinterest. Las figuras generadas quedan también en `html/img/figuras/`; la presentación las enlaza desde `i.pinimg.com`.
 - **2026-10-25**: `README.md` con la sección "Enlaces del curso" (página, presentación y libro publicados) y el enlace a la página personal https://edieraristizabal.github.io/.
 - **2026-10-24**: Commit de respaldo de los cambios locales pendientes antes de unificar.
 - **2026-10-24**: Interfaz en español: `_layouts/default.html` traducido; encabezados de créditos de los notebooks traducidos.
