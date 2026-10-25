@@ -1,0 +1,837 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Datos: tipos, recolección y preparación &#8212; Aprendizaje automático en geociencias</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02_Datos';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://edieraristizabal.github.io/MachineLearning/libro/02_Datos.html" />
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Análisis exploratorio de datos y distribuciones" href="03_EDA.html" />
+    <link rel="prev" title="Aprendizaje automático en geociencias" href="01_Introduccion.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Aprendizaje automático en geociencias - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Aprendizaje automático en geociencias - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Aprendizaje automático en geociencias
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Fundamentos</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Introduccion.html">Aprendizaje automático en geociencias</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Datos: tipos, recolección y preparación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_EDA.html">Análisis exploratorio de datos y distribuciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Inferencia.html">Inferencia estadística y pruebas de hipótesis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Construcción y evaluación de modelos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_SesgoVarianza.html">Sesgo, varianza y sobreajuste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Validacion.html">Validación de modelos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_Metricas.html">Métricas de evaluación y clases desbalanceadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_SeleccionVariables.html">Selección de variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizacion.html">Funciones de pérdida, optimización e hiperparámetros</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje no supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_Agrupamiento.html">Agrupamiento</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_ReduccionDimensionalidad.html">Reducción de dimensionalidad</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="12_RegresionLineal.html">Regresión lineal y regularización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_GLM.html">Modelos lineales generalizados y regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_KNN_SVM.html">Vecinos más cercanos y máquinas de soporte vectorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Arboles_Ensambles.html">Árboles de decisión y métodos de ensamble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_RedesNeuronales.html">Redes neuronales</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Interpretabilidad.html">Interpretabilidad de los modelos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_Notebooks.html">Notebooks del curso</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliografia.html">Bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/edieraristizabal/MachineLearning/blob/master/libro/02_Datos.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Repositorio de origen"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/edit/master/libro/02_Datos.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/issues/new?title=Issue%20on%20page%20%2F02_Datos.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Abrir un problema"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/02_Datos.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Datos: tipos, recolección y preparación</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-y-estructuras-de-datos">Tipos y estructuras de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuentes-de-datos">Fuentes de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limpieza">Limpieza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-atipicos">Valores atípicos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes-e-imputacion">Valores faltantes e imputación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformacion-escalado-y-codificacion">Transformación, escalado y codificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ingenieria-de-variables">Ingeniería de variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="datos-tipos-recoleccion-y-preparacion">
+<h1>Datos: tipos, recolección y preparación<a class="headerlink" href="#datos-tipos-recoleccion-y-preparacion" title="Link to this heading">#</a></h1>
+<p>Los datos son la materia prima del aprendizaje automático, y su calidad limita la de cualquier modelo. Buena parte del tiempo de un proyecto, a menudo más de la mitad, se dedica a recolectarlos, limpiarlos y transformarlos. Este capítulo resume los tipos de datos, las fuentes más comunes y los pasos básicos de preparación <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliografia.html#id6" title="Max Kuhn and Kjell Johnson. Applied Predictive Modeling. Springer, New York, 2013.">Kuhn and Johnson, 2013</a>, <a class="reference internal" href="bibliografia.html#id8" title="Andreas C. Müller and Sarah Guido. Introduction to Machine Learning with Python: A Guide for Data Scientists. O'Reilly, Sebastopol, CA, 2016.">Müller and Guido, 2016</a>]</span>.</p>
+<section id="tipos-y-estructuras-de-datos">
+<h2>Tipos y estructuras de datos<a class="headerlink" href="#tipos-y-estructuras-de-datos" title="Link to this heading">#</a></h2>
+<p>Las variables pueden ser numéricas continuas (pendiente, resistencia, caudal), numéricas discretas (número de sismos en un mes), categóricas nominales (litología, cobertura) o categóricas ordinales (grado de meteorización, de I a VI). La estructura del conjunto también importa. En los datos de corte transversal cada fila es una unidad observada en un mismo momento y las filas no tienen un orden natural, como las celdas de un mapa de susceptibilidad. En las series de tiempo las observaciones tienen un orden cronológico y suelen estar autocorrelacionadas, como la lluvia diaria de una estación. Los datos de panel o longitudinales combinan ambos, como la humedad de varias laderas medida cada semana. En geociencias se suma la dimensión espacial: observaciones cercanas tienden a parecerse más que las lejanas, y eso tiene consecuencias importantes para la validación, como se verá en el capítulo <a class="reference internal" href="06_Validacion.html"><span class="doc">Validación de modelos</span></a>.</p>
+</section>
+<section id="fuentes-de-datos">
+<h2>Fuentes de datos<a class="headerlink" href="#fuentes-de-datos" title="Link to this heading">#</a></h2>
+<p>Los datos se obtienen de mediciones de campo y laboratorio, de sensores remotos, de redes de monitoreo, de bases de datos institucionales (el Servicio Geológico Colombiano, el IDEAM o el IGAC), de interfaces de programación de aplicaciones (API), que permiten consultar servicios web desde un programa, y del web scraping, la extracción automática de información de páginas web. Cualquiera que sea la fuente, conviene documentar su origen, fecha, resolución, unidades y limitaciones, porque esa información condiciona qué preguntas se pueden responder.</p>
+</section>
+<section id="limpieza">
+<h2>Limpieza<a class="headerlink" href="#limpieza" title="Link to this heading">#</a></h2>
+<p>El mundo es imperfecto, y los datos también. Los problemas más comunes son los valores faltantes, los valores atípicos, los errores de digitación y unidades, los duplicados y las inconsistencias de formato. La celda siguiente construye un pequeño inventario de deslizamientos con estos problemas para tratarlos uno a uno con <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.dpi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'pendiente'</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s1">'lluvia_mm'</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+    <span class="s1">'dist_cauce_m'</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+    <span class="s1">'litologia'</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">'granito'</span><span class="p">,</span> <span class="s1">'esquisto'</span><span class="p">,</span> <span class="s1">'lutita'</span><span class="p">,</span> <span class="s1">'Lutita '</span><span class="p">,</span> <span class="s1">'GRANITO'</span><span class="p">],</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]),</span>
+<span class="p">})</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s1">'lluvia_mm'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>          <span class="c1"># faltantes</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s1">'pendiente'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">95</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">88</span><span class="p">]</span>  <span class="c1"># errores: pendientes imposibles</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s1">'dist_cauce_m'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">25000</span>           <span class="c1"># atípicos (¿en metros o en otra unidad?)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">]],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>                       <span class="c1"># duplicados</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">'all'</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Faltantes por columna:'</span><span class="p">);</span> <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Categorías de litología:'</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'litologia'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        pendiente  lluvia_mm  dist_cauce_m litologia
+count       305.0      279.0         305.0       305
+unique        NaN        NaN           NaN         5
+top           NaN        NaN           NaN   granito
+freq          NaN        NaN           NaN       111
+mean         26.7     2468.6         496.1       NaN
+std          15.3      501.8        2458.0       NaN
+min          -5.0     1002.0           3.0       NaN
+25%          17.3     2118.0          69.0       NaN
+50%          23.8     2476.0         190.0       NaN
+75%          32.4     2830.5         368.0       NaN
+max         120.0     3786.0       25000.0       NaN
+
+Faltantes por columna:
+pendiente        0
+lluvia_mm       26
+dist_cauce_m     0
+litologia        0
+dtype: int64
+
+Categorías de litología: &lt;StringArray&gt;
+['lutita', 'granito', 'esquisto', 'Lutita ', 'GRANITO']
+Length: 5, dtype: str
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s1">'litologia'</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s1">'litologia'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>         <span class="c1"># homogeneizar categorías</span>
+<span class="n">fuera</span> <span class="o">=</span> <span class="o">~</span><span class="n">limpio</span><span class="p">[</span><span class="s1">'pendiente'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Pendientes físicamente imposibles: </span><span class="si">{</span><span class="n">fuera</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">limpio</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">fuera</span><span class="p">,</span> <span class="s1">'pendiente'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Filas después de quitar duplicados:'</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Categorías:'</span><span class="p">,</span> <span class="n">limpio</span><span class="p">[</span><span class="s1">'litologia'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pendientes físicamente imposibles: 3
+Filas después de quitar duplicados: 300
+Categorías: &lt;StringArray&gt;
+['lutita', 'granito', 'esquisto']
+Length: 3, dtype: str
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="valores-atipicos">
+<h2>Valores atípicos<a class="headerlink" href="#valores-atipicos" title="Link to this heading">#</a></h2>
+<p>Un valor atípico es una observación que se aleja mucho del resto. Puede ser un error, que hay que corregir o eliminar, o un dato real y valioso, como un evento extremo, que hay que conservar. La regla del diagrama de caja marca como atípicos moderados los valores a más de 1.5 veces el rango intercuartílico (RIC) por fuera del primer o tercer cuartil, y como extremos los que están a más de 3 RIC. Para variables asimétricas, como la distancia a los cauces, conviene aplicar la regla sobre la variable transformada con un logaritmo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">atipicos_ric</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+    <span class="n">q1</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">])</span>
+    <span class="n">ric</span> <span class="o">=</span> <span class="n">q3</span> <span class="o">-</span> <span class="n">q1</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">q1</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">ric</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">q3</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">ric</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s1">'dist_cauce_m'</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Atípicos en la variable original:'</span><span class="p">,</span> <span class="n">atipicos_ric</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Atípicos en log(distancia):'</span><span class="p">,</span> <span class="n">atipicos_ric</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">d</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s1">'-&gt;'</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">atipicos_ric</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">d</span><span class="p">))]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">'horizontal'</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Distancia a cauces (m)'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">dropna</span><span class="p">()),</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">'horizontal'</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'log(1 + distancia)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Atípicos en la variable original: 14
+Atípicos en log(distancia): 4 -&gt; [2.5e+04 2.5e+04 3.0e+00 2.5e+04]
+</pre></div>
+</div>
+<img alt="_images/3fd9a8c25541a463576a8f9079098a7069fbf313ffb17792e4f1d05cfb2708ba.png" src="_images/3fd9a8c25541a463576a8f9079098a7069fbf313ffb17792e4f1d05cfb2708ba.png" />
+</div>
+</div>
+<p>Los tres valores de 25 000 m siguen siendo atípicos en escala logarítmica y no son plausibles en una cuenca pequeña: probablemente se digitaron en otra unidad. Lo correcto es revisar la fuente; si no es posible, se tratan como faltantes. La regla también marca una distancia muy pequeña, de pocos metros, que es perfectamente posible (un sitio junto al cauce) y se conserva: ninguna regla automática reemplaza el criterio del analista.</p>
+</section>
+<section id="valores-faltantes-e-imputacion">
+<h2>Valores faltantes e imputación<a class="headerlink" href="#valores-faltantes-e-imputacion" title="Link to this heading">#</a></h2>
+<p>Los valores faltantes pueden eliminarse (perdiendo filas o columnas) o imputarse. La imputación con la media o la mediana es simple pero reduce la variabilidad y debilita las correlaciones; la imputación por vecinos más cercanos o por regresión usa la información de las demás variables. Lo más importante es entender por qué faltan los datos: si faltan al azar, cualquier método razonable funciona; si faltan por una razón relacionada con la respuesta (por ejemplo, porque las estaciones de lluvia fallan durante las tormentas), imputar puede sesgar el modelo. La celda siguiente compara la imputación por mediana y por vecinos más cercanos en un caso en que la lluvia depende de la elevación.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleImputer</span><span class="p">,</span> <span class="n">KNNImputer</span>
+<span class="n">elev</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">lluvia</span> <span class="o">=</span> <span class="mi">1200</span> <span class="o">+</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">elev</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">faltan</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.2</span>
+<span class="n">datos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">elev</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">faltan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">lluvia</span><span class="p">)])</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">imp</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">'mediana'</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'median'</span><span class="p">)),</span> <span class="p">(</span><span class="s1">'vecinos (k=5)'</span><span class="p">,</span> <span class="n">KNNImputer</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">))]:</span>
+    <span class="n">est</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">datos</span><span class="p">)[</span><span class="n">faltan</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Imputación por </span><span class="si">{</span><span class="n">nombre</span><span class="si">:</span><span class="s1">14s</span><span class="si">}</span><span class="s1">: error medio absoluto </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">est</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lluvia</span><span class="p">[</span><span class="n">faltan</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">6.1f</span><span class="si">}</span><span class="s1"> mm'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Imputación por mediana       : error medio absoluto  396.4 mm
+Imputación por vecinos (k=5) : error medio absoluto  130.8 mm
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="transformacion-escalado-y-codificacion">
+<h2>Transformación, escalado y codificación<a class="headerlink" href="#transformacion-escalado-y-codificacion" title="Link to this heading">#</a></h2>
+<p>Muchos métodos no son invariantes a la escala: los basados en distancias (vecinos más cercanos, agrupamiento, máquinas de soporte vectorial), los regularizados y las redes neuronales dan más peso a las variables con valores más grandes. Por eso se escalan las variables. La estandarización resta la media y divide por la desviación estándar; la normalización min-max lleva cada variable al intervalo [0, 1]; el escalado robusto usa la mediana y el rango intercuartílico y es menos sensible a los atípicos. Las variables muy asimétricas, como distancias, áreas o concentraciones, suelen mejorar con una transformación logarítmica (que exige valores positivos). Las variables categóricas nominales se codifican con variables indicadoras (one-hot), una columna binaria por categoría; las ordinales pueden codificarse con enteros que respeten el orden.</p>
+<p>Una regla esencial: los parámetros de cualquier transformación (la media, la desviación, las categorías) se calculan solo con los datos de entrenamiento y luego se aplican a los de prueba. Calcularlos con todos los datos filtra información del conjunto de prueba al entrenamiento (fuga de datos) y produce evaluaciones optimistas. En <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> la forma segura de hacerlo es encadenar la preparación y el modelo en un <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.compose</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">FunctionTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">make_pipeline</span>
+
+<span class="n">limpio</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">limpio</span><span class="p">[</span><span class="s1">'dist_cauce_m'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">,</span> <span class="s1">'dist_cauce_m'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">num</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'pendiente'</span><span class="p">,</span> <span class="s1">'lluvia_mm'</span><span class="p">,</span> <span class="s1">'dist_cauce_m'</span><span class="p">]</span>
+<span class="n">prep</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">'num_log'</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'median'</span><span class="p">),</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">,</span> <span class="n">feature_names_out</span><span class="o">=</span><span class="s1">'one-to-one'</span><span class="p">),</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">[</span><span class="s1">'dist_cauce_m'</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">'num'</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'median'</span><span class="p">),</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">[</span><span class="s1">'pendiente'</span><span class="p">,</span> <span class="s1">'lluvia_mm'</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">'cat'</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">),</span> <span class="p">[</span><span class="s1">'litologia'</span><span class="p">]),</span>
+<span class="p">])</span>
+<span class="n">Xp</span> <span class="o">=</span> <span class="n">prep</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">limpio</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Forma de la matriz preparada:'</span><span class="p">,</span> <span class="n">Xp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Columnas:'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">prep</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Medias de las columnas numéricas (≈0):'</span><span class="p">,</span> <span class="n">Xp</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Forma de la matriz preparada: (300, 6)
+Columnas: ['num_log__dist_cauce_m', 'num__pendiente', 'num__lluvia_mm', 'cat__litologia_esquisto', 'cat__litologia_granito', 'cat__litologia_lutita']
+Medias de las columnas numéricas (≈0): [-0. -0. -0.]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ingenieria-de-variables">
+<h2>Ingeniería de variables<a class="headerlink" href="#ingenieria-de-variables" title="Link to this heading">#</a></h2>
+<p>La ingeniería de variables (feature engineering) transforma los datos crudos en variables que representan mejor el problema. En geociencias suele ser donde más se gana: derivar del modelo de elevación la pendiente, la curvatura, el área de drenaje o el índice topográfico de humedad; calcular la lluvia antecedente de 3, 7 o 30 días; combinar bandas en índices espectrales. Es un proceso iterativo de agregar, quitar y cambiar variables, guiado por el conocimiento del dominio, que es la mejor defensa contra los modelos que aprenden correlaciones espurias.</p>
+</section>
+<section id="para-profundizar">
+<h2>Para profundizar<a class="headerlink" href="#para-profundizar" title="Link to this heading">#</a></h2>
+<p>Los capítulos 3 y 4 de <span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliografia.html#id6" title="Max Kuhn and Kjell Johnson. Applied Predictive Modeling. Springer, New York, 2013.">Kuhn and Johnson, 2013</a>]</span> tratan la preparación de datos con detalle. El capítulo 4 de <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliografia.html#id8" title="Andreas C. Müller and Sarah Guido. Introduction to Machine Learning with Python: A Guide for Data Scientists. O'Reilly, Sebastopol, CA, 2016.">Müller and Guido, 2016</a>]</span> muestra la representación de variables y los <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> de <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. Los notebooks 02 a 04 del curso aplican estos pasos a datos reales.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_Introduccion.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Aprendizaje automático en geociencias</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_EDA.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Análisis exploratorio de datos y distribuciones</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-y-estructuras-de-datos">Tipos y estructuras de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuentes-de-datos">Fuentes de datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limpieza">Limpieza</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-atipicos">Valores atípicos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes-e-imputacion">Valores faltantes e imputación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformacion-escalado-y-codificacion">Transformación, escalado y codificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ingenieria-de-variables">Ingeniería de variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Edier V. Aristizábal G.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Desarrollado por <a href="https://github.com/edieraristizabal">Edier Aristizábal</a>, Facultad de Minas, Universidad Nacional de Colombia.
+<a href="https://edieraristizabal.github.io/MachineLearning/">Página del curso</a> ·
+<a href="https://edieraristizabal.github.io/MachineLearning/html/MachineLearning.html">Diapositivas</a></p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

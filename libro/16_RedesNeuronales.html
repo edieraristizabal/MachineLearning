@@ -1,0 +1,770 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Redes neuronales &#8212; Aprendizaje automático en geociencias</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '16_RedesNeuronales';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://edieraristizabal.github.io/MachineLearning/libro/16_RedesNeuronales.html" />
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Interpretabilidad de los modelos" href="17_Interpretabilidad.html" />
+    <link rel="prev" title="Árboles de decisión y métodos de ensamble" href="15_Arboles_Ensambles.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Aprendizaje automático en geociencias - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Aprendizaje automático en geociencias - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Aprendizaje automático en geociencias
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Fundamentos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Introduccion.html">Aprendizaje automático en geociencias</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Datos.html">Datos: tipos, recolección y preparación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_EDA.html">Análisis exploratorio de datos y distribuciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Inferencia.html">Inferencia estadística y pruebas de hipótesis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Construcción y evaluación de modelos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_SesgoVarianza.html">Sesgo, varianza y sobreajuste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Validacion.html">Validación de modelos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_Metricas.html">Métricas de evaluación y clases desbalanceadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_SeleccionVariables.html">Selección de variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizacion.html">Funciones de pérdida, optimización e hiperparámetros</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje no supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_Agrupamiento.html">Agrupamiento</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_ReduccionDimensionalidad.html">Reducción de dimensionalidad</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje supervisado</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="12_RegresionLineal.html">Regresión lineal y regularización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_GLM.html">Modelos lineales generalizados y regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_KNN_SVM.html">Vecinos más cercanos y máquinas de soporte vectorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Arboles_Ensambles.html">Árboles de decisión y métodos de ensamble</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Redes neuronales</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Interpretabilidad.html">Interpretabilidad de los modelos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_Notebooks.html">Notebooks del curso</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliografia.html">Bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/edieraristizabal/MachineLearning/blob/master/libro/16_RedesNeuronales.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Repositorio de origen"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/edit/master/libro/16_RedesNeuronales.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/issues/new?title=Issue%20on%20page%20%2F16_RedesNeuronales.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Abrir un problema"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/16_RedesNeuronales.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Redes neuronales</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#del-perceptron-a-la-red-multicapa">Del perceptrón a la red multicapa</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-retropropagacion">Entrenamiento: retropropagación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#redes-en-la-practica">Redes en la práctica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitecturas-especializadas">Arquitecturas especializadas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="redes-neuronales">
+<h1>Redes neuronales<a class="headerlink" href="#redes-neuronales" title="Link to this heading">#</a></h1>
+<p>Las redes neuronales artificiales son modelos formados por unidades simples, las neuronas, organizadas en capas y conectadas entre sí. Su capacidad de aprender relaciones no lineales muy complejas, sumada a la disponibilidad de grandes volúmenes de datos y de procesadores gráficos, dio origen al aprendizaje profundo, que domina hoy el análisis de imágenes, señales y texto, y tiene un papel creciente en las geociencias <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliografia.html#id11" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, Cambridge, MA, 2016.">Goodfellow <em>et al.</em>, 2016</a>, <a class="reference internal" href="bibliografia.html#id29" title="Markus Reichstein, Gustau Camps-Valls, Bjorn Stevens, Martin Jung, Joachim Denzler, Nuno Carvalhais, and Prabhat. Deep learning and process understanding for data-driven earth system science. Nature, 566:195–204, 2019.">Reichstein <em>et al.</em>, 2019</a>]</span>.</p>
+<section id="del-perceptron-a-la-red-multicapa">
+<h2>Del perceptrón a la red multicapa<a class="headerlink" href="#del-perceptron-a-la-red-multicapa" title="Link to this heading">#</a></h2>
+<p>El perceptrón, inspirado en la neurona biológica, calcula una suma ponderada de sus entradas más un sesgo, <span class="math notranslate nohighlight">\(z = w^T x + b\)</span>, y la pasa por una función de activación. Una sola neurona con activación sigmoide es exactamente una regresión logística. El perceptrón multicapa (MLP) organiza muchas neuronas en capas: una de entrada, una o más ocultas y una de salida, en la que cada neurona de una capa envía su salida a todas las de la siguiente. Las funciones de activación no lineales son las que dan potencia a la red: sin ellas, cualquier número de capas equivale a un modelo lineal. Las más comunes son la sigmoide y la tangente hiperbólica, que se saturan y pueden hacer que el gradiente se desvanezca, y la ReLU, <span class="math notranslate nohighlight">\(\max(0, z)\)</span>, la opción por defecto en las capas ocultas; en la salida se usa la sigmoide para clasificación binaria, la softmax para varias clases y la identidad para regresión.</p>
+<p>El teorema de aproximación universal dice que una red con una sola capa oculta suficientemente grande puede aproximar cualquier función continua. En la práctica esa capa podría ser inviablemente grande y no aprender ni generalizar bien; las redes profundas, con varias capas, logran representaciones más eficientes.</p>
+</section>
+<section id="entrenamiento-retropropagacion">
+<h2>Entrenamiento: retropropagación<a class="headerlink" href="#entrenamiento-retropropagacion" title="Link to this heading">#</a></h2>
+<p>La red se entrena minimizando una función de pérdida con descenso por gradiente (capítulo <a class="reference internal" href="09_Optimizacion.html"><span class="doc">Funciones de pérdida, optimización e hiperparámetros</span></a>). El gradiente respecto a todos los pesos se calcula con la retropropagación <span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliografia.html#id26" title="David E. Rumelhart, Geoffrey E. Hinton, and Ronald J. Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">Rumelhart <em>et al.</em>, 1986</a>]</span>, una aplicación ordenada de la regla de la cadena que propaga el error desde la salida hacia la entrada. La celda siguiente implementa desde cero, solo con <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, una red con una capa oculta y la entrena para clasificar un problema no lineal, para que el mecanismo quede a la vista.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.dpi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+
+<span class="c1"># datos: dos clases en forma de anillos (no separables linealmente)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">600</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">relu</span><span class="p">(</span><span class="n">z</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sigm</span><span class="p">(</span><span class="n">z</span><span class="p">):</span> <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">W1</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="p">));</span> <span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<span class="n">W2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">h</span><span class="p">),</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">alfa</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">epoca</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3000</span><span class="p">):</span>
+    <span class="c1"># propagación hacia adelante</span>
+    <span class="n">Z1</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">W1</span> <span class="o">+</span> <span class="n">b1</span><span class="p">;</span> <span class="n">A1</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">Z1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">sigm</span><span class="p">(</span><span class="n">A1</span> <span class="o">@</span> <span class="n">W2</span> <span class="o">+</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)))</span>
+    <span class="c1"># retropropagación (regla de la cadena)</span>
+    <span class="n">dZ2</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">dW2</span> <span class="o">=</span> <span class="n">A1</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dZ2</span><span class="p">;</span> <span class="n">db2</span> <span class="o">=</span> <span class="n">dZ2</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dZ1</span> <span class="o">=</span> <span class="p">(</span><span class="n">dZ2</span> <span class="o">@</span> <span class="n">W2</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Z1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">dW1</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dZ1</span><span class="p">;</span> <span class="n">db1</span> <span class="o">=</span> <span class="n">dZ1</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># descenso por gradiente</span>
+    <span class="n">W1</span> <span class="o">-=</span> <span class="n">alfa</span> <span class="o">*</span> <span class="n">dW1</span><span class="p">;</span> <span class="n">b1</span> <span class="o">-=</span> <span class="n">alfa</span> <span class="o">*</span> <span class="n">db1</span><span class="p">;</span> <span class="n">W2</span> <span class="o">-=</span> <span class="n">alfa</span> <span class="o">*</span> <span class="n">dW2</span><span class="p">;</span> <span class="n">b2</span> <span class="o">-=</span> <span class="n">alfa</span> <span class="o">*</span> <span class="n">db2</span>
+
+<span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">g1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">g2</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">sigm</span><span class="p">(</span><span class="n">relu</span><span class="p">(</span><span class="n">G</span> <span class="o">@</span> <span class="n">W1</span> <span class="o">+</span> <span class="n">b1</span><span class="p">)</span> <span class="o">@</span> <span class="n">W2</span> <span class="o">+</span> <span class="n">b2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'época'</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'pérdida logarítmica'</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Curva de entrenamiento'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'RdBu_r'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'RdBu_r'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Frontera de la red (16 neuronas ocultas), exactitud </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">p</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/93a79949a0c1493d1e550c7b7e89c5d35284f429ed68433546a59c93c356865a.png" src="_images/93a79949a0c1493d1e550c7b7e89c5d35284f429ed68433546a59c93c356865a.png" />
+</div>
+</div>
+</section>
+<section id="redes-en-la-practica">
+<h2>Redes en la práctica<a class="headerlink" href="#redes-en-la-practica" title="Link to this heading">#</a></h2>
+<p>Para problemas tabulares pequeños o medianos, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> ofrece <code class="docutils literal notranslate"><span class="pre">MLPClassifier</span></code> y <code class="docutils literal notranslate"><span class="pre">MLPRegressor</span></code>; para redes grandes se usan PyTorch, TensorFlow o JAX. Las decisiones principales son la arquitectura (número de capas y neuronas), la función de activación, el optimizador (Adam es la opción por defecto), la tasa de aprendizaje, el tamaño del minilote y la regularización: penalización L2 de los pesos, abandono (dropout), que apaga neuronas al azar durante el entrenamiento, y parada temprana, que detiene el entrenamiento cuando el error de validación deja de mejorar. Las entradas deben escalarse. Con datos tabulares, las redes no suelen superar a los ensambles de árboles bien ajustados, y son más difíciles de entrenar e interpretar; su ventaja aparece con datos de gran dimensión y estructura, como imágenes o series.</p>
+<p>La celda siguiente entrena una red con <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> para estimar la resistencia de una roca a partir de propiedades índice, con parada temprana, y la compara con una regresión lineal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="mi">800</span>
+<span class="n">por</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span> <span class="n">vp</span> <span class="o">=</span> <span class="mf">6.3</span> <span class="o">-</span> <span class="mf">0.11</span> <span class="o">*</span> <span class="n">por</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span> <span class="n">sat</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="n">ucs</span> <span class="o">=</span> <span class="mi">220</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.08</span> <span class="o">*</span> <span class="n">por</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.35</span> <span class="o">*</span> <span class="n">sat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">vp</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>    <span class="c1"># relación no lineal con interacción</span>
+<span class="n">Xr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">por</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">sat</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">nom</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">'regresión lineal'</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">()),</span>
+                 <span class="p">(</span><span class="s1">'red neuronal (32-16)'</span><span class="p">,</span> <span class="n">MLPRegressor</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">early_stopping</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nom</span><span class="si">:</span><span class="s1">22s</span><span class="si">}</span><span class="s1"> R² en validación cruzada </span><span class="si">{</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span><span class="w"> </span><span class="n">mod</span><span class="p">),</span><span class="w"> </span><span class="n">Xr</span><span class="p">,</span><span class="w"> </span><span class="n">ucs</span><span class="p">,</span><span class="w"> </span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">scoring</span><span class="o">=</span><span class="s2">"r2"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>regresión lineal       R² en validación cruzada 0.907
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>red neuronal (32-16)   R² en validación cruzada 0.965
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="arquitecturas-especializadas">
+<h2>Arquitecturas especializadas<a class="headerlink" href="#arquitecturas-especializadas" title="Link to this heading">#</a></h2>
+<p>Las redes convolucionales (CNN) están diseñadas para datos con estructura espacial, como imágenes o modelos de elevación. En lugar de conectar todas las entradas con todas las neuronas, aplican filtros pequeños (núcleos) que se deslizan sobre la imagen y detectan rasgos locales, como bordes o texturas, compartiendo los pesos en toda la imagen. El paso (stride) y el relleno (padding) controlan el tamaño de la salida; las capas de agrupamiento (pooling máximo o promedio) reducen la resolución y dan invariancia a pequeños desplazamientos. Al apilar capas, la red aprende rasgos cada vez más abstractos; al final, la salida se aplana y pasa por capas totalmente conectadas que clasifican. Las arquitecturas de segmentación, como la U-Net, producen un mapa de clases píxel a píxel y se usan para cartografiar deslizamientos en imágenes de satélite. La celda siguiente aplica a mano una convolución y un agrupamiento máximo para mostrar la operación básica.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">convolve2d</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">));</span> <span class="n">img</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">img</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">nucleo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>         <span class="c1"># detector de bordes verticales</span>
+<span class="n">conv</span> <span class="o">=</span> <span class="n">convolve2d</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">nucleo</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'same'</span><span class="p">)</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">im</span><span class="p">,</span> <span class="n">t_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="p">[</span><span class="n">img</span><span class="p">,</span> <span class="n">conv</span><span class="p">,</span> <span class="n">pool</span><span class="p">],</span> <span class="p">[</span><span class="s1">'entrada (12x12)'</span><span class="p">,</span> <span class="s1">'convolución con un filtro de bordes'</span><span class="p">,</span> <span class="s1">'max pooling 2x2 (6x6)'</span><span class="p">]):</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">t_</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([]);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/43526f66879ebe970e95f12bfe5c458c2fff9a322d15ad72adbf894290c9e2be.png" src="_images/43526f66879ebe970e95f12bfe5c458c2fff9a322d15ad72adbf894290c9e2be.png" />
+</div>
+</div>
+<p>Las redes recurrentes (RNN), y en particular las LSTM, procesan secuencias manteniendo una memoria del pasado y se usan en series de tiempo, como la predicción de caudales o de desplazamientos de laderas a partir de la lluvia. Los transformadores, basados en mecanismos de atención, las están reemplazando en muchas tareas.</p>
+<p>Las redes neuronales informadas por la física (PINN) <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliografia.html#id27" title="Maziar Raissi, Paris Perdikaris, and George E. Karniadakis. Physics-informed neural networks: a deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. Journal of Computational Physics, 378:686–707, 2019.">Raissi <em>et al.</em>, 2019</a>]</span> incorporan las leyes físicas en el entrenamiento: la función de pérdida incluye, además del error frente a los datos, el residuo de la ecuación diferencial que gobierna el sistema (por ejemplo, la ecuación de difusión de la presión de poros en una ladera). Así las predicciones son coherentes con la física aun con pocos datos, en la línea de la ciencia de datos guiada por la teoría <span class="bibtex-citation" id="id4">[<a class="reference internal" href="bibliografia.html#id28" title="Anuj Karpatne, Gowtham Atluri, James H. Faghmous, and others. Theory-guided data science: a new paradigm for scientific discovery from data. IEEE Transactions on Knowledge and Data Engineering, 29(10):2318–2331, 2017.">Karpatne <em>et al.</em>, 2017</a>]</span>. El notebook 19 del curso desarrolla un ejemplo.</p>
+</section>
+<section id="para-profundizar">
+<h2>Para profundizar<a class="headerlink" href="#para-profundizar" title="Link to this heading">#</a></h2>
+<p>Los capítulos 6 a 9 de <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliografia.html#id11" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, Cambridge, MA, 2016.">Goodfellow <em>et al.</em>, 2016</a>]</span> cubren las redes prealimentadas, la regularización, la optimización y las redes convolucionales; el capítulo 10 de <span class="bibtex-citation" id="id6">[<a class="reference internal" href="bibliografia.html#id2" title="Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning: with Applications in R. Springer, New York, 2 edition, 2021.">James <em>et al.</em>, 2021</a>]</span> es una introducción más accesible. <span class="bibtex-citation" id="id7">Reichstein <em>et al.</em> [<a class="reference internal" href="bibliografia.html#id29" title="Markus Reichstein, Gustau Camps-Valls, Bjorn Stevens, Martin Jung, Joachim Denzler, Nuno Carvalhais, and Prabhat. Deep learning and process understanding for data-driven earth system science. Nature, 566:195–204, 2019.">2019</a>]</span> discuten el aprendizaje profundo en las ciencias de la Tierra. Los notebooks 19 del curso implementan redes con <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> y PINN.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="15_Arboles_Ensambles.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Árboles de decisión y métodos de ensamble</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="17_Interpretabilidad.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Interpretabilidad de los modelos</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#del-perceptron-a-la-red-multicapa">Del perceptrón a la red multicapa</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-retropropagacion">Entrenamiento: retropropagación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#redes-en-la-practica">Redes en la práctica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitecturas-especializadas">Arquitecturas especializadas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Edier V. Aristizábal G.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Desarrollado por <a href="https://github.com/edieraristizabal">Edier Aristizábal</a>, Facultad de Minas, Universidad Nacional de Colombia.
+<a href="https://edieraristizabal.github.io/MachineLearning/">Página del curso</a> ·
+<a href="https://edieraristizabal.github.io/MachineLearning/html/MachineLearning.html">Diapositivas</a></p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

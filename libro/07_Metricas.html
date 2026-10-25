@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Métricas de evaluación y clases desbalanceadas &#8212; Aprendizaje automático en geociencias</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '07_Metricas';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://edieraristizabal.github.io/MachineLearning/libro/07_Metricas.html" />
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Selección de variables" href="08_SeleccionVariables.html" />
+    <link rel="prev" title="Validación de modelos" href="06_Validacion.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Aprendizaje automático en geociencias - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Aprendizaje automático en geociencias - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Aprendizaje automático en geociencias
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Fundamentos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Introduccion.html">Aprendizaje automático en geociencias</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Datos.html">Datos: tipos, recolección y preparación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_EDA.html">Análisis exploratorio de datos y distribuciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Inferencia.html">Inferencia estadística y pruebas de hipótesis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Construcción y evaluación de modelos</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_SesgoVarianza.html">Sesgo, varianza y sobreajuste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Validacion.html">Validación de modelos</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Métricas de evaluación y clases desbalanceadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_SeleccionVariables.html">Selección de variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizacion.html">Funciones de pérdida, optimización e hiperparámetros</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje no supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_Agrupamiento.html">Agrupamiento</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_ReduccionDimensionalidad.html">Reducción de dimensionalidad</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="12_RegresionLineal.html">Regresión lineal y regularización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_GLM.html">Modelos lineales generalizados y regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_KNN_SVM.html">Vecinos más cercanos y máquinas de soporte vectorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Arboles_Ensambles.html">Árboles de decisión y métodos de ensamble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_RedesNeuronales.html">Redes neuronales</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Interpretabilidad.html">Interpretabilidad de los modelos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_Notebooks.html">Notebooks del curso</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliografia.html">Bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/edieraristizabal/MachineLearning/blob/master/libro/07_Metricas.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Repositorio de origen"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/edit/master/libro/07_Metricas.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/issues/new?title=Issue%20on%20page%20%2F07_Metricas.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Abrir un problema"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/07_Metricas.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Métricas de evaluación y clases desbalanceadas</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-regresion">Métricas para regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-clasificacion">Métricas para clasificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clases-desbalanceadas">Clases desbalanceadas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="metricas-de-evaluacion-y-clases-desbalanceadas">
+<h1>Métricas de evaluación y clases desbalanceadas<a class="headerlink" href="#metricas-de-evaluacion-y-clases-desbalanceadas" title="Link to this heading">#</a></h1>
+<p>Una métrica traduce el desempeño de un modelo en un número, y la elección de la métrica define qué significa un buen modelo. No hay una métrica universal: depende del tipo de problema, del balance entre clases y del costo de cada tipo de error <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliografia.html#id2" title="Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning: with Applications in R. Springer, New York, 2 edition, 2021.">James <em>et al.</em>, 2021</a>, <a class="reference internal" href="bibliografia.html#id6" title="Max Kuhn and Kjell Johnson. Applied Predictive Modeling. Springer, New York, 2013.">Kuhn and Johnson, 2013</a>]</span>.</p>
+<section id="metricas-para-regresion">
+<h2>Métricas para regresión<a class="headerlink" href="#metricas-para-regresion" title="Link to this heading">#</a></h2>
+<p>El error absoluto medio (MAE) promedia los valores absolutos de los residuos y está en las unidades de la respuesta. La raíz del error cuadrático medio (RMSE) penaliza más los errores grandes. Ambas van de 0 a infinito, son mejores cuanto más bajas y no dependen del signo de los errores; si no se toma el valor absoluto, el promedio de los residuos es el error de sesgo medio (MBE), que indica si el modelo sobrestima o subestima sistemáticamente, aunque los errores positivos y negativos se compensan. El coeficiente de determinación <span class="math notranslate nohighlight">\(R^2\)</span> es la proporción de la varianza de la respuesta explicada por el modelo; el <span class="math notranslate nohighlight">\(R^2\)</span> ajustado penaliza el número de predictores. La función de pérdida de Huber combina el comportamiento cuadrático para errores pequeños con el lineal para errores grandes, y es robusta a los atípicos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.dpi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>                              <span class="c1"># caudal observado (m³/s)</span>
+<span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'sin sesgo'</span><span class="p">:</span> <span class="n">y</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+           <span class="s1">'con sesgo (+5)'</span><span class="p">:</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+           <span class="s1">'con 5 errores grandes'</span><span class="p">:</span> <span class="n">y</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">)}</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="s2">"modelo"</span><span class="si">:</span><span class="s1">24s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"MAE"</span><span class="si">:</span><span class="s1">&gt;6s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"RMSE"</span><span class="si">:</span><span class="s1">&gt;6s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"MBE"</span><span class="si">:</span><span class="s1">&gt;6s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="s2">"R2"</span><span class="si">:</span><span class="s1">&gt;6s</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nom</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">modelos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nom</span><span class="si">:</span><span class="s1">24s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">6.2f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">))</span><span class="si">:</span><span class="s1">6.2f</span><span class="si">}</span><span class="s1"> '</span>
+          <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="si">:</span><span class="s1">6.2f</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">6.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>modelo                      MAE   RMSE    MBE     R2
+sin sesgo                  6.37   8.14   0.02  0.903
+con sesgo (+5)             7.45   9.25   4.32  0.874
+con 5 errores grandes      4.62  11.18   0.91  0.817
+</pre></div>
+</div>
+</div>
+</div>
+<p>El tercer modelo tiene un MAE menor que el primero pero un RMSE mayor: unos pocos errores grandes pesan mucho en el RMSE. Reportar ambas métricas y el sesgo da una imagen más completa que cualquiera por separado.</p>
+</section>
+<section id="metricas-para-clasificacion">
+<h2>Métricas para clasificación<a class="headerlink" href="#metricas-para-clasificacion" title="Link to this heading">#</a></h2>
+<p>En clasificación binaria se cruzan las clases reales y las predichas en la matriz de confusión, con cuatro casillas: verdaderos positivos (VP), falsos positivos (FP), verdaderos negativos (VN) y falsos negativos (FN). De ella salen la exactitud, <span class="math notranslate nohighlight">\((VP+VN)/n\)</span>; la sensibilidad o exhaustividad (recall), <span class="math notranslate nohighlight">\(VP/(VP+FN)\)</span>, la fracción de deslizamientos reales que el modelo detecta; la especificidad, <span class="math notranslate nohighlight">\(VN/(VN+FP)\)</span>; la precisión, <span class="math notranslate nohighlight">\(VP/(VP+FP)\)</span>, la fracción de alarmas que son reales; y el puntaje F1, la media armónica de precisión y sensibilidad.</p>
+<p>La mayoría de los clasificadores entregan una probabilidad y la clase depende de un umbral, por defecto 0.5. La curva ROC grafica la sensibilidad contra la tasa de falsos positivos (1 - especificidad) para todos los umbrales, y el área bajo ella (AUC) resume la capacidad de discriminación: es la probabilidad de que un caso positivo elegido al azar reciba una probabilidad mayor que un negativo elegido al azar. Un AUC de 0.5 equivale al azar y uno de 1, a una discriminación perfecta. Es la métrica más usada en los mapas de susceptibilidad. La curva de precisión-sensibilidad es más informativa cuando los positivos son raros.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">inventario</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">prop_pos</span><span class="p">,</span> <span class="n">semilla</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">semilla</span><span class="p">)</span>
+    <span class="n">pend</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="n">lluv</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">eta</span> <span class="o">=</span> <span class="mf">0.12</span> <span class="o">*</span> <span class="n">pend</span> <span class="o">-</span> <span class="mf">0.004</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">+</span> <span class="mf">0.0012</span> <span class="o">*</span> <span class="n">lluv</span>
+    <span class="n">corte</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">eta</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">logistic</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">prop_pos</span><span class="p">)</span>    <span class="c1"># fija la proporción de positivos</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">eta</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">logistic</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">corte</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">pend</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">lluv</span><span class="p">]),</span> <span class="n">y</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">yb</span> <span class="o">=</span> <span class="n">inventario</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">X_tr</span><span class="p">,</span> <span class="n">X_te</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">,</span> <span class="n">y_te</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">yb</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">yb</span><span class="p">)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_te</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Proporción de deslizamientos: </span><span class="si">{</span><span class="n">yb</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Matriz de confusión (filas: real, columnas: predicho):'</span><span class="p">);</span> <span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Exactitud </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">   sensibilidad </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">   '</span>
+      <span class="sa">f</span><span class="s1">'precisión </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">,</span><span class="w"> </span><span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">   F1 </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">   AUC </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Un modelo que siempre dice "no hay deslizamiento" tendría exactitud </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_te</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Proporción de deslizamientos: 0.049
+Matriz de confusión (filas: real, columnas: predicho):
+[[2269   14]
+ [  93   24]]
+Exactitud 0.955   sensibilidad 0.205   precisión 0.632   F1 0.310   AUC 0.883
+Un modelo que siempre dice "no hay deslizamiento" tendría exactitud 0.951
+</pre></div>
+</div>
+</div>
+</div>
+<p>Con un 5 % de deslizamientos, la exactitud es engañosa: un modelo que nunca predice deslizamientos acierta el 95 %. La sensibilidad con el umbral de 0.5 es baja, aunque el AUC muestra que el modelo sí discrimina. El problema no es el modelo sino el umbral. La celda siguiente dibuja las curvas ROC y de precisión-sensibilidad y muestra cómo cambian las métricas con el umbral.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thr</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">prec</span><span class="p">,</span> <span class="n">rec</span><span class="p">,</span> <span class="n">thr_pr</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">umbrales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">sens</span> <span class="o">=</span> <span class="p">[</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">umbrales</span><span class="p">]</span>
+<span class="n">espe</span> <span class="o">=</span> <span class="p">[</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_te</span><span class="p">,</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">umbrales</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">'k--'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'tasa de falsos positivos'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'sensibilidad'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'ROC, AUC = </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">prec</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y_te</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'sensibilidad'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'precisión'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'precisión-sensibilidad, AP = </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">average_precision_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">umbrales</span><span class="p">,</span> <span class="n">sens</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'sensibilidad'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">umbrales</span><span class="p">,</span> <span class="n">espe</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'especificidad'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'0.5'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">':'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'umbral de probabilidad'</span><span class="p">);</span> <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">tpr</span> <span class="o">-</span> <span class="n">fpr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Umbral que maximiza el índice de Youden (sensibilidad + especificidad - 1): </span><span class="si">{</span><span class="n">thr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8f06c40274b0620780c05457f5eec8bd79d2e22470df61825cf756b780e5defb.png" src="_images/8f06c40274b0620780c05457f5eec8bd79d2e22470df61825cf756b780e5defb.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Umbral que maximiza el índice de Youden (sensibilidad + especificidad - 1): 0.049
+</pre></div>
+</div>
+</div>
+</div>
+<p>El umbral es una decisión que depende del costo de los errores, no del modelo. En un sistema de alerta por deslizamientos, un falso negativo (no alertar un evento) cuesta mucho más que un falso positivo, y conviene un umbral bajo con alta sensibilidad. Elegir el umbral con datos de validación, y no con los de prueba, mantiene la honestidad de la evaluación.</p>
+</section>
+<section id="clases-desbalanceadas">
+<h2>Clases desbalanceadas<a class="headerlink" href="#clases-desbalanceadas" title="Link to this heading">#</a></h2>
+<p>Muchos problemas geológicos son desbalanceados: los deslizamientos, los depósitos minerales o los sismos grandes son raros frente a su contraparte. Además del problema de la métrica, el desbalance puede llevar a modelos que ignoran la clase minoritaria. Hay tres familias de soluciones <span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliografia.html#id6" title="Max Kuhn and Kjell Johnson. Applied Predictive Modeling. Springer, New York, 2013.">Kuhn and Johnson, 2013</a>]</span>. Las basadas en los datos reequilibran el conjunto de entrenamiento: el submuestreo aleatorio de la clase mayoritaria, el sobremuestreo aleatorio de la minoritaria y SMOTE <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliografia.html#id24" title="Nitesh V. Chawla, Kevin W. Bowyer, Lawrence O. Hall, and W. Philip Kegelmeyer. Smote: synthetic minority over-sampling technique. Journal of Artificial Intelligence Research, 16:321–357, 2002.">Chawla <em>et al.</em>, 2002</a>]</span>, que crea casos sintéticos de la clase minoritaria interpolando entre un caso y uno de sus vecinos más cercanos. Las basadas en el algoritmo dan más peso a los errores en la clase minoritaria (el argumento <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> de <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>). Y la más simple, mover el umbral, ya se vio arriba. El remuestreo se aplica solo al conjunto de entrenamiento, nunca al de prueba. La celda siguiente implementa un SMOTE simplificado y compara las tres estrategias.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NearestNeighbors</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">smote</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">proporcion</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">semilla</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Versión simple de SMOTE: genera casos sintéticos de la clase 1 hasta alcanzar proporcion * n_clase0."""</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">semilla</span><span class="p">)</span>
+    <span class="n">Xmin</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_nuevos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">proporcion</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">Xmin</span><span class="p">)</span>
+    <span class="n">vecinos</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xmin</span><span class="p">)</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">Xmin</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Xmin</span><span class="p">),</span> <span class="n">n_nuevos</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">vecinos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n_nuevos</span><span class="p">)]</span>
+    <span class="n">nuevos</span> <span class="o">=</span> <span class="n">Xmin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">n_nuevos</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Xmin</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">Xmin</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">nuevos</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_nuevos</span><span class="p">,</span> <span class="nb">int</span><span class="p">)])</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="n">esc</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tr</span><span class="p">)</span>
+<span class="n">Xs_tr</span><span class="p">,</span> <span class="n">Xs_te</span> <span class="o">=</span> <span class="n">esc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_tr</span><span class="p">),</span> <span class="n">esc</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_te</span><span class="p">)</span>
+<span class="n">X_sm</span><span class="p">,</span> <span class="n">y_sm</span> <span class="o">=</span> <span class="n">smote</span><span class="p">(</span><span class="n">Xs_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
+<span class="n">estrategias</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'sin corrección'</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xs_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">),</span>
+               <span class="s1">'class_weight="balanced"'</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">class_weight</span><span class="o">=</span><span class="s1">'balanced'</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xs_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">),</span>
+               <span class="s1">'SMOTE'</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_sm</span><span class="p">,</span> <span class="n">y_sm</span><span class="p">)}</span>
+<span class="k">for</span> <span class="n">nom</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">estrategias</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pr</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xs_te</span><span class="p">);</span> <span class="n">pp</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">Xs_te</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nom</span><span class="si">:</span><span class="s1">24s</span><span class="si">}</span><span class="s1"> sensibilidad </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">  precisión </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">  '</span>
+          <span class="sa">f</span><span class="s1">'F1 </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">  AUC </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">)</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sin corrección           sensibilidad 0.205  precisión 0.649  F1 0.312  AUC 0.884
+class_weight="balanced"  sensibilidad 0.769  precisión 0.174  F1 0.284  AUC 0.879
+SMOTE                    sensibilidad 0.761  precisión 0.178  F1 0.288  AUC 0.876
+</pre></div>
+</div>
+</div>
+</div>
+<p>Las tres estrategias tienen prácticamente el mismo AUC, porque ordenan los casos igual; lo que cambia es dónde queda el umbral efectivo, y con él el equilibrio entre sensibilidad y precisión. Con modelos lineales, reequilibrar los datos equivale casi a mover el umbral; con modelos flexibles, como los árboles, el remuestreo sí puede cambiar lo que el modelo aprende.</p>
+</section>
+<section id="para-profundizar">
+<h2>Para profundizar<a class="headerlink" href="#para-profundizar" title="Link to this heading">#</a></h2>
+<p>El capítulo 11 de <span class="bibtex-citation" id="id4">[<a class="reference internal" href="bibliografia.html#id6" title="Max Kuhn and Kjell Johnson. Applied Predictive Modeling. Springer, New York, 2013.">Kuhn and Johnson, 2013</a>]</span> trata las métricas de clasificación y el 16, las clases desbalanceadas. <span class="bibtex-citation" id="id5">Chawla <em>et al.</em> [<a class="reference internal" href="bibliografia.html#id24" title="Nitesh V. Chawla, Kevin W. Bowyer, Lawrence O. Hall, and W. Philip Kegelmeyer. Smote: synthetic minority over-sampling technique. Journal of Artificial Intelligence Research, 16:321–357, 2002.">2002</a>]</span> describe SMOTE. Los notebooks 07 (desbalance) y 10 (métricas) del curso aplican estas ideas con <code class="docutils literal notranslate"><span class="pre">imbalanced-learn</span></code>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_Validacion.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Validación de modelos</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="08_SeleccionVariables.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Selección de variables</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-regresion">Métricas para regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-clasificacion">Métricas para clasificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clases-desbalanceadas">Clases desbalanceadas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Edier V. Aristizábal G.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Desarrollado por <a href="https://github.com/edieraristizabal">Edier Aristizábal</a>, Facultad de Minas, Universidad Nacional de Colombia.
+<a href="https://edieraristizabal.github.io/MachineLearning/">Página del curso</a> ·
+<a href="https://edieraristizabal.github.io/MachineLearning/html/MachineLearning.html">Diapositivas</a></p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

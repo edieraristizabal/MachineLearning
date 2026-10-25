@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Árboles de decisión y métodos de ensamble &#8212; Aprendizaje automático en geociencias</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '15_Arboles_Ensambles';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://edieraristizabal.github.io/MachineLearning/libro/15_Arboles_Ensambles.html" />
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Redes neuronales" href="16_RedesNeuronales.html" />
+    <link rel="prev" title="Vecinos más cercanos y máquinas de soporte vectorial" href="14_KNN_SVM.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Aprendizaje automático en geociencias - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Aprendizaje automático en geociencias - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Aprendizaje automático en geociencias
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Fundamentos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Introduccion.html">Aprendizaje automático en geociencias</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Datos.html">Datos: tipos, recolección y preparación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_EDA.html">Análisis exploratorio de datos y distribuciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Inferencia.html">Inferencia estadística y pruebas de hipótesis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Construcción y evaluación de modelos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05_SesgoVarianza.html">Sesgo, varianza y sobreajuste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Validacion.html">Validación de modelos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_Metricas.html">Métricas de evaluación y clases desbalanceadas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_SeleccionVariables.html">Selección de variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizacion.html">Funciones de pérdida, optimización e hiperparámetros</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje no supervisado</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="10_Agrupamiento.html">Agrupamiento</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_ReduccionDimensionalidad.html">Reducción de dimensionalidad</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aprendizaje supervisado</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="12_RegresionLineal.html">Regresión lineal y regularización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_GLM.html">Modelos lineales generalizados y regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_KNN_SVM.html">Vecinos más cercanos y máquinas de soporte vectorial</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Árboles de decisión y métodos de ensamble</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_RedesNeuronales.html">Redes neuronales</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Interpretabilidad.html">Interpretabilidad de los modelos</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Apéndices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A_Notebooks.html">Notebooks del curso</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliografia.html">Bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/edieraristizabal/MachineLearning/blob/master/libro/15_Arboles_Ensambles.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Repositorio de origen"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/edit/master/libro/15_Arboles_Ensambles.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/edieraristizabal/MachineLearning/issues/new?title=Issue%20on%20page%20%2F15_Arboles_Ensambles.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Abrir un problema"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/15_Arboles_Ensambles.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Árboles de decisión y métodos de ensamble</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arboles-de-decision">Árboles de decisión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ensambles-bagging-y-bosques-aleatorios">Ensambles: bagging y bosques aleatorios</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boosting">Boosting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importancia-de-las-variables">Importancia de las variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="arboles-de-decision-y-metodos-de-ensamble">
+<h1>Árboles de decisión y métodos de ensamble<a class="headerlink" href="#arboles-de-decision-y-metodos-de-ensamble" title="Link to this heading">#</a></h1>
+<p>Los árboles de decisión dividen el espacio de los predictores en regiones rectangulares mediante preguntas sucesivas y asignan a cada región una clase o un valor. Por sí solos son interpretables pero inestables; combinados en ensambles, como los bosques aleatorios y el boosting, están entre los modelos más precisos para datos tabulares y son los más usados en los estudios de susceptibilidad <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliografia.html#id2" title="Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning: with Applications in R. Springer, New York, 2 edition, 2021.">James <em>et al.</em>, 2021</a>, <a class="reference internal" href="bibliografia.html#id31" title="Abdelaziz Merghadi, Ali P. Yunus, Jie Dou, and others. Machine learning methods for landslide susceptibility studies: a comparative overview of algorithm performance. Earth-Science Reviews, 207:103225, 2020.">Merghadi <em>et al.</em>, 2020</a>]</span>.</p>
+<section id="arboles-de-decision">
+<h2>Árboles de decisión<a class="headerlink" href="#arboles-de-decision" title="Link to this heading">#</a></h2>
+<p>Un árbol tiene un nodo raíz, nodos internos, que hacen una prueba sobre un atributo (“¿pendiente &gt; 28°?”), ramas, que son los resultados de la prueba, y hojas, que asignan la clase. El camino de la raíz a una hoja es una regla de clasificación. El árbol se construye de arriba hacia abajo: en cada nodo se elige la variable y el punto de corte que producen los nodos hijos más puros, medidos con la impureza de Gini, <span class="math notranslate nohighlight">\(1 - \sum_k p_k^2\)</span>, o con la entropía, <span class="math notranslate nohighlight">\(-\sum_k p_k \log p_k\)</span>. La división se detiene cuando todas las muestras de un nodo son de la misma clase, cuando no quedan atributos o cuando se cumple un criterio de parada: profundidad máxima, número mínimo de muestras por nodo o por hoja.</p>
+<p>Los árboles tienen ventajas prácticas: se construyen rápido, son interpretables si son pequeños, manejan variables numéricas y categóricas, son invariantes a transformaciones monótonas de los predictores (no hace falta escalar) y poco sensibles a los atípicos en los predictores, y hacen selección de variables implícita. Su gran problema es la varianza: un pequeño cambio en los datos puede producir un árbol muy distinto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">StratifiedKFold</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.dpi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">inventario</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">semilla</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">semilla</span><span class="p">)</span>
+    <span class="n">pend</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="n">lluv</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="n">curv</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># relación no lineal con un umbral de pendiente y una interacción pendiente-lluvia</span>
+    <span class="n">eta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">+</span> <span class="mf">2.2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">pend</span> <span class="o">-</span> <span class="mi">28</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.004</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">+</span> <span class="mf">0.0015</span> <span class="o">*</span> <span class="p">(</span><span class="n">lluv</span> <span class="o">-</span> <span class="mi">2500</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">pend</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">curv</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">eta</span><span class="p">)))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">pend</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">lluv</span><span class="p">,</span> <span class="n">curv</span><span class="p">]),</span> <span class="n">y</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">inventario</span><span class="p">()</span>
+<span class="n">nombres</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'pendiente'</span><span class="p">,</span> <span class="s1">'dist_cauce'</span><span class="p">,</span> <span class="s1">'lluvia'</span><span class="p">,</span> <span class="s1">'curvatura'</span><span class="p">]</span>
+<span class="n">arbol</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">arbol</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">nombres</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">'estable'</span><span class="p">,</span> <span class="s1">'deslizamiento'</span><span class="p">],</span> <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e37a876fe0e556fdc5f84c6bb8ee7c8fe5eaf2bd101f6843d11b8b6789d8ebc2.png" src="_images/e37a876fe0e556fdc5f84c6bb8ee7c8fe5eaf2bd101f6843d11b8b6789d8ebc2.png" />
+</div>
+</div>
+<p>El árbol pone en la raíz un umbral de pendiente cercano al de la simulación (la probabilidad crece bruscamente alrededor de 28°) y luego divide por la lluvia, que solo actúa en pendientes fuertes. Para ver su inestabilidad basta entrenarlo con dos muestras bootstrap distintas y comparar las reglas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">tree_</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'muestra </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s1">: raíz "</span><span class="si">{</span><span class="n">nombres</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="si">}</span><span class="s1"> &lt;= </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">", '</span>
+          <span class="sa">f</span><span class="s1">'nodo izquierdo "</span><span class="si">{</span><span class="n">nombres</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="si">}</span><span class="s1"> &lt;= </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">", nodo derecho "</span><span class="si">{</span><span class="n">nombres</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">feature</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="si">}</span><span class="s1"> &lt;= </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">threshold</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>muestra 0: raíz "pendiente &lt;= 31.1", nodo izquierdo "lluvia &lt;= 3746.2", nodo derecho "lluvia &lt;= 2871.1"
+muestra 1: raíz "pendiente &lt;= 32.9", nodo izquierdo "lluvia &lt;= 3746.2", nodo derecho "dist_cauce &lt;= 59.3"
+muestra 2: raíz "pendiente &lt;= 41.8", nodo izquierdo "lluvia &lt;= 3824.3", nodo derecho "lluvia &lt;= 2551.9"
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ensambles-bagging-y-bosques-aleatorios">
+<h2>Ensambles: bagging y bosques aleatorios<a class="headerlink" href="#ensambles-bagging-y-bosques-aleatorios" title="Link to this heading">#</a></h2>
+<p>Un método de ensamble combina las predicciones de muchos modelos base para obtener uno más robusto y con mejor capacidad de generalización. El bagging (bootstrap aggregating) entrena muchos árboles profundos, cada uno con una muestra bootstrap de los datos, y promedia sus predicciones (o vota). Los árboles profundos tienen sesgo bajo y varianza alta, y promediar muchos reduce la varianza sin cambiar el sesgo. El bosque aleatorio <span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliografia.html#id16" title="Leo Breiman. Random forests. Machine Learning, 45(1):5–32, 2001.">Breiman, 2001</a>]</span> agrega un truco: en cada división solo se considera un subconjunto aleatorio de las variables (típicamente <span class="math notranslate nohighlight">\(\sqrt{p}\)</span>), lo que hace los árboles menos correlacionados entre sí y potencia la reducción de varianza. Como cada árbol deja fuera cerca de un tercio de los datos, esos datos fuera de la bolsa (out-of-bag) dan una estimación del error sin necesidad de un conjunto de validación.</p>
+<p>La celda siguiente repite un experimento clásico: ajusta un árbol y un bosque aleatorio a muchas muestras pequeñas de una relación conocida y compara el ancho de la nube de predicciones, que refleja la varianza.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span><span class="p">,</span> <span class="n">AdaBoostClassifier</span>
+<span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">300</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">[(</span><span class="s1">'árbol de decisión'</span><span class="p">,</span> <span class="n">DecisionTreeRegressor</span><span class="p">()),</span> <span class="p">(</span><span class="s1">'bosque aleatorio (100 árboles)'</span><span class="p">,</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">))]):</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="n">x</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yy</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xx</span><span class="p">));</span> <span class="n">a</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">P</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:blue'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.08</span><span class="p">)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">P</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="s1">'k'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">P</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">'r--'</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nom</span><span class="si">}</span><span class="s1">: varianza media </span><span class="si">{</span><span class="n">P</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3cf3960278b25ced8e9a8d53b03ddef85e21fb427c9dddea4c806c72da28242d.png" src="_images/3cf3960278b25ced8e9a8d53b03ddef85e21fb427c9dddea4c806c72da28242d.png" />
+</div>
+</div>
+</section>
+<section id="boosting">
+<h2>Boosting<a class="headerlink" href="#boosting" title="Link to this heading">#</a></h2>
+<p>El boosting construye los modelos de forma secuencial: cada modelo nuevo se concentra en los errores de los anteriores. Usa modelos base simples, de sesgo alto y varianza baja, como árboles de una o pocas divisiones (tocones), y al sumarlos reduce el sesgo del conjunto. AdaBoost aumenta en cada iteración el peso de las observaciones mal clasificadas y combina los modelos con pesos proporcionales a <span class="math notranslate nohighlight">\(\log(\text{aciertos}/\text{errores})\)</span>. El boosting de gradiente <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliografia.html#id19" title="Jerome H. Friedman. Greedy function approximation: a gradient boosting machine. Annals of Statistics, 29(5):1189–1232, 2001.">Friedman, 2001</a>]</span> generaliza la idea: cada árbol nuevo se ajusta al gradiente negativo de la función de pérdida (en regresión cuadrática, a los residuos del modelo actual), y su contribución se multiplica por una tasa de aprendizaje pequeña. Implementaciones como XGBoost, LightGBM o CatBoost, y <code class="docutils literal notranslate"><span class="pre">HistGradientBoosting</span></code> de <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>, son el estado del arte en datos tabulares. Sus hiperparámetros principales, la tasa de aprendizaje, el número de árboles y su profundidad, interactúan y deben ajustarse juntos (capítulo <a class="reference internal" href="09_Optimizacion.html"><span class="doc">Funciones de pérdida, optimización e hiperparámetros</span></a>); el boosting puede sobreajustar si se agregan demasiados árboles, por lo que se usa parada temprana.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'árbol (profundidad 4)'</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+           <span class="s1">'bosque aleatorio'</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+           <span class="s1">'AdaBoost (tocones)'</span><span class="p">:</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+           <span class="s1">'boosting de gradiente'</span><span class="p">:</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)}</span>
+<span class="k">for</span> <span class="n">nom</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modelos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nom</span><span class="si">:</span><span class="s1">24s</span><span class="si">}</span><span class="s1"> AUC en validación cruzada </span><span class="si">{</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span><span class="w"> </span><span class="n">scoring</span><span class="o">=</span><span class="s2">"roc_auc"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+<span class="n">gb</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">log_loss</span>
+<span class="n">X_tr</span><span class="p">,</span> <span class="n">X_te</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">,</span> <span class="n">y_te</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">gb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
+<span class="n">perd_tr</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_loss</span><span class="p">(</span><span class="n">y_tr</span><span class="p">,</span> <span class="n">p</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">gb</span><span class="o">.</span><span class="n">staged_predict_proba</span><span class="p">(</span><span class="n">X_tr</span><span class="p">)]</span>
+<span class="n">perd_te</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_loss</span><span class="p">(</span><span class="n">y_te</span><span class="p">,</span> <span class="n">p</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">gb</span><span class="o">.</span><span class="n">staged_predict_proba</span><span class="p">(</span><span class="n">X_te</span><span class="p">)]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">perd_tr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'entrenamiento'</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">perd_te</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'prueba'</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">perd_te</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">'--'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'número de árboles'</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'pérdida logarítmica'</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Boosting: la pérdida de prueba es mínima con </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">perd_te</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1"> árboles'</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>árbol (profundidad 4)    AUC en validación cruzada 0.714
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>bosque aleatorio         AUC en validación cruzada 0.773
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AdaBoost (tocones)       AUC en validación cruzada 0.787
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>boosting de gradiente    AUC en validación cruzada 0.787
+</pre></div>
+</div>
+<img alt="_images/12b9a58753d66f595a280f24ddb4894113a16495ae3b74eb2b941191e925a1ad.png" src="_images/12b9a58753d66f595a280f24ddb4894113a16495ae3b74eb2b941191e925a1ad.png" />
+</div>
+</div>
+</section>
+<section id="importancia-de-las-variables">
+<h2>Importancia de las variables<a class="headerlink" href="#importancia-de-las-variables" title="Link to this heading">#</a></h2>
+<p>Los ensambles de árboles entregan una importancia de cada variable, la reducción total de impureza que producen sus divisiones, promediada en todos los árboles. Es útil pero sesgada a favor de las variables continuas o con muchas categorías. La importancia por permutación, que mide cuánto empeora el modelo al desordenar al azar los valores de una variable en datos de validación, es más confiable; se trata en el capítulo <a class="reference internal" href="17_Interpretabilidad.html"><span class="doc">Interpretabilidad de los modelos</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf</span> <span class="o">=</span> <span class="n">modelos</span><span class="p">[</span><span class="s1">'bosque aleatorio'</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">imp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nombres</span><span class="p">,</span> <span class="n">rf</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">nm</span><span class="si">:</span><span class="s1">12s</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">imp</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pendiente    0.284
+dist_cauce   0.257
+lluvia       0.237
+curvatura    0.222
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="para-profundizar">
+<h2>Para profundizar<a class="headerlink" href="#para-profundizar" title="Link to this heading">#</a></h2>
+<p>El capítulo 8 de <span class="bibtex-citation" id="id4">[<a class="reference internal" href="bibliografia.html#id2" title="Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. An Introduction to Statistical Learning: with Applications in R. Springer, New York, 2 edition, 2021.">James <em>et al.</em>, 2021</a>]</span> presenta los árboles, el bagging, los bosques aleatorios y el boosting, y los capítulos 10, 15 y 16 de <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliografia.html#id3" title="Trevor Hastie, Robert Tibshirani, and Jerome Friedman. The Elements of Statistical Learning: Data Mining, Inference, and Prediction. Springer, New York, 2 edition, 2009.">Hastie <em>et al.</em>, 2009</a>]</span> los tratan en profundidad. <span class="bibtex-citation" id="id6">Merghadi <em>et al.</em> [<a class="reference internal" href="bibliografia.html#id31" title="Abdelaziz Merghadi, Ali P. Yunus, Jie Dou, and others. Machine learning methods for landslide susceptibility studies: a comparative overview of algorithm performance. Earth-Science Reviews, 207:103225, 2020.">2020</a>]</span> comparan estos métodos en estudios de susceptibilidad por deslizamientos. El notebook 20 del curso aplica los ensambles con búsqueda de hiperparámetros.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="14_KNN_SVM.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Vecinos más cercanos y máquinas de soporte vectorial</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="16_RedesNeuronales.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Redes neuronales</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arboles-de-decision">Árboles de decisión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ensambles-bagging-y-bosques-aleatorios">Ensambles: bagging y bosques aleatorios</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boosting">Boosting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importancia-de-las-variables">Importancia de las variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#para-profundizar">Para profundizar</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Edier V. Aristizábal G.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Desarrollado por <a href="https://github.com/edieraristizabal">Edier Aristizábal</a>, Facultad de Minas, Universidad Nacional de Colombia.
+<a href="https://edieraristizabal.github.io/MachineLearning/">Página del curso</a> ·
+<a href="https://edieraristizabal.github.io/MachineLearning/html/MachineLearning.html">Diapositivas</a></p>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
