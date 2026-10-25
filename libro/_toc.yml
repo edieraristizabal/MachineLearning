@@ -1,0 +1,32 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Fundamentos
+    chapters:
+      - file: 01_Introduccion
+      - file: 02_Datos
+      - file: 03_EDA
+      - file: 04_Inferencia
+  - caption: Construcción y evaluación de modelos
+    chapters:
+      - file: 05_SesgoVarianza
+      - file: 06_Validacion
+      - file: 07_Metricas
+      - file: 08_SeleccionVariables
+      - file: 09_Optimizacion
+  - caption: Aprendizaje no supervisado
+    chapters:
+      - file: 10_Agrupamiento
+      - file: 11_ReduccionDimensionalidad
+  - caption: Aprendizaje supervisado
+    chapters:
+      - file: 12_RegresionLineal
+      - file: 13_GLM
+      - file: 14_KNN_SVM
+      - file: 15_Arboles_Ensambles
+      - file: 16_RedesNeuronales
+      - file: 17_Interpretabilidad
+  - caption: Apéndices
+    chapters:
+      - file: A_Notebooks
+      - file: bibliografia

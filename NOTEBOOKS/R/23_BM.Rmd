@@ -1,6 +1,6 @@
 **CURSO**: Machine Learning, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
 **Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
-**Credits**: The content of this notebook is based on [Coding Club](https://ourcodingclub.github.io/tutorials/brms/) by Louise Litrico, Michael Clark [parte I](https://m-clark.github.io/posts/2021-02-28-practical-bayes-part-i/#example-data), [parte II](https://m-clark.github.io/posts/2021-02-28-practical-bayes-part-ii/)
+**Créditos**: El contenido de este notebook se basa en [Coding Club](https://ourcodingclub.github.io/tutorials/brms/) de Louise Litrico, Michael Clark [parte I](https://m-clark.github.io/posts/2021-02-28-practical-bayes-part-i/#example-data), [parte II](https://m-clark.github.io/posts/2021-02-28-practical-bayes-part-ii/)
 
 # Modelos Bayesianos
 
@@ -210,9 +210,9 @@ mcmc_plot(model_start_100, pars = c('b1', 'b2', 'x1'), type = 'rank_overlay')
 
 ### $\widehat{R}$
 
-The $\widehat{R}$ statistic measures the ratio of the average variance of samples within each chain to the variance of the pooled samples across chains. If all chains are at equilibrium, these will be the same and $\widehat{R}$ will be 1.0. If the chains have not converged to a common distribution, the $\widerhat{R}$ statistic will be greater than one.
+El estadístico $\widehat{R}$ mide la razón entre la varianza promedio de las muestras dentro de cada cadena y la varianza de las muestras combinadas de todas las cadenas. Si todas las cadenas están en equilibrio, ambas varianzas son iguales y $\widehat{R}$ vale 1.0. Si las cadenas no han convergido a una distribución común, $\widehat{R}$ es mayor que uno.
 
-What we want: values near 1.0 (\< 1 okay) and less than 1.05
+Lo que se busca: valores cercanos a 1.0 (\< 1 está bien) y menores que 1.05
 
 ```{r}
 mcmc_plot(model_start_100, type = 'rhat')

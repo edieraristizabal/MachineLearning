@@ -5,21 +5,26 @@ El curso **Machine Learning** está orientado para estudiantes de posgrados que 
 El curso es teórico - práctico. Se dictarán clases teóricas con las técnicas y modelos a utilizar, pero exige que el estudiante seleccione una base de datos para poner en práctica el conocimiento adquirido en el curso. El contenido del curso incluye una introducción al ambiente de trabajo en *Python*, construcción de un modelo basado en datos, métodos no supervisados, métodos supevisados, y finalmente intro a *Deep learning*.
 
 ## Programa del curso
-[Ir al programa...](/Programa_MachineLearning.pdf)
+[Ir al programa...](Programa_MachineLearning.pdf)
 
 ## Horario del curso
 Martes & Jueves 10:00 - 12:00 a.m.
 
+## Presentación
+[Ir a presentación...](html/MachineLearning.html)
+
+## Libro del curso
+[Ir al libro...](https://edieraristizabal.github.io/MachineLearning/libro/) *Aprendizaje automático en geociencias*, con la teoría del curso en notebooks ejecutables de Python.
+
 ## Contenido del curso
-[Ir a presentación...](/html/MachineLearning.html)
 
 #### Introducción al curso
-Lecture: [Landslides prediction from machine learning](https://onlinelibrary.wiley.com/doi/pdf/10.1111/gto.12034?casa_token=OBMQ2s_38OEAAAAA:2pJ1P3qelC9ELfrCyWC1Pzced8h6tZF36tXUEKE8rExNZp_v-LQpSokVx2PuArbIrdv0uLY94T8tSQ)  
+Lectura: [Landslides prediction from machine learning](https://onlinelibrary.wiley.com/doi/pdf/10.1111/gto.12034?casa_token=OBMQ2s_38OEAAAAA:2pJ1P3qelC9ELfrCyWC1Pzced8h6tZF36tXUEKE8rExNZp_v-LQpSokVx2PuArbIrdv0uLY94T8tSQ)  
 
 #### Ambiente de trabajo
 
 #### Formulación de hipótesis
-Lecture: [Physically-based machine learning](https://www.researchgate.net/publication/311925961_Theory-guided_Data_Science_A_New_Paradigm_for_Scientific_Discovery)
+Lectura: [Physically-based machine learning](https://www.researchgate.net/publication/311925961_Theory-guided_Data_Science_A_New_Paradigm_for_Scientific_Discovery)
 
 #### Toma y procesamiento de datos
 
@@ -42,26 +47,26 @@ Lecture: [Physically-based machine learning](https://www.researchgate.net/public
 #### Deep learning
 
 ## Notebooks
-* [Ambiente de trabajo](/NOTEBOOKS/01_Ambiente_de_trabajo.ipynb)
-* [Importar datos](/NOTEBOOKS/02_Importar.ipynb) 
-* [Creación de la base de datos](/NOTEBOOKS/03_DataFrame.ipynb) 
-* [Procesamiento de datos](/NOTEBOOKS/04_Procesamiento_datos.ipynb) 
-* [Análisis exploratorio de datos](/NOTEBOOKS/05_EDA.ipynb) 
-* [Selección de variables](/NOTEBOOKS/06_SeleccionVariables.ipynb) 
-* [Datos desbalanceados](/NOTEBOOKS/07_Desbalance.ipynb) 
-* [Validación](/NOTEBOOKS/08_Validation.ipynb) 
-* [Selección de hiperparámetros](/NOTEBOOKS/09_Algorithm_Tunning.ipynb) 
-* [Métrica](/NOTEBOOKS/10_Metric.ipynb) 
-* [Trade-off Bias-Variance](/NOTEBOOKS/11_Bias-Variance_TradeOff.ipynb) 
-* [Clustering](/NOTEBOOKS/12_Cluster.ipynb) 
-* [Análisis de componentes principales](/NOTEBOOKS/13_PCA.ipynb) 
-* [Análisis discriminante](/NOTEBOOKS/14_Discriminante.ipynb) 
-* [Regresión Lineal](/NOTEBOOKS/15_Regresion_lineal.ipynb) 
-* [Regresión Ligística](/NOTEBOOKS/16_Regresion_Logistica.ipynb) 
-* [Vecino más cercano](/NOTEBOOKS/17_KNN.ipynb) 
-* [Support Vector Machine](/NOTEBOOKS/18_SVM.ipynb) 
-* [Redes Neuronales Artificiales](/NOTEBOOKS/19_RedesNeuronales.ipynb) 
-* [Modelos ensamblados](/NOTEBOOKS/20_Ensembles.ipynb)
+* [Ambiente de trabajo](NOTEBOOKS/Python/01_Ambiente_de_trabajo.ipynb)
+* [Importar datos](NOTEBOOKS/Python/02_Importar.ipynb) 
+* [Creación de la base de datos](NOTEBOOKS/Python/03_DataFrame.ipynb) 
+* [Procesamiento de datos](NOTEBOOKS/Python/04_Procesamiento_datos.ipynb) 
+* [Análisis exploratorio de datos](NOTEBOOKS/Python/05_EDA.ipynb) 
+* [Selección de variables](NOTEBOOKS/Python/06_SeleccionVariables.ipynb) 
+* [Datos desbalanceados](NOTEBOOKS/Python/07_Desbalance.ipynb) 
+* [Validación](NOTEBOOKS/Python/08_Validation.ipynb) 
+* [Selección de hiperparámetros](NOTEBOOKS/Python/09_Algorithm_Tunning.ipynb) 
+* [Métrica](NOTEBOOKS/Python/10_Metric.ipynb) 
+* [Trade-off Bias-Variance](NOTEBOOKS/Python/11_Bias-Variance_TradeOff.ipynb) 
+* [Clustering](NOTEBOOKS/Python/12_Cluster.ipynb) 
+* [Análisis de componentes principales](NOTEBOOKS/Python/13_PCA.ipynb) 
+* [Análisis discriminante](NOTEBOOKS/Python/14_Discriminante.ipynb) 
+* [Regresión Lineal](NOTEBOOKS/Python/15_Regresion_lineal.ipynb) 
+* [Regresión Logística](NOTEBOOKS/Python/16_Regresion_Logistica.ipynb) 
+* [Vecino más cercano](NOTEBOOKS/Python/17_KNN.ipynb) 
+* [Support Vector Machine](NOTEBOOKS/Python/18_SVM.ipynb) 
+* [Redes Neuronales Artificiales](NOTEBOOKS/Python/19_RedesNeuronales.ipynb) 
+* [Modelos ensamblados](NOTEBOOKS/Python/20_Ensembles.ipynb)
 
 
 ## Evaluación del curso

@@ -1,6 +1,6 @@
 **CURSO**: Machine Learning, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
 **Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
-**Credits**: The content of this notebook is based on [fromthebottomoftheheap](https://fromthebottomoftheheap.net/2018/04/21/fitting-gams-with-brms/) by Gavin Simpson
+**Créditos**: El contenido de este notebook se basa en [fromthebottomoftheheap](https://fromthebottomoftheheap.net/2018/04/21/fitting-gams-with-brms/) de Gavin Simpson
 
 # Modelos GAMs
 

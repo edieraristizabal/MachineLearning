@@ -4,7 +4,7 @@
 
 ------------------------------------------------------------------------
 
-# Logistic regresión
+# Regresión logística
 
 ```{r}
 library(aod)
@@ -21,7 +21,7 @@ head(mydata)
 
 ```
 
-This dataset has a binary response (outcome, dependent) variable called **`admit`**. There are three predictor variables: **`gre`**, **`gpa`** and **`rank`**. We will treat the variables **`gre`** and **`gpa`** as continuous. The variable **`rank`** takes on the values 1 through 4. Institutions with a rank of 1 have the highest prestige, while those with a rank of 4 have the lowest. We can get basic descriptives for the entire data set by using **`summary`**. To get the standard deviations, we use **`sapply`** to apply the **`sd`** function to each variable in the dataset.
+Este conjunto de datos tiene una variable respuesta (dependiente) binaria llamada **`admit`** y tres predictores: **`gre`**, **`gpa`** y **`rank`**. Las variables **`gre`** y **`gpa`** se tratan como continuas. La variable **`rank`** toma valores de 1 a 4: las instituciones con rank 1 tienen el mayor prestigio y las de rank 4, el menor. Los descriptivos básicos de todo el conjunto se obtienen con **`summary`**, y las desviaciones estándar aplicando con **`sapply`** la función **`sd`** a cada variable.
 
 ```{r}
 summary(mydata)
@@ -37,7 +37,7 @@ sapply(mydata, sd)
 xtabs(~admit + rank, data = mydata)
 ```
 
-The code below estimates a logistic regression model using the glm (generalized linear model) function. First, we convert rank to a factor to indicate that rank should be treated as a categorical variable.
+El código siguiente estima un modelo de regresión logística con la función glm (modelo lineal generalizado). Primero se convierte rank en factor para indicar que debe tratarse como variable categórica.
 
 ```{r}
 mydata$rank <- factor(mydata$rank)

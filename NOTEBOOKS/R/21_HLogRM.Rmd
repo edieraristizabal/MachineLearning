@@ -1,8 +1,8 @@
 **CURSO**: Análisis Geoespacial, Departamento de Geociencias y Medio Ambiente, Universidad Nacional de Colombia - sede Medellín\
 **Profesor**: Edier Aristizábal ([evaristizabalg\@unal.edu.co](mailto:evaristizabalg@unal.edu.co){.email})\
-**Credits**: The content of this notebook is based on [UCLA](https://stats.oarc.ucla.edu/r/dae/mixed-effects-logistic-regression/).
+**Créditos**: El contenido de este notebook se basa en [UCLA](https://stats.oarc.ucla.edu/r/dae/mixed-effects-logistic-regression/).
 
-# Mixed Effects Logistic Regression
+# Regresión logística de efectos mixtos
 
 La regresión logística de efectos mixtos se utiliza para modelar variables de resultado binarias, en las cuales las probabilidades logarítmicas de los resultados se modelan como una combinación lineal de las variables predictoras cuando los datos están agrupados o existen efectos tanto fijos como aleatorios.
 
